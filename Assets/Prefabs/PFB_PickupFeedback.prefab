@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6599929208148889096}
   - component: {fileID: 5650103093151453187}
   - component: {fileID: 366091547349499958}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PFB_PickupFeedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}

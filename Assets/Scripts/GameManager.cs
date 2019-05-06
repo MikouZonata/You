@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 				ml.Add(maans[i]);
 			}
 		}
-		maanManager.Init(ml.ToArray());
+		maanManager.Init(trackPieces, ml.ToArray());
 	}
 
 	private void Update ()
