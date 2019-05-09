@@ -851,7 +851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 115340744}
   - component: {fileID: 115340745}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Maan_Directional Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -901,7 +901,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 33079
+    m_Bits: 230199
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -1214,7 +1214,7 @@ GameObject:
   - component: {fileID: 165353441}
   - component: {fileID: 165353444}
   - component: {fileID: 165353443}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Y+
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1311,7 +1311,7 @@ GameObject:
   - component: {fileID: 207296993}
   - component: {fileID: 207296992}
   - component: {fileID: 207296991}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1624,7 +1624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 237647197}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Kevin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1662,7 +1662,7 @@ GameObject:
   - component: {fileID: 238745642}
   - component: {fileID: 238745645}
   - component: {fileID: 238745644}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: X+
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2160,7 +2160,7 @@ GameObject:
   - component: {fileID: 342413173}
   - component: {fileID: 342413172}
   - component: {fileID: 342413171}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2320,7 +2320,7 @@ GameObject:
   - component: {fileID: 359737658}
   - component: {fileID: 359737657}
   - component: {fileID: 359737656}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2679,7 +2679,7 @@ GameObject:
   - component: {fileID: 401285728}
   - component: {fileID: 401285727}
   - component: {fileID: 401285726}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3259,7 +3259,7 @@ GameObject:
   - component: {fileID: 497816015}
   - component: {fileID: 497816017}
   - component: {fileID: 497816016}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Z+
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3582,7 +3582,7 @@ GameObject:
   - component: {fileID: 541766993}
   - component: {fileID: 541766996}
   - component: {fileID: 541766995}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Z-
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3825,7 +3825,7 @@ GameObject:
   - component: {fileID: 587670537}
   - component: {fileID: 587670536}
   - component: {fileID: 587670535}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4147,7 +4147,7 @@ GameObject:
   - component: {fileID: 651106647}
   - component: {fileID: 651106646}
   - component: {fileID: 651106645}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4889,7 +4889,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 13b2ee2e34aec4447bcb62c6f10363ef, type: 2}
+  - {fileID: 2100000, guid: 78067bcbef074674bb173b5466bb73e6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6421,7 +6421,7 @@ GameObject:
   - component: {fileID: 925836617}
   - component: {fileID: 925836616}
   - component: {fileID: 925836615}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7800,7 +7800,7 @@ GameObject:
   - component: {fileID: 1054421776}
   - component: {fileID: 1054421775}
   - component: {fileID: 1054421774}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Maan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7875,7 +7875,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1080383799}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: Barriers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8324,7 +8324,7 @@ GameObject:
   - component: {fileID: 1148504669}
   - component: {fileID: 1148504668}
   - component: {fileID: 1148504667}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8421,7 +8421,7 @@ GameObject:
   - component: {fileID: 1188376695}
   - component: {fileID: 1188376694}
   - component: {fileID: 1188376693}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8944,7 +8944,7 @@ GameObject:
   - component: {fileID: 1282028183}
   - component: {fileID: 1282028182}
   - component: {fileID: 1282028181}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9109,7 +9109,7 @@ GameObject:
   - component: {fileID: 1291443639}
   - component: {fileID: 1291443641}
   - component: {fileID: 1291443640}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Y+
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9194,7 +9194,7 @@ GameObject:
   - component: {fileID: 1311025277}
   - component: {fileID: 1311025276}
   - component: {fileID: 1311025275}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9285,7 +9285,7 @@ GameObject:
   - component: {fileID: 1323412328}
   - component: {fileID: 1323412327}
   - component: {fileID: 1323412326}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9692,7 +9692,7 @@ GameObject:
   - component: {fileID: 1376934865}
   - component: {fileID: 1376934868}
   - component: {fileID: 1376934867}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: X-
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9839,7 +9839,7 @@ GameObject:
   - component: {fileID: 1395401728}
   - component: {fileID: 1395401730}
   - component: {fileID: 1395401729}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Z-
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10157,97 +10157,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1537685733}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1445028286
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1445028287}
-  - component: {fileID: 1445028290}
-  - component: {fileID: 1445028289}
-  - component: {fileID: 1445028288}
-  m_Layer: 15
-  m_Name: PFB_Barrier
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1445028287
+--- !u!4 &1445028287 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+    type: 3}
+  m_PrefabInstance: {fileID: 2529494509308746993}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445028286}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.5, y: 2.5, z: 5.5}
-  m_LocalScale: {x: 1, y: 8, z: 13}
-  m_Children: []
-  m_Father: {fileID: 1080383799}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1445028288
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445028286}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1445028289
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445028286}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 98585418abb7e874d9f9fb431d03f74d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &1445028290
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445028286}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1451935776 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3504928516105619793, guid: 7dd6b857a441e8b44a2b966646b84e40,
@@ -10266,7 +10181,7 @@ GameObject:
   - component: {fileID: 1460756698}
   - component: {fileID: 1460756697}
   - component: {fileID: 1460756696}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10453,7 +10368,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1489910146}
   - component: {fileID: 1489910147}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Kevin_Directional Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10523,7 +10438,7 @@ GameObject:
   - component: {fileID: 1496242986}
   - component: {fileID: 1496242989}
   - component: {fileID: 1496242988}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Y-
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11146,7 +11061,7 @@ GameObject:
   - component: {fileID: 1580262699}
   - component: {fileID: 1580262702}
   - component: {fileID: 1580262701}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Z+
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11466,7 +11381,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1658228422}
-  m_Layer: 15
+  m_Layer: 16
   m_Name: Maan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11580,7 +11495,7 @@ GameObject:
   - component: {fileID: 1660995150}
   - component: {fileID: 1660995149}
   - component: {fileID: 1660995148}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12092,7 +12007,7 @@ GameObject:
   - component: {fileID: 1786069686}
   - component: {fileID: 1786069685}
   - component: {fileID: 1786069684}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13019,7 +12934,7 @@ GameObject:
   - component: {fileID: 1863941297}
   - component: {fileID: 1863941296}
   - component: {fileID: 1863941295}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13354,7 +13269,7 @@ GameObject:
   - component: {fileID: 1900600380}
   - component: {fileID: 1900600382}
   - component: {fileID: 1900600381}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: X-
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13508,7 +13423,7 @@ GameObject:
   - component: {fileID: 1937902475}
   - component: {fileID: 1937902474}
   - component: {fileID: 1937902473}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13886,7 +13801,7 @@ GameObject:
   - component: {fileID: 1983689346}
   - component: {fileID: 1983689348}
   - component: {fileID: 1983689347}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: X+
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14040,7 +13955,7 @@ GameObject:
   - component: {fileID: 2004793377}
   - component: {fileID: 2004793376}
   - component: {fileID: 2004793375}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14382,7 +14297,7 @@ GameObject:
   - component: {fileID: 2044139847}
   - component: {fileID: 2044139846}
   - component: {fileID: 2044139845}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14548,7 +14463,7 @@ GameObject:
   - component: {fileID: 2064738733}
   - component: {fileID: 2064738732}
   - component: {fileID: 2064738731}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15001,7 +14916,7 @@ GameObject:
   - component: {fileID: 2092882172}
   - component: {fileID: 2092882171}
   - component: {fileID: 2092882170}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: PFB_Barrier (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15171,7 +15086,7 @@ GameObject:
   - component: {fileID: 2119980422}
   - component: {fileID: 2119980424}
   - component: {fileID: 2119980423}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Y-
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15525,6 +15440,75 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2142734354}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2529494509308746993
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1080383799}
+    m_Modifications:
+    - target: {fileID: 2529494510212709711, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_Name
+      value: PFB_Barrier
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 12.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529494510212709710, guid: 0c0f6cac0f013a042825c635bf7c3df8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0c0f6cac0f013a042825c635bf7c3df8, type: 3}
 --- !u!4 &2545600396708209969 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7717349703289298031, guid: f0deb760b4f312449a9a96d8c163df68,
