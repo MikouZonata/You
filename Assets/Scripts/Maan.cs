@@ -15,8 +15,14 @@ public class Maan : MonoBehaviour
 	Rigidbody rig;
 
 	float triggerValue;
-	bool AButtonDown = false;
 	float rotationSpeed = 220, movementSpeed = 20;
+
+	List<Kattoe> kattoesInRange = new List<Kattoe>();
+	List<Barrier> barriersInRange = new List<Barrier>();
+
+	public GameObject pingPrefab;
+	float pingBaseSize = 1, pingMaxSize = 10;
+	float pingExpandTime = .3f;
 
 	float distanceToLink = 9f;
 
@@ -40,7 +46,7 @@ public class Maan : MonoBehaviour
 		}
 
 		if (GetAButtonDown()) {
-			//PING FOR ANIMALS
+			Ping();
 		}
 
 		if (gamePadState.Buttons.Back == ButtonState.Pressed) {
@@ -53,6 +59,48 @@ public class Maan : MonoBehaviour
 	{
 		transform.Rotate(0, gamePadState.ThumbSticks.Left.X * rotationSpeed * Time.fixedDeltaTime, 0);
 		rig.velocity = transform.rotation * Vector3.forward * gamePadState.ThumbSticks.Left.Y * movementSpeed;
+	}
+
+	private void OnTriggerEnter (Collider other)
+	{
+		if (other.gameObject.layer == LayerMask.NameToLayer("MaanKattoe")) {
+			kattoesInRange.Add(other.GetComponent<Kattoe>());
+		} else if (other.gameObject.layer == LayerMask.NameToLayer("MaanBarrier")) {
+			barriersInRange.Add(other.GetComponent<Barrier>());
+		}
+	}
+
+	private void OnTriggerExit (Collider other)
+	{
+		if (other.gameObject.layer == LayerMask.NameToLayer("MaanKattoe")) {
+			kattoesInRange.Remove(other.GetComponent<Kattoe>());
+		} else if (other.gameObject.layer == LayerMask.NameToLayer("MaanBarrier")) {
+			barriersInRange.Remove(other.GetComponent<Barrier>());
+		}
+	}
+
+	void Ping ()
+	{
+		StartCoroutine(PingRoutine(Instantiate(pingPrefab, transform.position, Quaternion.identity)));
+
+		for (int i = 0; i < kattoesInRange.Count; i++) {
+			if (kattoesInRange[i].Tempt()) {
+				kattoesInRange[i].Attach(transform);
+				kattoesInRange.RemoveAt(i);
+				i--;
+			}
+		}
+	}
+	IEnumerator PingRoutine (GameObject pingGO)
+	{
+		float pingSize = pingBaseSize;
+		for (float t = 0; t < pingExpandTime; t+=Time.deltaTime) {
+			pingSize = Mathf.Lerp(pingBaseSize, pingMaxSize, t / pingExpandTime);
+			pingGO.transform.localScale = new Vector3(pingSize, pingSize, pingSize);
+			pingGO.transform.position = transform.position;
+			yield return null;
+		}
+		Destroy(pingGO);
 	}
 
 	bool AButtonReleased = true;

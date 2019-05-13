@@ -8,10 +8,12 @@ public class Kattoe : MonoBehaviour
 	AudioSource audioSource;
 
 	bool attachedToMaan = false;
-	float callFrequencyNotAttached = 2.5f, callFrequencyAttached = 1.2f;
-	float _callTimer = 0;
+	float callFrequencyNotAttached = 2.5f, callFrequencyAttached = 1.2f, callFrequencyDeviation = .2f;
+	float _callTimer; 
 
 	float callPitchMax = 1.5f, callPitchMin = 0.2f;
+
+	int chanceToTempt = 40;
 
 	public void Init (AudioClip callClip)
 	{
@@ -20,6 +22,8 @@ public class Kattoe : MonoBehaviour
 
 		this.callClip = callClip;
 		audioSource.clip = callClip;
+
+		_callTimer = Random.Range(-callFrequencyDeviation, callFrequencyDeviation);
 	}
 
 	private void Update ()
@@ -33,18 +37,29 @@ public class Kattoe : MonoBehaviour
 		if (attachedToMaan) {
 			if (_callTimer >= callFrequencyAttached) {
 				audioSource.Play();
-				_callTimer = 0;
+				_callTimer = Random.Range(-callFrequencyDeviation, callFrequencyDeviation);
 			}
 		} else {
 			if (_callTimer >= callFrequencyNotAttached) {
 				audioSource.Play();
-				_callTimer = 0;
+				_callTimer = Random.Range(-callFrequencyDeviation, callFrequencyDeviation);
 			}
 		}
 	}
 
-	void Attach (Transform targetTrans)
+	public bool Tempt ()
 	{
+		int roll = Random.Range(0, 100);
+		if (roll > chanceToTempt) {
+			return true;
+		} else
+			return false;
+	}
 
+	public void Attach (Transform targetTrans)
+	{
+		GetComponent<Collider>().enabled = false;
+		attachedToMaan = true;
+		transform.parent = targetTrans;
 	}
 }
