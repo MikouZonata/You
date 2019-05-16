@@ -13,6 +13,8 @@ public class Maan : MonoBehaviour
 	MaanManager manager;
 	Transform otherPlayer;
 	Rigidbody rig;
+	Transform cameraTrans;
+	Vector3 _velocity, _cameraRotation;
 
 	float triggerValue;
 	float rotationSpeed = 220, movementSpeed = 20;
@@ -24,13 +26,12 @@ public class Maan : MonoBehaviour
 	float pingBaseSize = 1, pingMaxSize = 10;
 	float pingExpandTime = .3f;
 
-	float distanceToLink = 9f;
-
 	public void Init (MaanManager manager, Transform otherPlayer)
 	{
 		gamePadState = GamePad.GetState(playerIndex);
 
 		rig = GetComponent<Rigidbody>();
+		cameraTrans = transform.GetChild(0);
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
@@ -40,13 +41,21 @@ public class Maan : MonoBehaviour
 	{
 		gamePadState = GamePad.GetState(playerIndex);
 
-
-		if (Vector3.Distance(transform.position, otherPlayer.position) <= distanceToLink) {
-			//WE ZIJN LINKED
+		bool linked = false;
+		if (Vector3.Distance(transform.position, otherPlayer.position) <= StaticData.distanceToLink) {
+			linked = true;
 		}
 
 		if (GetAButtonDown()) {
 			Ping();
+		}
+
+		for (int i = 0; i < barriersInRange.Count; i++) {
+			barriersInRange[i].Disintegrate(linked);
+			if (barriersInRange[i].destroyed) {
+				barriersInRange.Remove(barriersInRange[i]);
+				i--;
+			}
 		}
 
 		if (gamePadState.Buttons.Back == ButtonState.Pressed) {
@@ -57,8 +66,9 @@ public class Maan : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		transform.Rotate(0, gamePadState.ThumbSticks.Left.X * rotationSpeed * Time.fixedDeltaTime, 0);
-		rig.velocity = transform.rotation * Vector3.forward * gamePadState.ThumbSticks.Left.Y * movementSpeed;
+		_velocity = transform.rotation * CharacterMovement();
+		CameraMovement();
+		rig.velocity = _velocity;
 	}
 
 	private void OnTriggerEnter (Collider other)
@@ -67,6 +77,7 @@ public class Maan : MonoBehaviour
 			kattoesInRange.Add(other.GetComponent<Kattoe>());
 		} else if (other.gameObject.layer == LayerMask.NameToLayer("MaanBarrier")) {
 			barriersInRange.Add(other.GetComponent<Barrier>());
+			other.GetComponent<Barrier>().maanInRange = true;
 		}
 	}
 
@@ -75,8 +86,30 @@ public class Maan : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("MaanKattoe")) {
 			kattoesInRange.Remove(other.GetComponent<Kattoe>());
 		} else if (other.gameObject.layer == LayerMask.NameToLayer("MaanBarrier")) {
+			other.GetComponent<Barrier>().maanInRange = false;
 			barriersInRange.Remove(other.GetComponent<Barrier>());
 		}
+	}
+
+	Vector3 CharacterMovement ()
+	{
+		Vector3 result = Vector3.zero;
+		result.x = gamePadState.ThumbSticks.Left.X * movementSpeed;
+		result.z = gamePadState.ThumbSticks.Left.Y * movementSpeed;
+		if (result.sqrMagnitude > movementSpeed * movementSpeed) {
+			result = result.normalized * movementSpeed;
+		}
+		return result;
+	}
+
+	float cameraMaxZAngle = 45, cameraMinZAngle = -32;
+	float _cameraZAngle = 0;
+	float cameraXSensitivity = 380, cameraZSensitivity = 170;
+	void CameraMovement ()
+	{
+		transform.Rotate(new Vector3(0, gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime, 0));
+		_cameraZAngle = Mathf.Clamp(_cameraZAngle - gamePadState.ThumbSticks.Right.Y * cameraZSensitivity * Time.deltaTime, cameraMinZAngle, cameraMaxZAngle);
+		cameraTrans.localRotation = Quaternion.Euler(new Vector3(_cameraZAngle, 0, 0));
 	}
 
 	void Ping ()
@@ -94,7 +127,7 @@ public class Maan : MonoBehaviour
 	IEnumerator PingRoutine (GameObject pingGO)
 	{
 		float pingSize = pingBaseSize;
-		for (float t = 0; t < pingExpandTime; t+=Time.deltaTime) {
+		for (float t = 0; t < pingExpandTime; t += Time.deltaTime) {
 			pingSize = Mathf.Lerp(pingBaseSize, pingMaxSize, t / pingExpandTime);
 			pingGO.transform.localScale = new Vector3(pingSize, pingSize, pingSize);
 			pingGO.transform.position = transform.position;

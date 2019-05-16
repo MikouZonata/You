@@ -22,7 +22,6 @@ public class Kevin : MonoBehaviour
 	float sideDriftDefaultEmission;
 
 	public LineRenderer linkRenderer;
-	float distanceToLink = 11;
 
 	public TrailRenderer throttleTrail;
 	Vector3 _velocity = Vector3.zero;
@@ -112,7 +111,7 @@ public class Kevin : MonoBehaviour
 	void ShowLink ()
 	{
 		Vector3[] positions;
-		if (Vector3.Distance(transform.position, otherPlayer.position) <= distanceToLink) {
+		if (Vector3.Distance(transform.position, otherPlayer.position) <= StaticData.distanceToLink) {
 			positions = new Vector3[] { transform.position, otherPlayer.position };
 		} else {
 			positions = new Vector3[] { transform.position, transform.position };
@@ -198,7 +197,7 @@ public class Kevin : MonoBehaviour
 
 	void LinkBoost ()
 	{
-		if ((transform.position - otherPlayer.position).sqrMagnitude <= distanceToLink * distanceToLink) {
+		if ((transform.position - otherPlayer.position).sqrMagnitude <= StaticData.distanceToLink * StaticData.distanceToLink) {
 			_boostSpeed = Mathf.MoveTowards(_boostSpeed, boostMaxSpeed * gamePadState.Triggers.Right, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
 		} else {
 			_boostSpeed = Mathf.MoveTowards(_boostSpeed, 0, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
