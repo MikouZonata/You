@@ -15,9 +15,8 @@ public class Maan : MonoBehaviour
 	Rigidbody rig;
 	Transform cameraTrans;
 	Vector3 _velocity, _cameraRotation;
-
-	float triggerValue;
-	float rotationSpeed = 220, movementSpeed = 20;
+	
+	float movementSpeed = 20;
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 	List<Barrier> barriersInRange = new List<Barrier>();
@@ -102,9 +101,9 @@ public class Maan : MonoBehaviour
 		return result;
 	}
 
-	float cameraMaxZAngle = 45, cameraMinZAngle = -32;
+	float cameraMaxZAngle = 42, cameraMinZAngle = -32;
 	float _cameraZAngle = 0;
-	float cameraXSensitivity = 380, cameraZSensitivity = 170;
+	float cameraXSensitivity = 260, cameraZSensitivity = 150;
 	void CameraMovement ()
 	{
 		transform.Rotate(new Vector3(0, gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime, 0));
