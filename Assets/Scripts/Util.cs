@@ -130,4 +130,27 @@ namespace Utility
 			return result;
 		}
 	}
+
+	public class WaitForFrames : CustomYieldInstruction
+	{
+		float _timer = 0;
+		float timeToWait;
+
+		public WaitForFrames (int framesToWait, int frameRate = 60)
+		{
+			timeToWait = framesToWait / frameRate;
+		}
+
+		public override bool keepWaiting
+		{
+			get {
+				if (_timer >= timeToWait) {
+					return false;
+				} else {
+					_timer += Time.deltaTime;
+					return true;
+				}
+			}
+		}
+	}
 }
