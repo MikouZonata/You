@@ -8461,9 +8461,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d74903b81dd3b9409ab57264a86923d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levels:
-  - {fileID: 0}
-  - {fileID: 1796070899}
+  displayMode: 0
+  level: {fileID: 1796070899}
   kevinPrefab: {fileID: 3706047649862686899, guid: b27eeddfe5983784699233e4b46cc714,
     type: 3}
   maanPrefab: {fileID: 2607124934051973264, guid: 0ebcb99ee6651404da2c1253a6c301f6,
