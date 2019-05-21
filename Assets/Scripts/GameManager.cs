@@ -27,15 +27,19 @@ public class GameManager : MonoBehaviour
 			trackPieces[i] = trackPiecesParent.GetChild(i + 1);
 		}
 
-		maan = (Instantiate(maanPrefab, Vector3.left, Quaternion.identity).GetComponent<Maan>());
+		maan = (Instantiate(maanPrefab, new Vector3(-1, .05f, 0), Quaternion.identity).GetComponent<Maan>());
 		maan.playerIndex = (PlayerIndex) 0;
-		kevin = (Instantiate(kevinPrefab, Vector3.right, Quaternion.identity).GetComponent<Kevin>());
+		kevin = (Instantiate(kevinPrefab, new Vector3(1, .05f, 0), Quaternion.identity).GetComponent<Kevin>());
 		kevin.playerIndex = (PlayerIndex) 1;
 
 		Camera[] maansCameras = maan.GetComponentsInChildren<Camera>();
 		Camera[] kevinsCameras = kevin.GetComponentsInChildren<Camera>();
+		Display.displays[0].Activate();
 		switch (displayMode) {
 			case DisplayModes.TwoMonitors:
+				if (Display.displays.Length > 1) {
+					Display.displays[1].Activate();
+				}
 				foreach (Camera c in maansCameras) {
 					c.rect = new Rect(0, 0, 1, 1);
 					c.targetDisplay = 0;
