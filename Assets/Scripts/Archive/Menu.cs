@@ -27,7 +27,7 @@ namespace Archive
 		void Start ()
 		{
 			SwitchSelectedOption(MenuOptions.Players);
-			StaticData.levelNumber = 0;
+			//StaticData.levelNumber = 0;
 			//LevelInformation.numberOfPlayers = 2;
 		}
 
@@ -79,7 +79,7 @@ namespace Archive
 								temp = 0;
 							levelOption = (LevelOptions) temp;
 							levelDisplay.text = ((int) levelOption + 1).ToString();
-							StaticData.levelNumber = (int) levelOption;
+							//StaticData.levelNumber = (int) levelOption;
 							gamePadWaitingForReset[i] = true;
 						} else if (!gamePadWaitingForReset[i] && (gamePadStates[i].ThumbSticks.Left.X < 0 || gamePadStates[i].DPad.Left == ButtonState.Pressed)) {
 							int temp = (int) levelOption - 1;
@@ -87,7 +87,7 @@ namespace Archive
 								temp = numberOfLevels - 1;
 							levelOption = (LevelOptions) temp;
 							levelDisplay.text = ((int) levelOption + 1).ToString();
-							StaticData.levelNumber = (int) levelOption;
+							//StaticData.levelNumber = (int) levelOption;
 							gamePadWaitingForReset[i] = true;
 						}
 					}

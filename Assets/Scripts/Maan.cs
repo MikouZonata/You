@@ -19,7 +19,6 @@ public class Maan : MonoBehaviour
 	float movementSpeed = 20;
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
-	List<Barrier> barriersInRange = new List<Barrier>();
 
 	public GameObject pingPrefab;
 	float pingBaseSize = 1, pingMaxSize = 10;
@@ -49,16 +48,7 @@ public class Maan : MonoBehaviour
 			Ping();
 		}
 
-		for (int i = 0; i < barriersInRange.Count; i++) {
-			barriersInRange[i].Disintegrate(linked);
-			if (barriersInRange[i].destroyed) {
-				barriersInRange.Remove(barriersInRange[i]);
-				i--;
-			}
-		}
-
 		if (gamePadState.Buttons.Back == ButtonState.Pressed) {
-			StaticData.playerOptions[(int) playerIndex] = StaticData.PlayerOptions.Kevin;
 			SceneManager.LoadScene(1);
 		}
 	}
@@ -74,9 +64,6 @@ public class Maan : MonoBehaviour
 	{
 		if (other.gameObject.layer == LayerMask.NameToLayer("MaanKattoe")) {
 			kattoesInRange.Add(other.GetComponent<Kattoe>());
-		} else if (other.gameObject.layer == LayerMask.NameToLayer("MaanBarrier")) {
-			barriersInRange.Add(other.GetComponent<Barrier>());
-			other.GetComponent<Barrier>().maanInRange = true;
 		}
 	}
 
@@ -84,9 +71,6 @@ public class Maan : MonoBehaviour
 	{
 		if (other.gameObject.layer == LayerMask.NameToLayer("MaanKattoe")) {
 			kattoesInRange.Remove(other.GetComponent<Kattoe>());
-		} else if (other.gameObject.layer == LayerMask.NameToLayer("MaanBarrier")) {
-			other.GetComponent<Barrier>().maanInRange = false;
-			barriersInRange.Remove(other.GetComponent<Barrier>());
 		}
 	}
 

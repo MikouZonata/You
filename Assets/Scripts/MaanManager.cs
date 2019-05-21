@@ -6,7 +6,7 @@ using Utility;
 public class MaanManager : MonoBehaviour
 {
 	Transform[] trackPieces;
-	Maan[] maans;
+	Maan maan;
 
 	public GameObject kattoeprefab;
 	public AudioClip[] kattoeClips;
@@ -27,10 +27,10 @@ public class MaanManager : MonoBehaviour
 	float _cloudChaseSpeed = 0;
 	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .1f;
 
-	public void Init (Transform[] trackPieces, params Maan[] maans)
+	public void Init (Transform[] trackPieces, Maan maan)
 	{
 		this.trackPieces = trackPieces;
-		this.maans = maans;
+		this.maan = maan;
 
 		Transform[] spawnPositions = Util.PickRandom(activeAnimals, false, trackPieces);
 		for (int i = 0; i < activeAnimals; i++) {
@@ -74,8 +74,8 @@ public class MaanManager : MonoBehaviour
 				break;
 			case CloudStates.Chasing:
 				_cloudChaseSpeed += cloudChaseAcceleration * Time.deltaTime;
-				cloudTrans.position = Vector3.MoveTowards(cloudTrans.position, maans[0].transform.position, _cloudChaseSpeed * Time.deltaTime);
-				if ((cloudTrans.position - maans[0].transform.position).sqrMagnitude < 64) {
+				cloudTrans.position = Vector3.MoveTowards(cloudTrans.position, maan.transform.position, _cloudChaseSpeed * Time.deltaTime);
+				if ((cloudTrans.position - maan.transform.position).sqrMagnitude < 64) {
 					Debug.Log("I've caught myself a Maan");
 					_cloudTimer = 0;
 					_cloudChaseSpeed = cloudChaseBaseSpeed;

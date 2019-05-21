@@ -9,81 +9,62 @@ using Utility;
 
 public class GameManager : MonoBehaviour
 {
-	public GameObject[] levels;
+	public enum DisplayModes { TwoMonitors, SplitScreen };
+	public DisplayModes displayMode = DisplayModes.TwoMonitors;
+	public GameObject level;
 	public GameObject kevinPrefab, maanPrefab;
-	Kevin[] kevins = new Kevin[2];
-	Maan[] maans = new Maan[2];
+	Kevin kevin;
+	Maan maan;
 	KevinManager kevinManager;
 	MaanManager maanManager;
 	Transform[] trackPieces;
 
 	private void Awake ()
 	{
-		//find the correct set of players and initialize them
-		for (int i = 0; i < 2; i++) {
-			if (StaticData.playerOptions[i] == StaticData.PlayerOptions.Kevin) {
-				kevins[i] = (Instantiate(kevinPrefab, new Vector3(-2 + 4 * i, 0.1f, 0), Quaternion.identity).GetComponent<Kevin>());
-				kevins[i].playerIndex = (PlayerIndex) i;
-				foreach (Camera c in kevins[i].transform.GetComponentsInChildren<Camera>()) {
-					c.rect = new Rect(0, 0.5f - .5f * i, 1, .5f);
-				}
-			} else {
-				maans[i] = (Instantiate(maanPrefab, new Vector3(-2 + 4 * i, 0.1f, 0), Quaternion.identity).GetComponent<Maan>());
-				maans[i].playerIndex = (PlayerIndex) i;
-				foreach (Camera c in maans[i].transform.GetComponentsInChildren<Camera>()) {
-					c.rect = new Rect(0, 0.5f - .5f * i, 1, .5f);
-				}
-			}
-		}
-
-		kevinManager = GetComponent<KevinManager>();
-		maanManager = GetComponent<MaanManager>();
-		for (int i = 0; i < 2; i++) {
-			if (StaticData.playerOptions[i] == StaticData.PlayerOptions.Kevin) {
-				if (StaticData.playerOptions[Util.InvertZeroAndOne(i)] == StaticData.PlayerOptions.Kevin) {
-					kevins[i].Init(kevinManager, kevins[Util.InvertZeroAndOne(i)].transform);
-				} else {
-					kevins[i].Init(kevinManager, maans[Util.InvertZeroAndOne(i)].transform);
-				}
-			} else {
-				if (StaticData.playerOptions[Util.InvertZeroAndOne(i)] == StaticData.PlayerOptions.Kevin) {
-					maans[i].Init(maanManager, kevins[Util.InvertZeroAndOne(i)].transform);
-				} else {
-					maans[i].Init(maanManager, maans[Util.InvertZeroAndOne(i)].transform);
-				}
-			}
-		}
-
-		//Enable correct level
-		for (int i = 0; i < levels.Length; i++) {
-			if (StaticData.levelNumber != i) {
-				levels[i].SetActive(false);
-			} else {
-				levels[i].SetActive(true);
-			}
-		}
-
-		Transform trackPiecesParent = levels[StaticData.levelNumber].transform;
+		Transform trackPiecesParent = level.transform;
 		trackPieces = new Transform[trackPiecesParent.childCount - 1];
 		for (int i = 0; i < trackPieces.Length; i++) {
 			trackPieces[i] = trackPiecesParent.GetChild(i + 1);
 		}
 
-		List<Kevin> kl = new List<Kevin>();
-		for (int i = 0; i < 2; i++) {
-			if (kevins[i] != null) {
-				kl.Add(kevins[i]);
-			}
-		}
-		kevinManager.Init(trackPieces, kl.ToArray());
+		maan = (Instantiate(maanPrefab, Vector3.left, Quaternion.identity).GetComponent<Maan>());
+		maan.playerIndex = (PlayerIndex) 0;
+		kevin = (Instantiate(kevinPrefab, Vector3.right, Quaternion.identity).GetComponent<Kevin>());
+		kevin.playerIndex = (PlayerIndex) 1;
 
-		List<Maan> ml = new List<Maan>();
-		for (int i = 0; i < 2; i++) {
-			if (maans[i] != null) {
-				ml.Add(maans[i]);
-			}
+		Camera[] maansCameras = maan.GetComponentsInChildren<Camera>();
+		Camera[] kevinsCameras = kevin.GetComponentsInChildren<Camera>();
+		switch (displayMode) {
+			case DisplayModes.TwoMonitors:
+				foreach (Camera c in maansCameras) {
+					c.rect = new Rect(0, 0, 1, 1);
+					c.targetDisplay = 0;
+				}
+				foreach (Camera c in kevinsCameras) {
+					c.rect = new Rect(0, 0, 1, 1);
+					c.targetDisplay = 1;
+				}
+				break;
+			case DisplayModes.SplitScreen:
+				foreach (Camera c in maansCameras) {
+					c.rect = new Rect(0, 0.5f, 1, .5f);
+					c.targetDisplay = 0;
+				}
+				foreach (Camera c in kevinsCameras) {
+					c.rect = new Rect(0, 0, 1, .5f);
+					c.targetDisplay = 0;
+				}
+				break;
 		}
-		maanManager.Init(trackPieces, ml.ToArray());
+
+		maanManager = GetComponent<MaanManager>();
+		kevinManager = GetComponent<KevinManager>();
+
+		maan.Init(maanManager, kevin.transform);
+		kevin.Init(kevinManager, maan.transform);
+
+		maanManager.Init(trackPieces, maan);
+		kevinManager.Init(trackPieces, kevin);
 	}
 
 	private void Update ()

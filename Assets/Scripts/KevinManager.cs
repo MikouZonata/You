@@ -10,8 +10,8 @@ public class KevinManager : MonoBehaviour
 {
 	public GameObject enemyDriverPrefab, pickupPrefab, pickupFeedbackPrefab;
 	const int numberOfDrivers = 6;
-	int numberOfAiDrivers, numberOfKevins;
-	Kevin[] kevins;
+	int numberOfAiDrivers;
+	Kevin kevin;
 	NavMeshAgent[] driverAgents;
 	int[] driverTargets = new int[numberOfDrivers];
 
@@ -19,21 +19,20 @@ public class KevinManager : MonoBehaviour
 
 	Transform[] trackPieces;
 
-	Transform[] leaderboards;
-	RectTransform[,] leaderboardCards;
+	Transform leaderboard;
+	RectTransform[] leaderboardCards;
 	int minStartingScore = 34, maxStartingScore = 107;
 	string[] driverNames = new string[] { "Tim", "Bosje", "Valentijn", "Herman", "Richard", "Bojan", "Arie", "Tuur", "Luan", "Earl", "Aran", "Micah" };
 	int[] scores = new int[numberOfDrivers];
 	int[] ranks;
-	Text[,] scoreDisplays;
-	Image[,] scoreHighlights;
+	Text[] scoreDisplays;
+	Image[] scoreHighlights;
 
-	public void Init (Transform[] trackPieces, params Kevin[] kevins)
+	public void Init (Transform[] trackPieces, Kevin kevin)
 	{
 		this.trackPieces = trackPieces;
-		this.kevins = kevins;
-		numberOfKevins = kevins.Length;
-		numberOfAiDrivers = numberOfDrivers - numberOfKevins;
+		this.kevin = kevin;
+		numberOfAiDrivers = numberOfDrivers - 1;
 
 		//Maak alle pickups.
 		pickupPool = new Transform[trackPieces.Length];
@@ -53,9 +52,7 @@ public class KevinManager : MonoBehaviour
 		}
 
 		//Geef alle kevins een naam die overeenkomt met hun driverIndex.
-		for (int i = 0; i < numberOfKevins; i++) {
-			kevins[i].name = (numberOfAiDrivers + i).ToString();
-		}
+		kevin.name = 5.ToString();
 
 		//Pickups for everyone.
 		for (int i = 0; i < numberOfDrivers; i++) {
@@ -63,30 +60,27 @@ public class KevinManager : MonoBehaviour
 		}
 
 		//Setup stuff voor leaderboard.
-		leaderboards = new Transform[numberOfKevins];
-		leaderboardCards = new RectTransform[numberOfKevins, numberOfDrivers];
-		scoreDisplays = new Text[numberOfKevins, numberOfDrivers];
-		scoreHighlights = new Image[numberOfKevins, numberOfDrivers];
+		leaderboardCards = new RectTransform[numberOfDrivers];
+		scoreDisplays = new Text[numberOfDrivers];
+		scoreHighlights = new Image[numberOfDrivers];
 		ranks = new int[numberOfDrivers];
 		string[] _driverNames = Util.PickRandom(numberOfAiDrivers, false, driverNames);
 
 		//Vul het leaderboard met naampjes en stuff
-		for (int kevin = 0; kevin < kevins.Length; kevin++) {
-			leaderboards[kevin] = kevins[kevin].leaderboard;
+		leaderboard = kevin.leaderboard;
 
-			for (int driver = 0; driver < numberOfDrivers; driver++) {
-				leaderboardCards[kevin, driver] = leaderboards[kevin].GetChild(driver).GetComponent<RectTransform>();
-				scoreHighlights[kevin, driver] = leaderboardCards[kevin, driver].GetChild(2).GetComponent<Image>();
-				scoreDisplays[kevin, driver] = leaderboardCards[kevin, driver].GetChild(3).GetComponent<Text>();
+		for (int driver = 0; driver < numberOfDrivers; driver++) {
+			leaderboardCards[driver] = leaderboard.GetChild(driver).GetComponent<RectTransform>();
+			scoreHighlights[driver] = leaderboardCards[driver].GetChild(2).GetComponent<Image>();
+			scoreDisplays[driver] = leaderboardCards[driver].GetChild(3).GetComponent<Text>();
 
-				if (driver < numberOfAiDrivers) {
-					leaderboardCards[kevin, driver].GetChild(1).GetComponent<Text>().text = _driverNames[driver];
-					scores[driver] = Random.Range(minStartingScore, maxStartingScore);
-					scoreDisplays[kevin, driver].text = scores[driver].ToString();
-				} else {
-					leaderboardCards[kevin, driver].GetChild(1).GetComponent<Text>().text = "Kevin";
-					scores[driver] = 0;
-				}
+			if (driver < numberOfAiDrivers) {
+				leaderboardCards[driver].GetChild(1).GetComponent<Text>().text = _driverNames[driver];
+				scores[driver] = Random.Range(minStartingScore, maxStartingScore);
+				scoreDisplays[driver].text = scores[driver].ToString();
+			} else {
+				leaderboardCards[driver].GetChild(1).GetComponent<Text>().text = "Kevin";
+				scores[driver] = 0;
 			}
 		}
 
@@ -170,11 +164,9 @@ public class KevinManager : MonoBehaviour
 
 		//Update leaderboardCards naar hun juiste posities en vul strings in
 		float distanceBetweenCards = -80;
-		for (int kevin = 0; kevin < numberOfKevins; kevin++) {
-			for (int driver = 0; driver < numberOfDrivers; driver++) {
-				leaderboardCards[kevin, driver].anchoredPosition = new Vector2(0, ranks[driver] * distanceBetweenCards);
-				scoreDisplays[kevin, driver].text = scores[driver].ToString();
-			}
+		for (int driver = 0; driver < numberOfDrivers; driver++) {
+			leaderboardCards[driver].anchoredPosition = new Vector2(0, ranks[driver] * distanceBetweenCards);
+			scoreDisplays[driver].text = scores[driver].ToString();
 		}
 	}
 
@@ -184,21 +176,15 @@ public class KevinManager : MonoBehaviour
 		float highlightAlpha = 1, highlightTime = .7f;
 
 		for (float t = 0; t < highlightTime * .5f; t += Time.deltaTime) {
-			for (int kevin = 0; kevin < numberOfKevins; kevin++) {
-				scoreHighlights[kevin, driverIndex].color = new Color(1, 1, 1, t * 2 / highlightTime * highlightAlpha);
-			}
+			scoreHighlights[driverIndex].color = new Color(1, 1, 1, t * 2 / highlightTime * highlightAlpha);
 			yield return null;
 		}
 		for (float t = highlightTime * .5f; t > 0; t -= Time.deltaTime) {
-			for (int kevin = 0; kevin < numberOfKevins; kevin++) {
-				scoreHighlights[kevin, driverIndex].color = new Color(1, 1, 1, t * 2 / highlightTime * highlightAlpha);
-			}
+			scoreHighlights[driverIndex].color = new Color(1, 1, 1, t * 2 / highlightTime * highlightAlpha);
 			yield return null;
 		}
 
-		for (int kevin = 0; kevin < numberOfKevins; kevin++) {
-			scoreHighlights[kevin, driverIndex].color = new Color(1, 1, 1, 0);
-		}
+		scoreHighlights[driverIndex].color = new Color(1, 1, 1, 0);
 	}
 }
 
