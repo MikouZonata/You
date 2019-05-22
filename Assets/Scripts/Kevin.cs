@@ -26,20 +26,24 @@ public class Kevin : MonoBehaviour
 	public TrailRenderer throttleTrail;
 	Vector3 _velocity = Vector3.zero;
 	float triggerValue;
-	float throttleMaxForwardSpeed = 26, throttleMaxBackwardsSpeed = 10, _throttleSpeed = 0;
+	float throttleMaxForwardSpeed = 26, throttleMaxBackwardsSpeed = 11;
 	float throttleAcceleration = 2, throttleDecceleration = .8f, throttleNaturalDecceleration = 18;
-	float _speedPoint = 0;
+	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
-	float _fatigueFactor = 0;
+	float _fatigueFactor = 1;
 	float fatigueFactorMin = .55f, fatigueTimeUntilMin = 40, fatigueTimeUntilRecharged = 5;
 	float fatigueGrowRate, fatigueShrinkRate;
 	float fatigueRechargePerPickup = 0.04f;
 
-	float maxTurnRate = 170, minTurnRate = 72;
+	float _pickupFatigueFactor = 1;
+	float pickupFatigueTimeToDeplete = 30, pickupFatigueBoostPerPickup = 0.08f;
+
+	float maxTurnRate = 178, minTurnRate = 76;
 	float turnRateLossPerVelocity = 4.2f;
 	float _steeringSideDrift = 0, sideDriftPerVelocity = .42f, sideDriftMaxVelocity = 22, sideDriftMinVelocity = 12;
-	float driftingMaxSideFactor = 5.8f, _driftingSideFactor = 1, driftingMaxTurnFactor = 1.24f, _driftingTurnFactor = 1, driftingTimeToMax = .12f;
+	float driftingMaxSideFactor = 5.2f, _driftingSideFactor = 1, driftingMaxTurnFactor = 1.24f, driftingTimeToMax = .12f;
+	float _driftingTurnFactor = 1;
 	float driftingSideAcceleration, driftingTurnAcceleration;
 
 	//public TrailRenderer boostTrail;
