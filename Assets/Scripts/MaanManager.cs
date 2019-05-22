@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using Utility;
 
 public class MaanManager : MonoBehaviour
@@ -15,6 +16,7 @@ public class MaanManager : MonoBehaviour
 
 	public GameObject cloudPrefab;
 	Transform cloudTrans;
+	Cloud cloud;
 	enum CloudStates { Dormant, Waiting, Chasing };
 	CloudStates cloudState = CloudStates.Dormant;
 	float _cloudTimer = 0, cloudTime;
@@ -26,6 +28,9 @@ public class MaanManager : MonoBehaviour
 
 	float _cloudChaseSpeed = 0;
 	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .1f;
+
+	float cloudDefaultSize = 24, cloudSmallSize = 12, cloudGrowthRate = 14;
+	float _cloudSize;
 
 	public void Init (Transform[] trackPieces, Maan maan)
 	{
@@ -49,6 +54,7 @@ public class MaanManager : MonoBehaviour
 	private void Update ()
 	{
 		Cloud();
+		CloudVisuals();
 	}
 
 	void Cloud ()
@@ -75,6 +81,7 @@ public class MaanManager : MonoBehaviour
 			case CloudStates.Chasing:
 				_cloudChaseSpeed += cloudChaseAcceleration * Time.deltaTime;
 				cloudTrans.position = Vector3.MoveTowards(cloudTrans.position, maan.transform.position, _cloudChaseSpeed * Time.deltaTime);
+				cloudTrans.LookAt(maan.transform);
 				if ((cloudTrans.position - maan.transform.position).sqrMagnitude < 64) {
 					Debug.Log("I've caught myself a Maan");
 					_cloudTimer = 0;
@@ -86,9 +93,34 @@ public class MaanManager : MonoBehaviour
 		}
 	}
 
+	void CloudVisuals ()
+	{
+		if (cloudState != CloudStates.Dormant) {
+			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
+			float _cloudTargetSize;
+			if (StaticData.playersAreLinked) {
+				cloud.SwitchMaterial(global::Cloud.MaterialOptions.Good);
+				_cloudTargetSize = cloudSmallSize;
+			} else {
+				cloud.SwitchMaterial(global::Cloud.MaterialOptions.Bad);
+				_cloudTargetSize = cloudDefaultSize;
+			}
+
+			_cloudSize = Mathf.MoveTowards(_cloudSize, _cloudTargetSize, cloudGrowthRate * Time.deltaTime);
+			cloudTrans.localScale = new Vector3(_cloudSize, _cloudSize, _cloudSize);
+
+			maan.VisualReactionToCloud(distanceMaanToCloud);
+		} else {
+			maan.VisualReactionToCloud(1000);
+		}
+	}
+
 	IEnumerator SpawnCloud ()
 	{
 		cloudTrans = Instantiate(cloudPrefab, Util.PickRandom(trackPieces).position - Vector3.up * cloudSpawningHeight, Quaternion.identity).transform;
+		cloud = cloudTrans.GetComponent<Cloud>();
+		cloudTrans.localScale = new Vector3(cloudDefaultSize, cloudDefaultSize, cloudDefaultSize);
+		_cloudSize = cloudDefaultSize;
 		float riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < riseTime; t += Time.deltaTime) {
 			cloudTrans.position += Vector3.up * cloudWaitingSpeed * Time.deltaTime;

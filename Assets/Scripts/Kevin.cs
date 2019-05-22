@@ -8,7 +8,7 @@ using Utility;
 
 public class Kevin : MonoBehaviour
 {
-	public PlayerIndex playerIndex = PlayerIndex.One;
+	public PlayerIndex playerIndex = PlayerIndex.Two;
 	GamePadState gamePadState;
 	KevinManager manager;
 	Transform otherPlayer;
@@ -26,10 +26,15 @@ public class Kevin : MonoBehaviour
 	public TrailRenderer throttleTrail;
 	Vector3 _velocity = Vector3.zero;
 	float triggerValue;
-	float throttleMaxForwardSpeed = 22, throttleMaxBackwardsSpeed = 10, _throttleSpeed = 0;
+	float throttleMaxForwardSpeed = 26, throttleMaxBackwardsSpeed = 10, _throttleSpeed = 0;
 	float throttleAcceleration = 2, throttleDecceleration = .8f, throttleNaturalDecceleration = 18;
 	float _speedPoint = 0;
 	float throttleTrailMaxTime = .08f;
+
+	float _fatigueFactor = 0;
+	float fatigueFactorMin = .55f, fatigueTimeUntilMin = 40, fatigueTimeUntilRecharged = 5;
+	float fatigueGrowRate, fatigueShrinkRate;
+	float fatigueRechargePerPickup = 0.04f;
 
 	float maxTurnRate = 170, minTurnRate = 72;
 	float turnRateLossPerVelocity = 4.2f;
@@ -37,9 +42,9 @@ public class Kevin : MonoBehaviour
 	float driftingMaxSideFactor = 5.8f, _driftingSideFactor = 1, driftingMaxTurnFactor = 1.24f, _driftingTurnFactor = 1, driftingTimeToMax = .12f;
 	float driftingSideAcceleration, driftingTurnAcceleration;
 
-	public TrailRenderer boostTrail;
-	float _boostSpeed = 0, boostMaxSpeed = 12, boostTimeTillMax = .7f;
-	float boostTrailMaxTime = 0.12f;
+	//public TrailRenderer boostTrail;
+	//float _boostSpeed = 0, boostMaxSpeed = 12, boostTimeTillMax = .7f;
+	//float boostTrailMaxTime = 0.12f;
 
 	public Transform leaderboard;
 
@@ -49,6 +54,9 @@ public class Kevin : MonoBehaviour
 
 		rig = GetComponent<Rigidbody>();
 		mainCamera = transform.GetChild(0).GetComponent<Camera>();
+
+		fatigueShrinkRate = (1 - fatigueFactorMin) / fatigueTimeUntilMin;
+		fatigueGrowRate = (1 - fatigueFactorMin) / fatigueTimeUntilRecharged;
 
 		sideDriftParticles = GetComponentInChildren<ParticleSystem>();
 		sideDriftEmissionModule = sideDriftParticles.emission;
@@ -86,9 +94,10 @@ public class Kevin : MonoBehaviour
 		triggerValue = gamePadState.Triggers.Right;
 
 		Throttle();
-		LinkBoost();
+		Fatigue();
+		//LinkBoost();
 
-		_velocity.z = _throttleSpeed + _boostSpeed;
+		_velocity.z = _throttleSpeed * _fatigueFactor;  //_boostSpeed;
 		_velocity.x = _steeringSideDrift;
 
 		transform.Rotate(new Vector3(0, Steering(), 0));
@@ -100,6 +109,7 @@ public class Kevin : MonoBehaviour
 	{
 		if (other.tag == "Pickup") {
 			manager.PickUpPickup(Util.ToInt(transform.name), Util.ToInt(other.name));
+			_fatigueFactor = Mathf.Clamp(_fatigueFactor + fatigueRechargePerPickup, 0, 1);
 		}
 	}
 
@@ -111,7 +121,7 @@ public class Kevin : MonoBehaviour
 	void ShowLink ()
 	{
 		Vector3[] positions;
-		if (Vector3.Distance(transform.position, otherPlayer.position) <= StaticData.distanceToLink) {
+		if (StaticData.playersAreLinked) {
 			positions = new Vector3[] { transform.position, otherPlayer.position };
 		} else {
 			positions = new Vector3[] { transform.position, transform.position };
@@ -161,6 +171,15 @@ public class Kevin : MonoBehaviour
 		throttleTrail.time = Mathf.Lerp(0, throttleTrailMaxTime, actualTriggerValue);
 	}
 
+	void Fatigue ()
+	{
+		if (StaticData.playersAreLinked) {
+			_fatigueFactor = Mathf.MoveTowards(_fatigueFactor, 1, fatigueGrowRate * Time.deltaTime);
+		} else {
+			_fatigueFactor = Mathf.MoveTowards(_fatigueFactor, fatigueFactorMin, fatigueShrinkRate * Time.deltaTime);
+		}
+	}
+
 	float Steering ()
 	{
 		float result = 0;
@@ -195,21 +214,21 @@ public class Kevin : MonoBehaviour
 		return result;
 	}
 
-	void LinkBoost ()
-	{
-		if ((transform.position - otherPlayer.position).sqrMagnitude <= StaticData.distanceToLink * StaticData.distanceToLink) {
-			_boostSpeed = Mathf.MoveTowards(_boostSpeed, boostMaxSpeed * gamePadState.Triggers.Right, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
-		} else {
-			_boostSpeed = Mathf.MoveTowards(_boostSpeed, 0, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
-		}
+	//void LinkBoost ()
+	//{
+	//	if (StaticData.playersAreLinked) {
+	//		_boostSpeed = Mathf.MoveTowards(_boostSpeed, boostMaxSpeed * gamePadState.Triggers.Right, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
+	//	} else {
+	//		_boostSpeed = Mathf.MoveTowards(_boostSpeed, 0, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
+	//	}
 
-		BoostTrail();
-	}
+	//	BoostTrail();
+	//}
 
-	void BoostTrail ()
-	{
-		boostTrail.time = Mathf.Lerp(0, boostTrailMaxTime, _boostSpeed / boostMaxSpeed);
-	}
+	//void BoostTrail ()
+	//{
+	//	boostTrail.time = Mathf.Lerp(0, boostTrailMaxTime, _boostSpeed / boostMaxSpeed);
+	//}
 
 	public Transform GetTransform ()
 	{

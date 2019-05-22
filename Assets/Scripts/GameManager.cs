@@ -78,10 +78,10 @@ public class GameManager : MonoBehaviour
 			gamePadStates[i] = GamePad.GetState((PlayerIndex) i);
 		}
 
-		//foreach (GamePadState gps in gamePadStates) {
-		//	if (gps.Buttons.Back == ButtonState.Pressed) {
-		//		SceneManager.LoadScene(0);
-		//	}
-		//}
+		if (Vector3.Distance(kevin.transform.position, maan.transform.position) <= StaticData.distanceToLink) {
+			StaticData.playersAreLinked = true;
+		} else {
+			StaticData.playersAreLinked = false;
+		}
 	}
 }

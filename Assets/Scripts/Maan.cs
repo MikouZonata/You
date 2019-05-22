@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.PostProcessing;
 using XInputDotNetPure;
 using Utility;
 
 public class Maan : MonoBehaviour
 {
-	public PlayerIndex playerIndex = PlayerIndex.Two;
+	public PlayerIndex playerIndex = PlayerIndex.One;
 	GamePadState gamePadState;
 	MaanManager manager;
 	Transform otherPlayer;
 	Rigidbody rig;
 	Transform cameraTrans;
 	Vector3 _velocity, _cameraRotation;
-	
+
 	float movementSpeed = 20;
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
@@ -24,12 +25,22 @@ public class Maan : MonoBehaviour
 	float pingBaseSize = 1, pingMaxSize = 10;
 	float pingExpandTime = .3f;
 
+	public PostProcessProfile defaultPPProfile, nearCloudPPProfile;
+	PostProcessVolume[] postProcessVolumes;
+
 	public void Init (MaanManager manager, Transform otherPlayer)
 	{
 		gamePadState = GamePad.GetState(playerIndex);
 
 		rig = GetComponent<Rigidbody>();
 		cameraTrans = transform.GetChild(0);
+		cameraDefaultPosition = cameraTrans.localPosition;
+
+		postProcessVolumes = GetComponentsInChildren<PostProcessVolume>();
+		postProcessVolumes[0].profile = defaultPPProfile;
+		postProcessVolumes[0].weight = 1;
+		postProcessVolumes[1].profile = nearCloudPPProfile;
+		postProcessVolumes[1].weight = 0;
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
@@ -38,11 +49,6 @@ public class Maan : MonoBehaviour
 	private void Update ()
 	{
 		gamePadState = GamePad.GetState(playerIndex);
-
-		bool linked = false;
-		if (Vector3.Distance(transform.position, otherPlayer.position) <= StaticData.distanceToLink) {
-			linked = true;
-		}
 
 		if (GetAButtonDown()) {
 			Ping();
@@ -93,6 +99,37 @@ public class Maan : MonoBehaviour
 		transform.Rotate(new Vector3(0, gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime, 0));
 		_cameraZAngle = Mathf.Clamp(_cameraZAngle - gamePadState.ThumbSticks.Right.Y * cameraZSensitivity * Time.deltaTime, cameraMinZAngle, cameraMaxZAngle);
 		cameraTrans.localRotation = Quaternion.Euler(new Vector3(_cameraZAngle, 0, 0));
+	}
+
+	Vector3 cameraDefaultPosition;
+	float screenShakeMaxIntensity = .16f, visualMaxDistanceToCloud = 70, visualReactionMinDistanceToCloud = 15;
+	float _screenShakeIntensity = 0, screenShakeIntensityGrowth = .2f;
+	float _postProcessingWeight, postProcessingWeightGrowth = .3f;
+	public void VisualReactionToCloud (float distanceMaanToCloud)
+	{
+		float _targetIntensity;
+		float _targetWeight;
+		if (distanceMaanToCloud >= visualMaxDistanceToCloud) {
+			_targetIntensity = _targetWeight = 0;
+		} else if (distanceMaanToCloud <= visualReactionMinDistanceToCloud) {
+			_targetIntensity = screenShakeMaxIntensity;
+			_targetWeight = 1;
+		} else {
+			_targetIntensity = screenShakeMaxIntensity * (visualMaxDistanceToCloud - distanceMaanToCloud) / visualMaxDistanceToCloud;
+			_targetWeight = (visualMaxDistanceToCloud - distanceMaanToCloud) / visualMaxDistanceToCloud;
+		}
+
+		if (StaticData.playersAreLinked) {
+			_targetIntensity *= 0.08f;
+			_targetWeight *= .1f;
+		}
+
+		_screenShakeIntensity = Mathf.MoveTowards(_screenShakeIntensity, _targetIntensity, screenShakeIntensityGrowth * Time.deltaTime);
+		_postProcessingWeight = Mathf.MoveTowards(_postProcessingWeight, _targetWeight, postProcessingWeightGrowth * Time.deltaTime);
+
+		Vector3 screenShakeResult = new Vector3(Mathf.Sin(Time.time * 100), Mathf.Sin(Time.time * 120 + 1), 0);
+		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * _screenShakeIntensity;
+		postProcessVolumes[1].weight = _postProcessingWeight;
 	}
 
 	void Ping ()
