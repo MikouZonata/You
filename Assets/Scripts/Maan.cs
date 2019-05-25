@@ -108,24 +108,24 @@ public class Maan : MonoBehaviour
 	public void VisualReactionToCloud (float distanceMaanToCloud)
 	{
 		float _targetIntensity;
-		float _targetWeight;
+		float _targetPPWeight;
 		if (distanceMaanToCloud >= visualMaxDistanceToCloud) {
-			_targetIntensity = _targetWeight = 0;
+			_targetIntensity = _targetPPWeight = 0;
 		} else if (distanceMaanToCloud <= visualReactionMinDistanceToCloud) {
 			_targetIntensity = screenShakeMaxIntensity;
-			_targetWeight = 1;
+			_targetPPWeight = 1;
 		} else {
 			_targetIntensity = screenShakeMaxIntensity * (visualMaxDistanceToCloud - distanceMaanToCloud) / visualMaxDistanceToCloud;
-			_targetWeight = (visualMaxDistanceToCloud - distanceMaanToCloud) / visualMaxDistanceToCloud;
+			_targetPPWeight = (visualMaxDistanceToCloud - distanceMaanToCloud) / visualMaxDistanceToCloud;
 		}
 
 		if (StaticData.playersAreLinked) {
 			_targetIntensity *= 0.08f;
-			_targetWeight *= .1f;
+			_targetPPWeight *= .1f;
 		}
 
 		_screenShakeIntensity = Mathf.MoveTowards(_screenShakeIntensity, _targetIntensity, screenShakeIntensityGrowth * Time.deltaTime);
-		_postProcessingWeight = Mathf.MoveTowards(_postProcessingWeight, _targetWeight, postProcessingWeightGrowth * Time.deltaTime);
+		_postProcessingWeight = Mathf.MoveTowards(_postProcessingWeight, _targetPPWeight, postProcessingWeightGrowth * Time.deltaTime);
 
 		Vector3 screenShakeResult = new Vector3(Mathf.Sin(Time.time * 100), Mathf.Sin(Time.time * 120 + 1), 0);
 		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * _screenShakeIntensity;
