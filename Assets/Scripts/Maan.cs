@@ -28,6 +28,8 @@ public class Maan : MonoBehaviour
 	public PostProcessProfile defaultPPProfile, nearCloudPPProfile;
 	PostProcessVolume[] postProcessVolumes;
 
+	public Image fadeToBlackDisplay;
+
 	public void Init (MaanManager manager, Transform otherPlayer)
 	{
 		gamePadState = GamePad.GetState(playerIndex);
@@ -41,6 +43,8 @@ public class Maan : MonoBehaviour
 		postProcessVolumes[0].weight = 1;
 		postProcessVolumes[1].profile = nearCloudPPProfile;
 		postProcessVolumes[1].weight = 0;
+
+		fadeToBlackDisplay.enabled = false;
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
@@ -154,6 +158,23 @@ public class Maan : MonoBehaviour
 			yield return null;
 		}
 		Destroy(pingGO);
+	}
+
+	public IEnumerator TemporaryFadeToBlack (float fadeDelay = .4f, float fadeTime = 1f)
+	{
+		fadeToBlackDisplay.enabled = true;
+		Color _color = Color.black;
+		fadeToBlackDisplay.color = _color;
+
+		yield return new WaitForSeconds(fadeDelay);
+
+		float transformationValue = 1 / fadeTime;
+		for (float t = fadeTime; t > 0; t -= Time.deltaTime) {
+			_color.a = t * transformationValue;
+			fadeToBlackDisplay.color = _color;
+			yield return null;
+		}
+		fadeToBlackDisplay.enabled = false;
 	}
 
 	bool AButtonReleased = true;

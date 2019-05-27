@@ -20,16 +20,17 @@ public class MaanManager : MonoBehaviour
 	enum CloudStates { Dormant, Waiting, Chasing };
 	CloudStates cloudState = CloudStates.Dormant;
 	float _cloudTimer = 0, cloudTime;
-	float minTimeBeforeCloudSpawn = 12, maxTimeBeforeCloudSpawn = 40;
-	float cloudSpawningHeight = 30;
+	float minTimeBeforeCloudSpawn = 0, maxTimeBeforeCloudSpawn = 0;
+	float cloudSpawningHeight = 20;
 
 	float cloudWaitingSpeed = 4, cloudWaitingHeight = 0;
-	float minTimeBeforeCloudChase = 0, maxTimeBeforeCloudChase = 0;
+	float minTimeBeforeCloudChase = 3, maxTimeBeforeCloudChase = 6;
 
-	float _cloudDescendSpeed = 0;
-	float cloudDescendBaseSpeed = 1, cloudDescendAcceleration = .1f;
+	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
+	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .33f;
+	float cloudChasingHeight = 14;
 
-	float cloudDefaultSize = 36, cloudSmallSize = 20, cloudGrowthRate = 20;
+	float cloudDefaultSize = 24, cloudSmallSize = 18, cloudGrowthRate = 20;
 	float _cloudSize;
 
 	public void Init (Transform[] trackPieces, Maan maan)
@@ -74,23 +75,34 @@ public class MaanManager : MonoBehaviour
 				_cloudTimer += Time.deltaTime;
 				if (_cloudTimer >= cloudTime) {
 					_cloudTimer = 0;
-					_cloudDescendSpeed = cloudDescendBaseSpeed;
+					_cloudChaseSpeed = cloudChaseBaseSpeed;
 					cloudState = CloudStates.Chasing;
 				}
 				break;
 			case CloudStates.Chasing:
-				_cloudDescendSpeed += cloudDescendAcceleration * Time.deltaTime;
+				_cloudChaseSpeed += cloudChaseAcceleration * Time.deltaTime;
+
+				float distanceCloudToMaan = Vector3.Distance(maan.transform.position, cloudTrans.position);
 				Vector3 _cloudPosition = cloudTrans.position;
-				_cloudPosition.y -= _cloudDescendSpeed * Time.deltaTime;
-				_cloudPosition.x = maan.transform.position.x;
-				_cloudPosition.z = maan.transform.position.z;
+
+				if (distanceCloudToMaan < 24) {
+					_cloudPosition.y = Mathf.MoveTowards(_cloudPosition.y, 0, cloudDescendSpeed * Time.deltaTime);
+				} else {
+					_cloudPosition.y = Mathf.MoveTowards(_cloudPosition.y, cloudChasingHeight, cloudDescendSpeed * Time.deltaTime);
+				}
+
+				Vector2 lateralCloudPos = new Vector2(_cloudPosition.x, _cloudPosition.z);
+				lateralCloudPos = Vector2.MoveTowards(lateralCloudPos, new Vector2(maan.transform.position.x, maan.transform.position.z), _cloudChaseSpeed * Time.deltaTime);
+				_cloudPosition.x = lateralCloudPos.x;
+				_cloudPosition.z = lateralCloudPos.y;
+
 				cloudTrans.position = _cloudPosition;
-				//cloudTrans.position = Vector3.MoveTowards(cloudTrans.position, maan.transform.position, _cloudChaseSpeed * Time.deltaTime);
-				//cloudTrans.LookAt(maan.transform);
-				if ((cloudTrans.position - maan.transform.position).sqrMagnitude < 16) {
-					Debug.Log("I've caught myself a Maan");
+				cloudTrans.LookAt(maan.transform);
+
+				if (distanceCloudToMaan < 10) {
+					StartCoroutine(maan.TemporaryFadeToBlack());
 					_cloudTimer = 0;
-					_cloudDescendSpeed = cloudDescendBaseSpeed;
+					_cloudChaseSpeed = cloudChaseBaseSpeed;
 					Destroy(cloudTrans.gameObject);
 					cloudState = CloudStates.Dormant;
 				}
@@ -112,7 +124,7 @@ public class MaanManager : MonoBehaviour
 			}
 
 			_cloudSize = Mathf.MoveTowards(_cloudSize, _cloudTargetSize, cloudGrowthRate * Time.deltaTime);
-			cloudTrans.localScale = new Vector3(_cloudSize, .1f, _cloudSize);
+			cloudTrans.localScale = new Vector3(_cloudSize, _cloudSize, _cloudSize);
 
 			maan.VisualReactionToCloud(distanceMaanToCloud);
 		} else {
@@ -124,7 +136,7 @@ public class MaanManager : MonoBehaviour
 	{
 		cloudTrans = Instantiate(cloudPrefab, Util.PickRandom(trackPieces).position + Vector3.up * cloudSpawningHeight, Quaternion.identity).transform;
 		cloud = cloudTrans.GetComponent<Cloud>();
-		cloudTrans.localScale = new Vector3(cloudDefaultSize, .1f, cloudDefaultSize);
+		cloudTrans.localScale = new Vector3(cloudDefaultSize, cloudDefaultSize, cloudDefaultSize);
 		_cloudSize = cloudDefaultSize;
 		float riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < riseTime; t += Time.deltaTime) {
