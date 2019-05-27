@@ -47,7 +47,7 @@ public class Kevin : MonoBehaviour
 	float driftingSideAcceleration, driftingTurnAcceleration;
 
 	float _struggleTimer = 0, struggleTime = 10;
-	float struggleMinTime = 2, struggleMaxTime = 4.0f;
+	float struggleMinTime = 2, struggleMaxTime = 5.0f;
 	Vector3 _struggleVelocity = Vector3.zero;
 
 	//public TrailRenderer boostTrail;
@@ -76,6 +76,8 @@ public class Kevin : MonoBehaviour
 		driftingSideAcceleration = (driftingMaxSideFactor - 1) / driftingTimeToMax;
 		driftingTurnAcceleration = (driftingMaxTurnFactor - 1) / driftingTimeToMax;
 
+		struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
+
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
 	}
@@ -93,8 +95,10 @@ public class Kevin : MonoBehaviour
 
 		if (gamePadState.ThumbSticks.Left.X == 0 || gamePadState.ThumbSticks.Left.Y == 0 || gamePadState.Triggers.Right == 0 || gamePadState.Triggers.Left == 0) {
 			_struggleTimer += Time.deltaTime;
+			Debug.Log(_struggleTimer);
 			if (_struggleTimer > struggleTime) {
 				StartCoroutine(Struggle());
+				struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 				_struggleTimer = 0;
 			}
 		} else {
@@ -236,10 +240,10 @@ public class Kevin : MonoBehaviour
 
 	IEnumerator Struggle ()
 	{
-		float struggleTime = Random.Range(0.15f, 0.3f);
+		float struggleTime = Random.Range(0.08f, 0.18f);
 		Vector2 radial = Random.insideUnitCircle;
-		Vector3 velocity = new Vector3(radial.x, 0, radial.y).normalized * Random.Range(4, 8);
-		float rotation = Random.Range(-100, 100);
+		Vector3 velocity = new Vector3(radial.x, 0, Mathf.Abs(radial.y)).normalized * Random.Range(3, 7);
+		float rotation = Random.Range(-80, 80);
 
 		_struggleVelocity = velocity;
 		
