@@ -95,7 +95,6 @@ public class Kevin : MonoBehaviour
 
 		if (gamePadState.ThumbSticks.Left.X == 0 || gamePadState.ThumbSticks.Left.Y == 0 || gamePadState.Triggers.Right == 0 || gamePadState.Triggers.Left == 0) {
 			_struggleTimer += Time.deltaTime;
-			Debug.Log(_struggleTimer);
 			if (_struggleTimer > struggleTime) {
 				StartCoroutine(Struggle());
 				struggleTime = Random.Range(struggleMinTime, struggleMaxTime);

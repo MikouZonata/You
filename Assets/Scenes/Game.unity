@@ -8493,12 +8493,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a086aa3203e674486c3353088d8871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kattoeprefab: {fileID: 7244394949106852805, guid: 180e412375af3cd4a83a3cdc43cdb417,
+  kattoePrefab: {fileID: 7244394949106852805, guid: 180e412375af3cd4a83a3cdc43cdb417,
     type: 3}
   kattoeClips:
-  - {fileID: 8300000, guid: 69aef294d5f1a3648bf15de141524ec5, type: 3}
-  - {fileID: 8300000, guid: 7acde6b2a89a199429ee7b9e9616e0df, type: 3}
-  - {fileID: 8300000, guid: e9c03312cb715ae4a9935a7165278caa, type: 3}
+  - {fileID: 8300000, guid: dc056146dc7663544828efe7820abfd0, type: 3}
   cloudPrefab: {fileID: 4863358132707089081, guid: f6d48aebb8d45c049b23bc4eea0945ce,
     type: 3}
 --- !u!114 &1601890804

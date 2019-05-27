@@ -25,6 +25,9 @@ public class Maan : MonoBehaviour
 	float pingBaseSize = 1, pingMaxSize = 10;
 	float pingExpandTime = .3f;
 
+	public Transform[] kattoeAnchors;
+	List<Transform> occupiedKattoeAnchors = new List<Transform>();
+
 	public PostProcessProfile defaultPPProfile, nearCloudPPProfile;
 	PostProcessVolume[] postProcessVolumes;
 
@@ -141,11 +144,7 @@ public class Maan : MonoBehaviour
 		StartCoroutine(PingRoutine(Instantiate(pingPrefab, transform.position, Quaternion.identity)));
 
 		for (int i = 0; i < kattoesInRange.Count; i++) {
-			if (kattoesInRange[i].Tempt()) {
-				kattoesInRange[i].Attach(transform);
-				kattoesInRange.RemoveAt(i);
-				i--;
-			}
+			kattoesInRange[i].ReceiveLure();
 		}
 	}
 	IEnumerator PingRoutine (GameObject pingGO)
@@ -158,6 +157,16 @@ public class Maan : MonoBehaviour
 			yield return null;
 		}
 		Destroy(pingGO);
+	}
+
+	public Transform KattoeRequestFlockAnchor ()
+	{
+		Transform attemptedAnchor = Util.PickRandom(kattoeAnchors);
+		while (occupiedKattoeAnchors.Contains(attemptedAnchor)) {
+			attemptedAnchor = Util.PickRandom(kattoeAnchors);
+		}
+		occupiedKattoeAnchors.Add(attemptedAnchor);
+		return attemptedAnchor;
 	}
 
 	public IEnumerator TemporaryFadeToBlack (float fadeDelay = .4f, float fadeTime = 1f)
