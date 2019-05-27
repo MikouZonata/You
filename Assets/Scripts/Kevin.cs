@@ -46,6 +46,10 @@ public class Kevin : MonoBehaviour
 	float _driftingTurnFactor = 1;
 	float driftingSideAcceleration, driftingTurnAcceleration;
 
+	float _struggleTimer = 0, struggleTime = 10;
+	float struggleMinTime = 2, struggleMaxTime = 4.0f;
+	Vector3 _struggleVelocity = Vector3.zero;
+
 	//public TrailRenderer boostTrail;
 	//float _boostSpeed = 0, boostMaxSpeed = 12, boostTimeTillMax = .7f;
 	//float boostTrailMaxTime = 0.12f;
@@ -87,6 +91,17 @@ public class Kevin : MonoBehaviour
 			SceneManager.LoadScene(0);
 		}
 
+		if (gamePadState.ThumbSticks.Left.X == 0 || gamePadState.ThumbSticks.Left.Y == 0 || gamePadState.Triggers.Right == 0 || gamePadState.Triggers.Left == 0) {
+			_struggleTimer += Time.deltaTime;
+			if (_struggleTimer > struggleTime) {
+				StartCoroutine(Struggle());
+				_struggleTimer = 0;
+			}
+		} else {
+			_struggleTimer = 0;
+			struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
+		}
+
 		//if (gamePadState.Buttons.Back == ButtonState.Pressed) {
 		//	StaticData.playerOptions[(int) playerIndex] = StaticData.PlayerOptions.Maan;
 		//	SceneManager.LoadScene(1);
@@ -103,6 +118,7 @@ public class Kevin : MonoBehaviour
 
 		_velocity.z = _throttleSpeed * _fatigueFactor;  //_boostSpeed;
 		_velocity.x = _steeringSideDrift;
+		_velocity += _struggleVelocity;
 
 		transform.Rotate(new Vector3(0, Steering(), 0));
 
@@ -216,6 +232,28 @@ public class Kevin : MonoBehaviour
 		}
 
 		return result;
+	}
+
+	IEnumerator Struggle ()
+	{
+		float struggleTime = Random.Range(0.15f, 0.3f);
+		Vector2 radial = Random.insideUnitCircle;
+		Vector3 velocity = new Vector3(radial.x, 0, radial.y).normalized * Random.Range(4, 8);
+		float rotation = Random.Range(-100, 100);
+
+		_struggleVelocity = velocity;
+		
+		for (float t = 0; t < struggleTime; t += Time.deltaTime) {
+			transform.Rotate(0, rotation * Time.deltaTime, 0);
+
+			if (gamePadState.ThumbSticks.Left.X != 0 || gamePadState.ThumbSticks.Left.Y != 0 || gamePadState.Triggers.Right != 0 || gamePadState.Triggers.Left != 0) {
+				break;
+			}
+
+			yield return null;
+		}
+
+		_struggleVelocity = Vector3.zero;
 	}
 
 	//void LinkBoost ()
