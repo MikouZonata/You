@@ -5,28 +5,42 @@ using UnityEngine.AI;
 
 public class Kattoe : MonoBehaviour
 {
-	AudioClip callClip;
+	MaanManager manager;
 	AudioSource audioSource;
 	NavMeshAgent navMeshAgent;
+	Transform maanTrans;
+	Transform parentPiece;
 
-	bool attachedToMaan = false;
+	public enum BehaviourStates { Roaming, Spotted, Near, Bonded };
+	BehaviourStates behaviourState = BehaviourStates.Roaming;
+
+	bool roamingDestinationSet = false;
+	float _roamingTimer = 0, roamingTime = 0;
+	float roamingMinTime = 1, roamingmaxTime = 3.6f;
+	float distanceBeforeSpotted = 16;
+
+	bool spottedSetup = false;
+	Vector3 spottedMaanPosition;
+
+
+
+	float runAwaySpeed = 15, runAwayTime = 2.4f;
 
 	float callFrequencyNotAttached = 2.5f, callFrequencyAttached = 1.2f, callFrequencyDeviation = .3f;
 	float _callTimer; 
 	float callPitchMax = 1.5f, callPitchMin = 0.2f;
 
-	float minTimeBetweenRoaming = 1, maxTimeBetweenRoaming = 3.6f;
 	Vector3 basePosition;
-	float maxRoamingDistance = 7;
+	float maxRoamingDistance = 5;
 
-	int chanceToTempt = 40;
-
-	public void Init (AudioClip callClip)
+	public void Init (MaanManager manager, AudioClip callClip, Transform maanTrans, Transform parentPiece)
 	{
+		this.manager = manager;
+		this.maanTrans = maanTrans;
+
 		audioSource = GetComponent<AudioSource>();
 		audioSource.pitch = Random.Range(callPitchMin, callPitchMax);
-
-		this.callClip = callClip;
+		
 		audioSource.clip = callClip;
 		navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -38,7 +52,60 @@ public class Kattoe : MonoBehaviour
 
 	private void Update ()
 	{
-		Call();
+		Behaviour();
+	}
+
+	void Behaviour ()
+	{
+		switch (behaviourState) {
+			case BehaviourStates.Roaming:
+				if (!roamingDestinationSet) {
+					Vector2 randomPoint = Random.insideUnitCircle * maxRoamingDistance;
+					Vector3 targetPosition = basePosition + new Vector3(randomPoint.x, 0, randomPoint.y);
+					navMeshAgent.destination = targetPosition;
+					roamingTime = Random.Range(roamingMinTime, roamingmaxTime);
+					_roamingTimer = 0;
+					roamingDestinationSet = true;
+				}
+
+				_roamingTimer += Time.deltaTime;
+				if (_roamingTimer > roamingTime) {
+					roamingDestinationSet = false;
+				}
+
+				if ((maanTrans.position - transform.position).sqrMagnitude < distanceBeforeSpotted * distanceBeforeSpotted) {
+					behaviourState = BehaviourStates.Spotted;
+					goto case BehaviourStates.Spotted;
+				}
+				break;
+			case BehaviourStates.Spotted:
+				if (!spottedSetup) {
+					spottedMaanPosition = maanTrans.position;
+				}
+				if ((spottedMaanPosition - maanTrans.position).sqrMagnitude > 4) {
+					StartCoroutine(RunAway());
+				}
+
+
+				break;
+			case BehaviourStates.Near:
+				break;
+			case BehaviourStates.Bonded:
+				break;
+		}
+	}
+
+	IEnumerator RunAway ()
+	{
+		Vector3 direction = transform.position - maanTrans.position;
+
+		for (float t = 0; t < runAwayTime; t += Time.deltaTime) {
+			transform.position += direction * runAwaySpeed * Time.deltaTime;
+			yield return null;
+		}
+
+		manager.KattoeRanAway(this, parentPiece);
+		Destroy(gameObject);
 	}
 
 	void Call ()
@@ -59,7 +126,7 @@ public class Kattoe : MonoBehaviour
 
 	IEnumerator Roam ()
 	{
-		float waitTime = Random.Range(minTimeBetweenRoaming, maxTimeBetweenRoaming);
+		float waitTime = Random.Range(roamingMinTime, roamingmaxTime);
 		float _timer = 0;
 		while (true) {
 			if (attachedToMaan) {
@@ -73,9 +140,7 @@ public class Kattoe : MonoBehaviour
 			yield return null;
 		}
 
-		Vector2 randomPoint = Random.insideUnitCircle * maxRoamingDistance;
-		Vector3 targetPosition = basePosition + new Vector3(randomPoint.x, 0, randomPoint.y);
-		navMeshAgent.destination = targetPosition;
+		
 
 		while ((transform.position - targetPosition).sqrMagnitude > .5f) {
 			if (attachedToMaan) {
@@ -96,21 +161,5 @@ public class Kattoe : MonoBehaviour
 	{
 		navMeshAgent.enabled = false;
 		yield return null;
-	}
-
-	public bool Tempt ()
-	{
-		int roll = Random.Range(0, 100);
-		if (roll > chanceToTempt) {
-			return true;
-		} else
-			return false;
-	}
-
-	public void Attach (Transform targetTrans)
-	{
-		GetComponent<Collider>().enabled = false;
-		attachedToMaan = true;
-		transform.parent = targetTrans;
 	}
 }

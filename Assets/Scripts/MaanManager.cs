@@ -9,10 +9,12 @@ public class MaanManager : MonoBehaviour
 	Transform[] trackPieces;
 	Maan maan;
 
-	public GameObject kattoeprefab;
+	public GameObject kattoePrefab;
 	public AudioClip[] kattoeClips;
 
-	int activeAnimals = 15;
+	int activeKattoes = 7;
+	List<Kattoe> kattoes = new List<Kattoe>();
+	List<Transform> occupiedPieces = new List<Transform>();
 
 	public GameObject cloudPrefab;
 	Transform cloudTrans;
@@ -38,24 +40,43 @@ public class MaanManager : MonoBehaviour
 		this.trackPieces = trackPieces;
 		this.maan = maan;
 
-		Transform[] spawnPositions = Util.PickRandom(activeAnimals, false, trackPieces);
-		for (int i = 0; i < activeAnimals; i++) {
-			CreateKattoe(spawnPositions[i].position);
+		Transform[] spawnPositions = Util.PickRandom(activeKattoes, false, trackPieces);
+		for (int i = 0; i < activeKattoes; i++) {
+			kattoes.Add(CreateKattoe(spawnPositions[i]));
+			occupiedPieces.Add(spawnPositions[i]);
 		}
 
 		cloudTime = Random.Range(minTimeBeforeCloudSpawn, maxTimeBeforeCloudSpawn);
-	}
-
-	void CreateKattoe (Vector3 position)
-	{
-		Kattoe newKattoe = Instantiate(kattoeprefab, position, Quaternion.identity).GetComponent<Kattoe>();
-		newKattoe.Init(Util.PickRandom(kattoeClips));
 	}
 
 	private void Update ()
 	{
 		Cloud();
 		CloudVisuals();
+	}
+
+	Kattoe CreateKattoe (Transform parentPiece)
+	{
+		Kattoe newKattoe = Instantiate(kattoePrefab, parentPiece.position, Quaternion.identity).GetComponent<Kattoe>();
+		newKattoe.Init(this, Util.PickRandom(kattoeClips), maan.transform, parentPiece);
+		return newKattoe;
+	}
+
+	public void KattoeRanAway (Kattoe kattoe, Transform parentPiece)
+	{
+		kattoes.Remove(kattoe);
+		occupiedPieces.Remove(parentPiece);
+		StartCoroutine(ReplaceKattoe());
+	}
+
+	IEnumerator ReplaceKattoe ()
+	{
+		yield return new WaitForSeconds(9);
+		Transform pieceAttempt = Util.PickRandom(trackPieces);
+		while (occupiedPieces.Contains(pieceAttempt)) {
+			pieceAttempt = Util.PickRandom(trackPieces);
+		}
+		kattoes.Add(CreateKattoe(pieceAttempt));
 	}
 
 	void Cloud ()

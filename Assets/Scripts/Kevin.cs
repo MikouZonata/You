@@ -225,8 +225,6 @@ public class Kevin : MonoBehaviour
 		result *= _driftingTurnFactor;
 		_steeringSideDrift *= _driftingSideFactor;
 
-
-
 		if (Mathf.Abs(_steeringSideDrift) >= 2.5f) {
 			sideDriftParticles.Play();
 			sideDriftEmissionModule.rateOverTime = sideDriftDefaultEmission;
@@ -259,22 +257,6 @@ public class Kevin : MonoBehaviour
 
 		_struggleVelocity = Vector3.zero;
 	}
-
-	//void LinkBoost ()
-	//{
-	//	if (StaticData.playersAreLinked) {
-	//		_boostSpeed = Mathf.MoveTowards(_boostSpeed, boostMaxSpeed * gamePadState.Triggers.Right, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
-	//	} else {
-	//		_boostSpeed = Mathf.MoveTowards(_boostSpeed, 0, boostMaxSpeed / boostTimeTillMax * Time.deltaTime);
-	//	}
-
-	//	BoostTrail();
-	//}
-
-	//void BoostTrail ()
-	//{
-	//	boostTrail.time = Mathf.Lerp(0, boostTrailMaxTime, _boostSpeed / boostMaxSpeed);
-	//}
 
 	public Transform GetTransform ()
 	{
