@@ -50,6 +50,8 @@ public class Kevin : MonoBehaviour
 	float struggleMinTime = 2, struggleMaxTime = 5.0f;
 	Vector3 _struggleVelocity = Vector3.zero;
 
+	bool selectButtonReleased = false;
+
 	//public TrailRenderer boostTrail;
 	//float _boostSpeed = 0, boostMaxSpeed = 12, boostTimeTillMax = .7f;
 	//float boostTrailMaxTime = 0.12f;
@@ -89,10 +91,6 @@ public class Kevin : MonoBehaviour
 		CameraFoV();
 		ShowLink();
 
-		if (gamePadState.Buttons.Back == ButtonState.Pressed || gamePadState.Buttons.Start == ButtonState.Pressed) {
-			SceneManager.LoadScene(0);
-		}
-
 		if (gamePadState.ThumbSticks.Left.X == 0 || gamePadState.ThumbSticks.Left.Y == 0 || gamePadState.Triggers.Right == 0 || gamePadState.Triggers.Left == 0) {
 			_struggleTimer += Time.deltaTime;
 			if (_struggleTimer > struggleTime) {
@@ -105,10 +103,12 @@ public class Kevin : MonoBehaviour
 			struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 		}
 
-		//if (gamePadState.Buttons.Back == ButtonState.Pressed) {
-		//	StaticData.playerOptions[(int) playerIndex] = StaticData.PlayerOptions.Maan;
-		//	SceneManager.LoadScene(1);
-		//}
+		if (gamePadState.Buttons.Back == ButtonState.Pressed && selectButtonReleased) {
+			manager.Reset();
+			selectButtonReleased = false;
+		} else if (gamePadState.Buttons.Back == ButtonState.Released) {
+			selectButtonReleased = true;
+		}
 	}
 
 	void FixedUpdate ()

@@ -2,6 +2,7 @@ namespace Utility
 {
 	using UnityEngine;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	public static class Util
 	{
@@ -34,6 +35,17 @@ namespace Utility
 				}
 			}
 
+			return result;
+		}
+
+		public static List<T> Shuffle<T> (List<T> collection)
+		{
+			T[] resultArray = PickRandom(collection.Count, false, collection.ToArray());
+			return resultArray.ToList();
+		}
+		public static T[] Shuffle<T> (params T[] collection)
+		{
+			T[] result = PickRandom(collection.Length, false, collection.ToArray());
 			return result;
 		}
 
