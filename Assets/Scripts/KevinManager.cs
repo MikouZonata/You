@@ -47,15 +47,26 @@ public class KevinManager : MonoBehaviour
 			pickupPool = new Transform[trackPieces.Length];
 			GameObject pickupParent = new GameObject("PickupParent");
 			for (int i = 0; i < pickupPool.Length; i++) {
-				pickupPool[i] = Instantiate(pickupPrefab, trackPieces[i].position, Quaternion.identity, pickupParent.transform).transform;
+				pickupPool[i] = Instantiate(pickupPrefab, trackPieces[i].position + Vector3.up * .5f, Quaternion.identity, pickupParent.transform).transform;
 				pickupPool[i].name = i.ToString();
 				pickupPool[i].gameObject.SetActive(false);
 			}
 
+			//Pickup feedback pool maken
 			for (int i = 0; i < pickupFeedbackPool.Length; i++) {
 				pickupFeedbackPool[i] = Instantiate(pickupFeedbackPrefab);
 				pickupFeedbackPool[i].SetActive(false);
 			}
+
+			//Geef Kevin een naam die overeenkomt met zijn driverIndex
+			kevin.name = 5.ToString();
+
+			//Setup stuff voor leaderboard
+			leaderboardCards = new RectTransform[numberOfDrivers];
+			scoreDisplays = new Text[numberOfDrivers];
+			scoreHighlights = new Image[numberOfDrivers];
+			ranks = new int[numberOfDrivers];
+
 			firstTimeSetup = false;
 		}
 
@@ -68,19 +79,10 @@ public class KevinManager : MonoBehaviour
 			driverAgents[i].name = i.ToString();
 		}
 
-		//Geef Kevin een naam die overeenkomt met zijn driverIndex
-		kevin.name = 5.ToString();
-
 		//Pickups for everyone
 		for (int i = 0; i < numberOfDrivers; i++) {
 			AssignNewPickup(i, true);
 		}
-
-		//Setup stuff voor leaderboard
-		leaderboardCards = new RectTransform[numberOfDrivers];
-		scoreDisplays = new Text[numberOfDrivers];
-		scoreHighlights = new Image[numberOfDrivers];
-		ranks = new int[numberOfDrivers];
 
 		//Vul het leaderboard met naampjes en stuff
 		leaderboard = kevin.leaderboard;
@@ -227,10 +229,11 @@ public class KevinManager : MonoBehaviour
 			Destroy(agent.gameObject);
 		}
 		foreach (Transform t in pickupPool) {
-			Destroy(t.gameObject);
+			t.gameObject.SetActive(false);
 		}
 
 		kevin.transform.position = kevinSpawnPosition;
+		kevin.transform.rotation = Quaternion.identity;
 		Init(trackPieces, kevin);
 	}
 }

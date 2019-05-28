@@ -109,8 +109,8 @@ public class Maan : MonoBehaviour
 	}
 
 	Vector3 cameraDefaultPosition;
-	float screenShakeMaxIntensity = .16f, visualMaxDistanceToCloud = 70, visualReactionMinDistanceToCloud = 15;
-	float _screenShakeIntensity = 0, screenShakeIntensityGrowth = .2f;
+	float screenShakeMaxIntensity = .14f, visualMaxDistanceToCloud = 55, visualReactionMinDistanceToCloud = 12;
+	float _screenShakeIntensity = 0, screenShakeIntensityGrowth = .18f;
 	float _postProcessingWeight, postProcessingWeightGrowth = .3f;
 	public void VisualReactionToCloud (float distanceMaanToCloud)
 	{
@@ -128,7 +128,7 @@ public class Maan : MonoBehaviour
 
 		if (StaticData.playersAreLinked) {
 			_targetIntensity *= 0.08f;
-			_targetPPWeight *= .1f;
+			_targetPPWeight *= .11f;
 		}
 
 		_screenShakeIntensity = Mathf.MoveTowards(_screenShakeIntensity, _targetIntensity, screenShakeIntensityGrowth * Time.deltaTime);

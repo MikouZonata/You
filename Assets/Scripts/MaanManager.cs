@@ -9,8 +9,8 @@ public class MaanManager : MonoBehaviour
 	Transform[] trackPieces;
 	Maan maan;
 
-	public GameObject kattoePrefab;
-	public AudioClip[] kattoeClips;
+	public GameObject[] kattoePrefabs;
+	public AudioClip kattoeClip;
 
 	int activeKattoes = 7;
 	List<Kattoe> kattoes = new List<Kattoe>();
@@ -60,8 +60,8 @@ public class MaanManager : MonoBehaviour
 
 	Kattoe CreateKattoe (Transform parentPiece)
 	{
-		Kattoe newKattoe = Instantiate(kattoePrefab, parentPiece.position, Quaternion.identity).GetComponent<Kattoe>();
-		newKattoe.Init(this, Util.PickRandom(kattoeClips), maan.transform, parentPiece);
+		Kattoe newKattoe = Instantiate(Util.PickRandom(kattoePrefabs), parentPiece.position, Quaternion.identity).GetComponent<Kattoe>();
+		newKattoe.Init(this, kattoeClip, maan.transform, parentPiece);
 		return newKattoe;
 	}
 

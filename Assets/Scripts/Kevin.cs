@@ -105,6 +105,7 @@ public class Kevin : MonoBehaviour
 
 		if (gamePadState.Buttons.Back == ButtonState.Pressed && selectButtonReleased) {
 			manager.Reset();
+			_velocity = Vector3.zero;
 			selectButtonReleased = false;
 		} else if (gamePadState.Buttons.Back == ButtonState.Released) {
 			selectButtonReleased = true;
