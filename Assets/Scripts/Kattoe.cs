@@ -11,7 +11,7 @@ public class Kattoe : MonoBehaviour
 	Transform maanTrans;
 	Transform parentPiece;
 
-	public enum BehaviourStates { Roaming, Spotted, Near, Bonded };
+	public enum BehaviourStates { Roaming, Spotted, Near, Bonded, RunningAway };
 	BehaviourStates behaviourState = BehaviourStates.Roaming;
 
 	bool roamingDestinationSet = false;
@@ -22,9 +22,11 @@ public class Kattoe : MonoBehaviour
 	bool spottedSetup = false, spottedAdvancing = false;
 	Vector3 spottedMaanPosition, spottedTargetPosition;
 	float _spottedAdvanceTimer = 0, spottedAdvanceTime;
+	float _spottedMovingTimer = 0, spottedMovingTime;
 	const float spottedMinAdvanceTime = .8f, spottedMaxAdvanceTime = 3;
 	const float spottedMinAdvanceDistance = 2, spottedMaxAdvanceDistance = 6;
-	const float spottedAdvanceSpeed = 3;
+	const float spottedMoveSpeed = 3;
+	const float spottedMinMoveTime = .4f, spottedMaxMoveTime = 1.2f;
 	const float spottedTargetDistance = 3;
 	float _spottedTimesLured = 0, spottedLureLimit;
 	const float spottedMinLureLimit = 5, spottedMaxLureLimit = 18, spottedTimePerLure = .2f;
@@ -37,14 +39,15 @@ public class Kattoe : MonoBehaviour
 
 	bool bondedSetup = false;
 	Transform bondedTargetTrans;
+	float bondedMinMovementSpeed = 7, bondedMaxMovementSpeed = 22;
 	float _bondedNavTimer = 0, _bondedCallTimer = 0, _bondedLeaveTimer = 0;
 	float bondedTimeBetweenRetargetting = 1;
-	float bondedTimeBetweenCalls, bondedMinTimeBetweenCalls = .4f, bondedMaxTimeBetweenCalls = 2.8f;
+	float bondedTimeBetweenCalls, bondedMinTimeBetweenCalls = 1.6f, bondedMaxTimeBetweenCalls = 3.6f;
 	float bondedTimeBeforeLeaving, bondedMinTimeBeforeLeaving = 16, bondedMaxTimeBeforeLeaving = 80;
 
-	const float runAwaySpeed = 15, runAwayTime = 2.4f;
-	
-	float callBasePitch, callPitchMax = 1.56f, callPitchMin = 0.1f, callPitchMaxDeviation = .11f;
+	const float runAwaySpeed = 20, runAwayTime = 1.2f;
+
+	float callBasePitch, callPitchMax = 1.56f, callPitchMin = 0.4f, callPitchMaxDeviation = .11f;
 
 	Vector3 basePosition;
 	float maxRoamingDistance = 5;
@@ -60,7 +63,7 @@ public class Kattoe : MonoBehaviour
 		audioSource.clip = callClip;
 
 		navMeshAgent = GetComponent<NavMeshAgent>();
-		
+
 		basePosition = transform.position;
 	}
 
@@ -72,11 +75,13 @@ public class Kattoe : MonoBehaviour
 	void Behaviour ()
 	{
 		switch (behaviourState) {
+			//Idle behaviour in which the kattoe roams about doing its thing
 			case BehaviourStates.Roaming:
 				//Setup
 				if (!roamingDestinationSet) {
 					Vector2 randomPoint = Random.insideUnitCircle * maxRoamingDistance;
 					Vector3 targetPosition = basePosition + new Vector3(randomPoint.x, 0, randomPoint.y);
+					navMeshAgent.enabled = true;
 					navMeshAgent.destination = targetPosition;
 					roamingTime = Random.Range(roamingMinTime, roamingmaxTime);
 					_roamingTimer = 0;
@@ -96,18 +101,20 @@ public class Kattoe : MonoBehaviour
 					goto case BehaviourStates.Spotted;
 				}
 				break;
+			//Maan has been spotted and the kattoe will slowly approach and respond to being lured
 			case BehaviourStates.Spotted:
 				//Setup
 				if (!spottedSetup) {
-					Debug.Log("Spotted");
+					navMeshAgent.enabled = false;
 					spottedMaanPosition = maanTrans.position;
 					_spottedAdvanceTimer = 0;
 					spottedAdvanceTime = Random.Range(spottedMinAdvanceTime, spottedMaxAdvanceTime);
 					spottedLureLimit = Random.Range(spottedMinLureLimit, spottedMaxLureLimit);
+					spottedSetup = true;
 				}
 
 				//If Maan moves away from her initial position after being spotted OR if the times lured exceedes the limit, run away
-				if ((spottedMaanPosition - maanTrans.position).sqrMagnitude > 6 || spottedLureLimit < _spottedTimesLured) {
+				if ((spottedMaanPosition - maanTrans.position).sqrMagnitude > 25 || spottedLureLimit < _spottedTimesLured) {
 					StartCoroutine(RunAway());
 				}
 
@@ -118,34 +125,43 @@ public class Kattoe : MonoBehaviour
 				_spottedAdvanceTimer += Time.deltaTime;
 				if (_spottedAdvanceTimer >= spottedAdvanceTime && !spottedAdvancing) {
 					spottedAdvancing = true;
-					spottedTargetPosition = Vector3.MoveTowards(transform.position, spottedMaanPosition + transform.forward * -spottedTargetDistance, Random.Range(spottedMinAdvanceDistance, spottedMaxAdvanceDistance));
+					_spottedAdvanceTimer = 0;
+					_spottedMovingTimer = 0;
+					spottedMovingTime = Random.Range(spottedMinMoveTime, spottedMaxMoveTime);
+					spottedMaanPosition = maanTrans.position;
 				}
 
-				//Move towards Maan. If the end position is close enough, advance to Near state ELSE reset the timer and wait for the next advance
+				//Move towards Maan. If Kattoe gets close enough, advance to Near state ELSE reset the timer and wait for the next advance
 				if (spottedAdvancing) {
-					transform.position = Vector3.MoveTowards(transform.position, spottedTargetPosition, spottedAdvanceSpeed * Time.deltaTime);
-					if ((transform.position - spottedTargetPosition).sqrMagnitude < .5f) {
-						if ((transform.position - maanTrans.position).sqrMagnitude < 2) {
-							Call();
-							behaviourState = BehaviourStates.Near;
-							goto case BehaviourStates.Near;
-						} else {
-							spottedAdvancing = false;
-							_spottedAdvanceTimer = 0;
-						}
+					transform.position += transform.forward * spottedMoveSpeed * Time.deltaTime;
+
+					//If Maan en Kattoe are close enough proceed to Near state
+					if ((transform.position - maanTrans.position).sqrMagnitude < spottedTargetDistance * spottedTargetDistance) {
+						Call();
+						behaviourState = BehaviourStates.Near;
+						goto case BehaviourStates.Near;
+					}
+
+					//Cut out the moving if time has expired
+					_spottedMovingTimer += Time.deltaTime;
+					if (_spottedMovingTimer > spottedMovingTime) {
+						spottedAdvancing = false;
+						_spottedAdvanceTimer = 0;
 					}
 				}
 				break;
+			//Trust between Kattoe and Maan has been established and it dances for a little while before joining her flock
 			case BehaviourStates.Near:
 				//Setup
 				if (!nearSetup) {
-					Debug.Log("Near");
+					navMeshAgent.enabled = false;
 					nearMaanPosition = maanTrans.position;
+					_nearTimer = 0;
 					nearSetup = true;
 				}
 
 				//Kattoe wiggles in excitement when near
-				transform.Rotate(0, Mathf.Sin(_nearTimer * 3), 0);
+				transform.Rotate(0, Mathf.Sin(_nearTimer * 8), 0);
 
 				//If Maan goes too far away the kattoe resets to roaming
 				if ((transform.position - maanTrans.position).sqrMagnitude > nearMaxDistanceToBond * nearMaxDistanceToBond) {
@@ -159,31 +175,43 @@ public class Kattoe : MonoBehaviour
 				if (_nearTimer >= nearTimeBeforeBond) {
 					Call();
 					bondedTargetTrans = maanTrans.GetComponent<Maan>().KattoeRequestFlockAnchor();
+					navMeshAgent.enabled = true;
+					behaviourState = BehaviourStates.Bonded;
+					goto case BehaviourStates.Bonded;
 				}
 				break;
+			//Kattoe and Maan have bonded, the Kattoe follows her around in her flock until it's time for it to leave
 			case BehaviourStates.Bonded:
-				Debug.Log("Bonded");
 				if (!bondedSetup) {
+					navMeshAgent.speed = Random.Range(bondedMinMovementSpeed, bondedMaxMovementSpeed);
 					bondedTimeBetweenCalls = Random.Range(bondedMinTimeBetweenCalls, bondedMaxTimeBetweenCalls);
 					bondedTimeBeforeLeaving = Random.Range(bondedMinTimeBeforeLeaving, bondedMaxTimeBeforeLeaving);
+					navMeshAgent.destination = bondedTargetTrans.position;
+					_bondedNavTimer = 0;
+					_bondedCallTimer = 0;
+					_bondedLeaveTimer = 0;
+					bondedSetup = true;
 				}
 
+				//Update the target position once every second
 				_bondedNavTimer += Time.deltaTime;
 				if (_bondedNavTimer >= bondedTimeBetweenRetargetting) {
 					navMeshAgent.destination = bondedTargetTrans.position;
 					_bondedNavTimer = 0;
 				}
 
+				//Emit a call every now and then
 				_bondedCallTimer += Time.deltaTime;
 				if (_bondedCallTimer >= bondedTimeBetweenCalls) {
 					Call();
 					_bondedCallTimer = 0;
 				}
 
+				//Leave when time is up
 				_bondedLeaveTimer += Time.deltaTime;
 				if (_bondedLeaveTimer >= bondedTimeBeforeLeaving) {
 					Call();
-					RunAway();
+					StartCoroutine(RunAway());
 				}
 				break;
 		}
@@ -191,11 +219,14 @@ public class Kattoe : MonoBehaviour
 
 	IEnumerator RunAway ()
 	{
-		Vector3 direction = transform.position - maanTrans.position;
-		transform.forward = direction;
+		behaviourState = BehaviourStates.RunningAway;
+		navMeshAgent.enabled = false;
+
+		transform.LookAt(maanTrans);
+		transform.forward *= -1;
 
 		for (float t = 0; t < runAwayTime; t += Time.deltaTime) {
-			transform.position += direction * runAwaySpeed * Time.deltaTime;
+			transform.position += transform.forward * runAwaySpeed * Time.deltaTime;
 			yield return null;
 		}
 

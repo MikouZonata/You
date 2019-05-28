@@ -21,13 +21,18 @@ public class MaanManager : MonoBehaviour
 	Cloud cloud;
 	enum CloudStates { Dormant, Waiting, Chasing };
 	CloudStates cloudState = CloudStates.Dormant;
-	float _cloudTimer = 0, cloudTime;
-	float minTimeBeforeCloudSpawn = 0, maxTimeBeforeCloudSpawn = 0;
-	float cloudSpawningHeight = 20;
 
+	bool cloudDormantSetup = false;
+	float _cloudDormantTimer = 0, cloudDormantTime;
+	const float cloudMinTimeBeforeSpawn = 30, cloudMaxTimeBeforeSpawn = 90;
+	const float cloudSpawningHeight = 20;
+
+	bool cloudWaitingSetup = false;
+	float _cloudWaitingTimer = 0, cloudWaitingTime;
 	float cloudWaitingSpeed = 4, cloudWaitingHeight = 0;
 	float minTimeBeforeCloudChase = 3, maxTimeBeforeCloudChase = 6;
 
+	bool cloudChaseSetup = false;
 	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
 	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .33f;
 	float cloudChasingHeight = 14;
@@ -45,8 +50,6 @@ public class MaanManager : MonoBehaviour
 			kattoes.Add(CreateKattoe(spawnPositions[i]));
 			occupiedPieces.Add(spawnPositions[i]);
 		}
-
-		cloudTime = Random.Range(minTimeBeforeCloudSpawn, maxTimeBeforeCloudSpawn);
 	}
 
 	private void Update ()
@@ -83,24 +86,38 @@ public class MaanManager : MonoBehaviour
 	{
 		switch (cloudState) {
 			case CloudStates.Dormant:
-				_cloudTimer += Time.deltaTime;
-				if (_cloudTimer >= cloudTime) {
+				if (!cloudDormantSetup) {
+					_cloudDormantTimer = 0;
+					cloudDormantTime = Random.Range(cloudMinTimeBeforeSpawn, cloudMaxTimeBeforeSpawn);
+					cloudDormantSetup = true;
+				}
+
+				_cloudDormantTimer += Time.deltaTime;
+				if (_cloudDormantTimer > cloudDormantTime) {
 					StartCoroutine(SpawnCloud());
-					_cloudTimer = 0;
-					float baseTimeBeforeChase = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
-					cloudTime = baseTimeBeforeChase + Random.Range(minTimeBeforeCloudChase, maxTimeBeforeCloudChase);
+					cloudDormantSetup = false;
 					cloudState = CloudStates.Waiting;
+					goto case CloudStates.Waiting;
 				}
 				break;
 			case CloudStates.Waiting:
-				_cloudTimer += Time.deltaTime;
-				if (_cloudTimer >= cloudTime) {
-					_cloudTimer = 0;
-					_cloudChaseSpeed = cloudChaseBaseSpeed;
+				if (!cloudWaitingSetup) {
+					_cloudWaitingTimer = 0;
+					cloudWaitingTime = Random.Range(minTimeBeforeCloudChase, maxTimeBeforeCloudChase);
+					cloudWaitingSetup = true;
+				}
+				_cloudWaitingTimer += Time.deltaTime;
+				if (_cloudWaitingTimer > cloudWaitingTime) {
+					cloudChaseSetup = false;
 					cloudState = CloudStates.Chasing;
+					goto case CloudStates.Chasing;
 				}
 				break;
 			case CloudStates.Chasing:
+				if (!cloudChaseSetup) {
+					_cloudChaseSpeed = cloudChaseBaseSpeed;
+					cloudChaseSetup = true;
+				}
 				_cloudChaseSpeed += cloudChaseAcceleration * Time.deltaTime;
 
 				float distanceCloudToMaan = Vector3.Distance(maan.transform.position, cloudTrans.position);
@@ -121,11 +138,11 @@ public class MaanManager : MonoBehaviour
 				cloudTrans.LookAt(maan.transform);
 
 				if (distanceCloudToMaan < 10) {
-					StartCoroutine(maan.TemporaryFadeToBlack());
-					_cloudTimer = 0;
-					_cloudChaseSpeed = cloudChaseBaseSpeed;
+					StartCoroutine(maan.FadeToBlack());
 					Destroy(cloudTrans.gameObject);
+					cloudChaseSetup = false;
 					cloudState = CloudStates.Dormant;
+					goto case CloudStates.Dormant;
 				}
 				break;
 		}

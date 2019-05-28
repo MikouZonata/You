@@ -169,7 +169,7 @@ public class Maan : MonoBehaviour
 		return attemptedAnchor;
 	}
 
-	public IEnumerator TemporaryFadeToBlack (float fadeDelay = .4f, float fadeTime = 1f)
+	public IEnumerator FadeToBlack (float fadeDelay = .4f, float fadeTime = 1f)
 	{
 		fadeToBlackDisplay.enabled = true;
 		Color _color = Color.black;
