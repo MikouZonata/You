@@ -8,6 +8,7 @@ using Utility;
 
 public class KevinManager : MonoBehaviour
 {
+	bool firstTimeSetup = true;
 	public GameObject enemyDriverPrefab, pickupPrefab, pickupFeedbackPrefab;
 	const int numberOfDrivers = 6;
 	int numberOfAiDrivers;
@@ -30,22 +31,34 @@ public class KevinManager : MonoBehaviour
 	Text[] scoreDisplays;
 	Image[] scoreHighlights;
 
+	GameObject[] pickupFeedbackPool = new GameObject[numberOfDrivers];
+
 	Vector3 kevinSpawnPosition;
 
 	public void Init (Transform[] trackPieces, Kevin kevin)
 	{
 		this.trackPieces = trackPieces;
 		this.kevin = kevin;
-		numberOfAiDrivers = numberOfDrivers - 1;
 
-		//Maak alle pickups
-		pickupPool = new Transform[trackPieces.Length];
-		GameObject pickupParent = new GameObject("PickupParent");
-		for (int i = 0; i < pickupPool.Length; i++) {
-			pickupPool[i] = Instantiate(pickupPrefab, trackPieces[i].position, Quaternion.identity, pickupParent.transform).transform;
-			pickupPool[i].name = i.ToString();
-			pickupPool[i].gameObject.SetActive(false);
+		if (firstTimeSetup) {
+			numberOfAiDrivers = numberOfDrivers - 1;
+
+			//Maak alle pickups
+			pickupPool = new Transform[trackPieces.Length];
+			GameObject pickupParent = new GameObject("PickupParent");
+			for (int i = 0; i < pickupPool.Length; i++) {
+				pickupPool[i] = Instantiate(pickupPrefab, trackPieces[i].position, Quaternion.identity, pickupParent.transform).transform;
+				pickupPool[i].name = i.ToString();
+				pickupPool[i].gameObject.SetActive(false);
+			}
+
+			for (int i = 0; i < pickupFeedbackPool.Length; i++) {
+				pickupFeedbackPool[i] = Instantiate(pickupFeedbackPrefab);
+				pickupFeedbackPool[i].SetActive(false);
+			}
+			firstTimeSetup = false;
 		}
+
 
 		//Instantiate alle drivers
 		driverAgents = new NavMeshAgent[numberOfAiDrivers];
@@ -112,8 +125,15 @@ public class KevinManager : MonoBehaviour
 	{
 		//Verwijder oude pickup.
 		pickupPool[pickupIndex].gameObject.SetActive(false);
-		GameObject feedback = Instantiate(pickupFeedbackPrefab, pickupPool[pickupIndex].position, Quaternion.identity);
-		Destroy(feedback, 1);
+
+		foreach (GameObject feedbackGO in pickupFeedbackPool) {
+			if (!feedbackGO.activeSelf) {
+				feedbackGO.transform.position = pickupPool[pickupIndex].position;
+				feedbackGO.SetActive(true);
+				StartCoroutine(SetActiveWithDelay(feedbackGO, false, 1));
+				break;
+			}
+		}
 
 		AddPointToScore(driverIndex);
 
@@ -129,8 +149,6 @@ public class KevinManager : MonoBehaviour
 		//Zet oude pickup op inactive en maak feedback
 		if (!firstTimeInitialization) {
 			pickupPool[driverTargets[driverIndex]].gameObject.SetActive(false);
-			GameObject feedback = Instantiate(pickupFeedbackPrefab, pickupPool[driverTargets[driverIndex]].position, Quaternion.identity);
-			Destroy(feedback, 1);
 		}
 
 		//Vind nieuwe target in de pool
@@ -173,7 +191,7 @@ public class KevinManager : MonoBehaviour
 		}
 
 		//Update leaderboardCards naar hun juiste posities en vul strings in
-		float distanceBetweenCards = -80;
+		float distanceBetweenCards = -116;
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
 			leaderboardCards[driver].anchoredPosition = new Vector2(0, ranks[driver] * distanceBetweenCards);
 			scoreDisplays[driver].text = scores[driver].ToString();
@@ -195,6 +213,12 @@ public class KevinManager : MonoBehaviour
 		}
 
 		scoreHighlights[driverIndex].color = new Color(1, 1, 1, 0);
+	}
+
+	IEnumerator SetActiveWithDelay (GameObject gameObject, bool state, float delay)
+	{
+		yield return new WaitForSeconds(delay);
+		gameObject.SetActive(state);
 	}
 
 	public void Reset ()
