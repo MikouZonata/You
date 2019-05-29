@@ -17,13 +17,13 @@ public class Maan : MonoBehaviour
 	Transform cameraTrans;
 	Vector3 _velocity, _cameraRotation;
 
-	float movementSpeed = 20;
+	float movementSpeed = 15;
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 
-	public GameObject pingPrefab;
-	float pingBaseSize = 1, pingMaxSize = 10;
-	float pingExpandTime = .3f;
+	public GameObject pingGO;
+	SpriteRenderer pingRenderer;
+	float pingActiveTime = .3f;
 
 	public Transform[] kattoeAnchors;
 	List<Transform> occupiedKattoeAnchors = new List<Transform>();
@@ -48,6 +48,9 @@ public class Maan : MonoBehaviour
 		postProcessVolumes[1].weight = 0;
 
 		fadeToBlackDisplay.enabled = false;
+
+		pingRenderer = pingGO.GetComponent<SpriteRenderer>();
+		pingRenderer.color = new Color(1, 1, 1, 0);
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
@@ -135,22 +138,24 @@ public class Maan : MonoBehaviour
 	}
 	void Ping ()
 	{
-		StartCoroutine(PingRoutine(Instantiate(pingPrefab, transform.position, Quaternion.identity)));
+		StopCoroutine(PingRoutine());
+		StartCoroutine(PingRoutine());
 
 		for (int i = 0; i < kattoesInRange.Count; i++) {
 			kattoesInRange[i].ReceiveLure();
 		}
 	}
-	IEnumerator PingRoutine (GameObject pingGO)
+	IEnumerator PingRoutine ()
 	{
-		float pingSize = pingBaseSize;
-		for (float t = 0; t < pingExpandTime; t += Time.deltaTime) {
-			pingSize = Mathf.Lerp(pingBaseSize, pingMaxSize, t / pingExpandTime);
-			pingGO.transform.localScale = new Vector3(pingSize, pingSize, pingSize);
-			pingGO.transform.position = transform.position;
+		pingRenderer.color = Color.white;
+		float colorFactor = 1 / pingActiveTime;
+
+		for (float t = pingActiveTime; t > 0; t -= Time.deltaTime) {
+			pingRenderer.color = new Color(1, 1, 1, t * colorFactor);
 			yield return null;
 		}
-		Destroy(pingGO);
+
+		pingRenderer.color = new Color(1,1,1,0);
 	}
 
 	public Transform KattoeRequestFlockAnchor ()
