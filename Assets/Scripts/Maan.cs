@@ -73,20 +73,6 @@ public class Maan : MonoBehaviour
 		rig.velocity = _velocity;
 	}
 
-	private void OnTriggerEnter (Collider other)
-	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("MaanKattoe")) {
-			kattoesInRange.Add(other.GetComponent<Kattoe>());
-		}
-	}
-
-	private void OnTriggerExit (Collider other)
-	{
-		if (other.gameObject.layer == LayerMask.NameToLayer("MaanKattoe")) {
-			kattoesInRange.Remove(other.GetComponent<Kattoe>());
-		}
-	}
-
 	Vector3 CharacterMovement ()
 	{
 		Vector3 result = Vector3.zero;
@@ -139,6 +125,14 @@ public class Maan : MonoBehaviour
 		postProcessVolumes[1].weight = _postProcessingWeight;
 	}
 
+	public void EngagedByKattoe (Kattoe kattoe, bool engageOrDisengage)
+	{
+		if (engageOrDisengage) {
+			kattoesInRange.Add(kattoe);
+		} else {
+			kattoesInRange.Remove(kattoe);
+		}
+	}
 	void Ping ()
 	{
 		StartCoroutine(PingRoutine(Instantiate(pingPrefab, transform.position, Quaternion.identity)));

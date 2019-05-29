@@ -8,6 +8,7 @@ public class Kattoe : MonoBehaviour
 	MaanManager manager;
 	AudioSource audioSource;
 	NavMeshAgent navMeshAgent;
+	Maan maan;
 	Transform maanTrans;
 	Transform parentPiece;
 
@@ -35,8 +36,10 @@ public class Kattoe : MonoBehaviour
 	Vector3 nearMaanPosition;
 	const float nearMaxDistanceToBond = 8;
 	float _nearTimer = 0;
-	const float nearTimeBeforeBond = 4;
+	const float nearTimeBeforeBond = 2;
 
+	public GameObject bondedFeedbackPrefab;
+	float bondedFeedBackHeight = 2.2f;
 	bool bondedSetup = false;
 	Transform bondedTargetTrans;
 	float bondedMinMovementSpeed = 7, bondedMaxMovementSpeed = 22;
@@ -56,6 +59,7 @@ public class Kattoe : MonoBehaviour
 	{
 		this.manager = manager;
 		this.maanTrans = maanTrans;
+		maan = maanTrans.GetComponent<Maan>();
 		this.parentPiece = parentPiece;
 
 		audioSource = GetComponent<AudioSource>();
@@ -85,6 +89,7 @@ public class Kattoe : MonoBehaviour
 					navMeshAgent.destination = targetPosition;
 					roamingTime = Random.Range(roamingMinTime, roamingmaxTime);
 					_roamingTimer = 0;
+					maan.EngagedByKattoe(this, false);
 					roamingDestinationSet = true;
 				}
 
@@ -110,6 +115,7 @@ public class Kattoe : MonoBehaviour
 					_spottedAdvanceTimer = 0;
 					spottedAdvanceTime = Random.Range(spottedMinAdvanceTime, spottedMaxAdvanceTime);
 					spottedLureLimit = Random.Range(spottedMinLureLimit, spottedMaxLureLimit);
+					maan.EngagedByKattoe(this, true);
 					spottedSetup = true;
 				}
 
@@ -157,11 +163,14 @@ public class Kattoe : MonoBehaviour
 					navMeshAgent.enabled = false;
 					nearMaanPosition = maanTrans.position;
 					_nearTimer = 0;
+					maan.EngagedByKattoe(this, false);
+					GameObject feedbackGO = Instantiate(bondedFeedbackPrefab, transform.position + Vector3.up * bondedFeedBackHeight, transform.rotation);
+					Destroy(feedbackGO, nearTimeBeforeBond);
 					nearSetup = true;
 				}
 
 				//Kattoe wiggles in excitement when near
-				transform.Rotate(0, Mathf.Sin(_nearTimer * 8), 0);
+				transform.Rotate(0, Mathf.Sin(_nearTimer * 8) * 1.5f, 0);
 
 				//If Maan goes too far away the kattoe resets to roaming
 				if ((transform.position - maanTrans.position).sqrMagnitude > nearMaxDistanceToBond * nearMaxDistanceToBond) {
@@ -190,6 +199,7 @@ public class Kattoe : MonoBehaviour
 					_bondedNavTimer = 0;
 					_bondedCallTimer = 0;
 					_bondedLeaveTimer = 0;
+					maan.EngagedByKattoe(this, false);
 					bondedSetup = true;
 				}
 
@@ -222,15 +232,19 @@ public class Kattoe : MonoBehaviour
 		behaviourState = BehaviourStates.RunningAway;
 		navMeshAgent.enabled = false;
 
+		Vector3 runningDirection;
 		transform.LookAt(maanTrans);
 		transform.forward *= -1;
+		runningDirection = transform.forward;
 
 		for (float t = 0; t < runAwayTime; t += Time.deltaTime) {
+			transform.forward = runningDirection;
 			transform.position += transform.forward * runAwaySpeed * Time.deltaTime;
 			yield return null;
 		}
 
 		manager.KattoeRanAway(this, parentPiece);
+		maan.EngagedByKattoe(this, false);
 		Destroy(gameObject);
 	}
 
