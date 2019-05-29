@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b56238163f115fb4a88ccd69d72afa65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bondedFeedbackPrefab: {fileID: 2921974523966438034, guid: d77929156758cf44d8d91a9c733d315b,
+    type: 3}
 --- !u!82 &4131704297554025202
 AudioSource:
   m_ObjectHideFlags: 0
@@ -177,7 +179,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &7041669238315615958
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +207,7 @@ Transform:
   m_GameObject: {fileID: 7041669238315615958}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 60, y: 60, z: 60}
+  m_LocalScale: {x: 70, y: 70, z: 70}
   m_Children: []
   m_Father: {fileID: 3060355326110114904}
   m_RootOrder: 0
