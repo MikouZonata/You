@@ -1,11 +1,13 @@
 fileFormatVersion: 2
-guid: ad4b8907b23c1f546885d5bb3c14c596
+guid: 0ae8f006e8c764a4c97a6e02f5214376
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: lambert1
+    2100000: fear_tentacles
+    2100002: fear_body
+    2100004: fear_clocks
     2300000: //RootNode
     3300000: //RootNode
     4300000: fear_uvd:Mesh
