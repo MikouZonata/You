@@ -24,6 +24,8 @@ public class Kevin : MonoBehaviour
 	public LineRenderer linkRenderer;
 
 	public TrailRenderer throttleTrail;
+	public Transform modelAnchor;
+	float modelMaxForwardsAngle = 12, modelMaxSidewaysAngle = 9;
 	Vector3 _velocity = Vector3.zero;
 	float triggerValue;
 	float throttleMaxForwardSpeed = 26, throttleMaxBackwardsSpeed = 11;
@@ -90,6 +92,7 @@ public class Kevin : MonoBehaviour
 
 		CameraFoV();
 		ShowLink();
+		ModelRotation();
 
 		if (gamePadState.ThumbSticks.Left.X == 0 || gamePadState.ThumbSticks.Left.Y == 0 || gamePadState.Triggers.Right == 0 || gamePadState.Triggers.Left == 0) {
 			_struggleTimer += Time.deltaTime;
@@ -118,7 +121,6 @@ public class Kevin : MonoBehaviour
 
 		Throttle();
 		Fatigue();
-		//LinkBoost();
 
 		_velocity.z = _throttleSpeed * _fatigueFactor;  //_boostSpeed;
 		_velocity.x = _steeringSideDrift;
@@ -151,6 +153,13 @@ public class Kevin : MonoBehaviour
 			positions = new Vector3[] { transform.position, transform.position };
 		}
 		linkRenderer.SetPositions(positions);
+	}
+
+	void ModelRotation ()
+	{
+		float xRot = modelMaxForwardsAngle * gamePadState.Triggers.Right;
+		float yRot = modelMaxSidewaysAngle * gamePadState.ThumbSticks.Left.X;
+		modelAnchor.rotation = transform.rotation * Quaternion.Euler(xRot, yRot, 0);
 	}
 
 	void Throttle ()
