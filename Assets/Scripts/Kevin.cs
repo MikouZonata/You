@@ -35,7 +35,7 @@ public class Kevin : MonoBehaviour
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
-	float _fatigue = 0;
+	float _fatigue = 1;
 	float fatigueGrowRate = .166f, fatigueShrinkRate = .01f;
 	float fatigueRechargePerPickup = 0.04f;
 	float fatigueSlowFactorMin = .55f;

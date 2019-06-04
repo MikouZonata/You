@@ -653,7 +653,7 @@ RectTransform:
   m_Children:
   - {fileID: 5723247996987091382}
   m_Father: {fileID: 3706047649862686901}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5660,12 +5660,12 @@ Transform:
   - {fileID: 3706047649649401553}
   - {fileID: 3706047650364933273}
   - {fileID: 3706047649821507993}
+  - {fileID: 1599156357105850427}
   - {fileID: 4747062900944679807}
   - {fileID: 6025163742170509440}
   - {fileID: 1509517161153307639}
   - {fileID: 4436474759445640348}
   - {fileID: 4431606092988745753}
-  - {fileID: 1599156357105850427}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5856,7 +5856,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3706047649862686901}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: -90}
 --- !u!120 &7796570651651278999
 LineRenderer:
@@ -7144,7 +7144,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3706047649862686901}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: -90}
 --- !u!96 &7231016175677059027
 TrailRenderer:
@@ -7471,7 +7471,7 @@ PrefabInstance:
     - target: {fileID: 6784411993131929079, guid: ccffe492eb27ed047ac5f3d83307f568,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6784411993131929079, guid: ccffe492eb27ed047ac5f3d83307f568,
         type: 3}
@@ -7546,7 +7546,7 @@ PrefabInstance:
     - target: {fileID: 3251793442139070357, guid: 7f47c474ff821e84f855f463a1c1b5ba,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3251793442139070357, guid: 7f47c474ff821e84f855f463a1c1b5ba,
         type: 3}
@@ -7586,7 +7586,7 @@ PrefabInstance:
     - target: {fileID: 8934909781551552251, guid: 10c8e9bead827b64abf70349e75dbeb8,
         type: 3}
       propertyPath: m_Name
-      value: Drift
+      value: SideDriftParticles
       objectReference: {fileID: 0}
     - target: {fileID: 8934909781551552250, guid: 10c8e9bead827b64abf70349e75dbeb8,
         type: 3}
@@ -7626,7 +7626,7 @@ PrefabInstance:
     - target: {fileID: 8934909781551552250, guid: 10c8e9bead827b64abf70349e75dbeb8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8934909781551552250, guid: 10c8e9bead827b64abf70349e75dbeb8,
         type: 3}
