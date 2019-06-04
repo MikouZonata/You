@@ -132,6 +132,12 @@ public class KevinManager : MonoBehaviour
 			if (!feedbackGO.activeSelf) {
 				feedbackGO.transform.position = pickupPool[pickupIndex].position;
 				feedbackGO.SetActive(true);
+				if (driverIndex != 5) {
+
+					StartCoroutine(PickupFeedbackRoutine(feedbackGO, driverAgents[driverIndex].transform));
+				} else {
+					StartCoroutine(PickupFeedbackRoutine(feedbackGO, kevin.transform));
+				}
 				StartCoroutine(SetActiveWithDelay(feedbackGO, false, 1));
 				break;
 			}
@@ -144,6 +150,15 @@ public class KevinManager : MonoBehaviour
 				AssignNewPickup(i);
 			}
 		}
+	}
+
+	IEnumerator PickupFeedbackRoutine (GameObject feedbackGO, Transform followTrans)
+	{
+		for (float t = 0; t < 2; t += Time.deltaTime) {
+			feedbackGO.transform.position = followTrans.position + Vector3.up;
+			yield return null;
+		}
+		feedbackGO.SetActive(false);
 	}
 
 	void AssignNewPickup (int driverIndex, bool firstTimeInitialization = false)
