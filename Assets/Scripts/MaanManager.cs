@@ -22,6 +22,10 @@ public class MaanManager : MonoBehaviour
 	enum CloudStates { Dormant, Waiting, Chasing };
 	CloudStates cloudState = CloudStates.Dormant;
 
+	float cloudSpawnDistance = 60;
+	float cloudDefaultSize = 24, cloudSmallSize = 18, cloudGrowthRate = 20;
+	float _cloudSize;
+
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
 	const float cloudMinTimeBeforeSpawn = 30, cloudMaxTimeBeforeSpawn = 90;
@@ -36,9 +40,6 @@ public class MaanManager : MonoBehaviour
 	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
 	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .33f;
 	float cloudChasingHeight = 14;
-
-	float cloudDefaultSize = 24, cloudSmallSize = 18, cloudGrowthRate = 20;
-	float _cloudSize;
 
 	public void Init (Transform[] trackPieces, Maan maan)
 	{
@@ -172,10 +173,12 @@ public class MaanManager : MonoBehaviour
 
 	IEnumerator SpawnCloud ()
 	{
-		cloudTrans = Instantiate(cloudPrefab, Util.PickRandom(trackPieces).position + Vector3.up * cloudSpawningHeight, Quaternion.identity).transform;
-		cloud = cloudTrans.GetComponent<Cloud>();
+		Vector2 randomRadius = Random.insideUnitCircle.normalized * cloudSpawnDistance;
+		Vector3 spawnPos = new Vector3(maan.transform.position.x + randomRadius.x, cloudSpawningHeight, maan.transform.position.z + randomRadius.y);
+		cloudTrans = Instantiate(cloudPrefab, spawnPos, Quaternion.identity).transform;
 		cloudTrans.localScale = new Vector3(cloudDefaultSize, cloudDefaultSize, cloudDefaultSize);
 		_cloudSize = cloudDefaultSize;
+		cloud = cloudTrans.GetComponent<Cloud>();
 		float riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < riseTime; t += Time.deltaTime) {
 			cloudTrans.position += Vector3.up * cloudWaitingSpeed * Time.deltaTime;

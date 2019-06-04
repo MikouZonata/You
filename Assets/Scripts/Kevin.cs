@@ -33,6 +33,7 @@ public class Kevin : MonoBehaviour
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
+	float _fatigue = 0;
 	float _fatigueFactor = 1;
 	float fatigueFactorMin = .55f, fatigueTimeUntilMin = 40, fatigueTimeUntilRecharged = 5;
 	float fatigueGrowRate, fatigueShrinkRate;
@@ -53,10 +54,6 @@ public class Kevin : MonoBehaviour
 	Vector3 _struggleVelocity = Vector3.zero;
 
 	bool selectButtonReleased = false;
-
-	//public TrailRenderer boostTrail;
-	//float _boostSpeed = 0, boostMaxSpeed = 12, boostTimeTillMax = .7f;
-	//float boostTrailMaxTime = 0.12f;
 
 	public Transform leaderboard;
 
