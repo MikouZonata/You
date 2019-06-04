@@ -12008,7 +12008,7 @@ MonoBehaviour:
     type: 3}
   pickupPrefab: {fileID: 8996983298411079521, guid: 8b07ee6ea608c4846a775fb91c6cb52c,
     type: 3}
-  pickupFeedbackPrefab: {fileID: 151674293700796306, guid: 185e2298113bc254894ea0a3bd694bf5,
+  pickupFeedbackPrefab: {fileID: 9207796204039916789, guid: be7f26e96bedf0e4c8b1987a3360712a,
     type: 3}
 --- !u!4 &1621655544 stripped
 Transform:

@@ -14,8 +14,10 @@ public class Kevin : MonoBehaviour
 	Transform otherPlayer;
 	Rigidbody rig;
 
-	Camera mainCamera;
+	Camera mainCam;
+	Transform mainCamTrans;
 	float FoVBaseDegrees = 60, FoVDegreesPerVelocity = .3f;
+	Quaternion mainCamDefaultRot;
 
 	ParticleSystem sideDriftParticles;
 	ParticleSystem.EmissionModule sideDriftEmissionModule;
@@ -33,10 +35,10 @@ public class Kevin : MonoBehaviour
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
-	float _fatigueFactor = 1;
-	float fatigueFactorMin = .55f, fatigueTimeUntilMin = 40, fatigueTimeUntilRecharged = 5;
-	float fatigueGrowRate, fatigueShrinkRate;
+	float _fatigue = 1;
+	float fatigueGrowRate = .166f, fatigueShrinkRate = .01f;
 	float fatigueRechargePerPickup = 0.04f;
+	float fatigueSlowFactorMin = .55f;
 
 	float _pickupFatigueFactor = 1;
 	float pickupFatigueTimeToDeplete = 30, pickupFatigueBoostPerPickup = 0.08f;
@@ -54,10 +56,6 @@ public class Kevin : MonoBehaviour
 
 	bool selectButtonReleased = false;
 
-	//public TrailRenderer boostTrail;
-	//float _boostSpeed = 0, boostMaxSpeed = 12, boostTimeTillMax = .7f;
-	//float boostTrailMaxTime = 0.12f;
-
 	public Transform leaderboard;
 
 	public void Init (KevinManager manager, Transform otherPlayer)
@@ -65,10 +63,9 @@ public class Kevin : MonoBehaviour
 		gamePadState = GamePad.GetState(playerIndex);
 
 		rig = GetComponent<Rigidbody>();
-		mainCamera = transform.GetChild(0).GetComponent<Camera>();
-
-		fatigueShrinkRate = (1 - fatigueFactorMin) / fatigueTimeUntilMin;
-		fatigueGrowRate = (1 - fatigueFactorMin) / fatigueTimeUntilRecharged;
+		mainCam = transform.GetChild(0).GetComponent<Camera>();
+		mainCamTrans = mainCam.transform;
+		mainCamDefaultRot = mainCamTrans.rotation;
 
 		sideDriftParticles = GetComponentInChildren<ParticleSystem>();
 		sideDriftEmissionModule = sideDriftParticles.emission;
@@ -122,7 +119,7 @@ public class Kevin : MonoBehaviour
 		Throttle();
 		Fatigue();
 
-		_velocity.z = _throttleSpeed * _fatigueFactor;  //_boostSpeed;
+		_velocity.z = _throttleSpeed * FatigueSlowFactor();  //_boostSpeed;
 		_velocity.x = _steeringSideDrift;
 		_velocity += _struggleVelocity;
 
@@ -135,13 +132,13 @@ public class Kevin : MonoBehaviour
 	{
 		if (other.tag == "Pickup") {
 			manager.PickUpPickup(Util.ToInt(transform.name), Util.ToInt(other.name));
-			_fatigueFactor = Mathf.Clamp(_fatigueFactor + fatigueRechargePerPickup, 0, 1);
+			_fatigue = Mathf.Clamp(_fatigue + fatigueRechargePerPickup, 0, 1);
 		}
 	}
 
 	void CameraFoV ()
 	{
-		mainCamera.fieldOfView = FoVBaseDegrees + _velocity.z * FoVDegreesPerVelocity;
+		mainCam.fieldOfView = FoVBaseDegrees + _velocity.z * FoVDegreesPerVelocity;
 	}
 
 	void ShowLink ()
@@ -199,7 +196,7 @@ public class Kevin : MonoBehaviour
 	void ThrottleTrail ()
 	{
 		float actualTriggerValue = triggerValue;
-		if (triggerValue < .1f)
+		if (triggerValue < .12f)
 			actualTriggerValue = 0;
 		throttleTrail.time = Mathf.Lerp(0, throttleTrailMaxTime, actualTriggerValue);
 	}
@@ -207,11 +204,18 @@ public class Kevin : MonoBehaviour
 	void Fatigue ()
 	{
 		if (StaticData.playersAreLinked) {
-			_fatigueFactor = Mathf.MoveTowards(_fatigueFactor, 1, fatigueGrowRate * Time.deltaTime);
+			_fatigue = Mathf.MoveTowards(_fatigue, 1, fatigueGrowRate * Time.deltaTime);
 		} else {
-			_fatigueFactor = Mathf.MoveTowards(_fatigueFactor, fatigueFactorMin, fatigueShrinkRate * Time.deltaTime);
+			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueShrinkRate * Time.deltaTime);
 		}
 	}
+	float FatigueSlowFactor ()
+	{
+		float result;
+		result = 1 - (1 - fatigueSlowFactorMin) * _fatigue;
+		return result;
+	}
+
 
 	float Steering ()
 	{
@@ -234,26 +238,26 @@ public class Kevin : MonoBehaviour
 		result *= _driftingTurnFactor;
 		_steeringSideDrift *= _driftingSideFactor;
 
-		if (Mathf.Abs(_steeringSideDrift) >= 2.5f) {
-			sideDriftParticles.Play();
-			sideDriftEmissionModule.rateOverTime = sideDriftDefaultEmission;
-		} else {
-			sideDriftParticles.Stop();
-			sideDriftEmissionModule.rateOverTime = 0;
-		}
+		//if (Mathf.Abs(_steeringSideDrift) >= 2.5f) {
+		//	sideDriftParticles.Play();
+		//	sideDriftEmissionModule.rateOverTime = sideDriftDefaultEmission;
+		//} else {
+		//	sideDriftParticles.Stop();
+		//	sideDriftEmissionModule.rateOverTime = 0;
+		//}
 
 		return result;
 	}
 
 	IEnumerator Struggle ()
 	{
-		float struggleTime = Random.Range(0.08f, 0.18f);
+		float struggleTime = Random.Range(0.08f, 0.16f);
 		Vector2 radial = Random.insideUnitCircle;
 		Vector3 velocity = new Vector3(radial.x, 0, Mathf.Abs(radial.y)).normalized * Random.Range(3, 7);
-		float rotation = Random.Range(-80, 80);
+		float rotation = Random.Range(-88f, 88f);
 
 		_struggleVelocity = velocity;
-		
+
 		for (float t = 0; t < struggleTime; t += Time.deltaTime) {
 			transform.Rotate(0, rotation * Time.deltaTime, 0);
 
