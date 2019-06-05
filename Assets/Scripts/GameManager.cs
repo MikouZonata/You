@@ -22,9 +22,9 @@ public class GameManager : MonoBehaviour
 	private void Awake ()
 	{
 		Transform trackPiecesParent = level.transform;
-		trackPieces = new Transform[trackPiecesParent.childCount - 1];
+		trackPieces = new Transform[trackPiecesParent.childCount];
 		for (int i = 0; i < trackPieces.Length; i++) {
-			trackPieces[i] = trackPiecesParent.GetChild(i + 1);
+			trackPieces[i] = trackPiecesParent.GetChild(i);
 		}
 
 		maan = (Instantiate(maanPrefab, new Vector3(-1, .05f, 0), Quaternion.identity).GetComponent<Maan>());

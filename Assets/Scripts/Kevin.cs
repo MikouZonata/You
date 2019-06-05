@@ -43,8 +43,6 @@ public class Kevin : MonoBehaviour
 	//float _pickupFatigueFactor = 1;
 	//float pickupFatigueTimeToDeplete = 30, pickupFatigueBoostPerPickup = 0.08f;
 
-		4-7-2019 13:30 met Henk voor seminar herkansing. Mail hem met waarop je beoordeeld moet worden.
-
 	float maxTurnRate = 178, minTurnRate = 76;
 	float turnRateLossPerVelocity = 4.2f;
 	float _steeringSideDrift = 0, sideDriftPerVelocity = .42f, sideDriftMaxVelocity = 22, sideDriftMinVelocity = 12;
