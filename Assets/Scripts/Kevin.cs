@@ -35,13 +35,15 @@ public class Kevin : MonoBehaviour
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
-	float _fatigue = 1;
-	float fatigueGrowRate = .166f, fatigueShrinkRate = .01f;
+	float _fatigue = 0;
+	float fatigueGrowRate = .166f, fatigueShrinkRate = .015f;
 	float fatigueRechargePerPickup = 0.04f;
-	float fatigueSlowFactorMin = .55f;
+	float fatigueSlowFactorMin = .48f;
 
-	float _pickupFatigueFactor = 1;
-	float pickupFatigueTimeToDeplete = 30, pickupFatigueBoostPerPickup = 0.08f;
+	//float _pickupFatigueFactor = 1;
+	//float pickupFatigueTimeToDeplete = 30, pickupFatigueBoostPerPickup = 0.08f;
+
+		4-7-2019 13:30 met Henk voor seminar herkansing. Mail hem met waarop je beoordeeld moet worden.
 
 	float maxTurnRate = 178, minTurnRate = 76;
 	float turnRateLossPerVelocity = 4.2f;
@@ -132,7 +134,7 @@ public class Kevin : MonoBehaviour
 	{
 		if (other.tag == "Pickup") {
 			manager.PickUpPickup(Util.ToInt(transform.name), Util.ToInt(other.name));
-			_fatigue = Mathf.Clamp(_fatigue + fatigueRechargePerPickup, 0, 1);
+			_fatigue = Mathf.Clamp(_fatigue - fatigueRechargePerPickup, 0, 1);
 		}
 	}
 
@@ -204,9 +206,9 @@ public class Kevin : MonoBehaviour
 	void Fatigue ()
 	{
 		if (StaticData.playersAreLinked) {
-			_fatigue = Mathf.MoveTowards(_fatigue, 1, fatigueGrowRate * Time.deltaTime);
+			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueGrowRate * Time.deltaTime);
 		} else {
-			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueShrinkRate * Time.deltaTime);
+			_fatigue = Mathf.MoveTowards(_fatigue, 1, fatigueShrinkRate * Time.deltaTime);
 		}
 	}
 	float FatigueSlowFactor ()
