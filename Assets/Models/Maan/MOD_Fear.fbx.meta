@@ -1,19 +1,368 @@
 fileFormatVersion: 2
-guid: 0ae8f006e8c764a4c97a6e02f5214376
+guid: 9bae338f86e83394ebc76e842ff006cc
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: fear_tentacles
-    2100002: fear_body
-    2100004: fear_clocks
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: fear_uvd:Mesh
+    100000: fear_uvd:Mesh
+    100002: //RootNode
+    100004: g_clock1
+    100006: g_clock2
+    100008: g_clock3
+    100010: g_clock4
+    100012: g_clock5
+    100014: g_clock6
+    100016: g_clock7
+    100018: g_clock8
+    100020: g_clock9
+    100022: p_clock
+    100024: p_clock 1
+    100026: p_clock 2
+    100028: p_clock 3
+    100030: p_clock 4
+    100032: p_clock 5
+    100034: p_clock 6
+    100036: p_clock 7
+    100038: p_clock 8
+    100040: p_hour
+    100042: p_hour 1
+    100044: p_hour 2
+    100046: p_hour 3
+    100048: p_hour 4
+    100050: p_hour 5
+    100052: p_hour 6
+    100054: p_hour 7
+    100056: p_hour 8
+    100058: p_min
+    100060: p_min 1
+    100062: p_min 2
+    100064: p_min 3
+    100066: p_min 4
+    100068: p_min 5
+    100070: p_min 6
+    100072: p_min 7
+    100074: p_min 8
+    100076: p_pivot
+    100078: p_pivot 1
+    100080: p_pivot 2
+    100082: p_pivot 3
+    100084: p_pivot 4
+    100086: p_pivot 5
+    100088: p_pivot 6
+    100090: p_pivot 7
+    100092: p_pivot 8
+    100094: polySurface10
+    100096: polySurface11
+    100098: polySurface12
+    100100: polySurface13
+    100102: polySurface14
+    100104: polySurface15
+    100106: polySurface16
+    100108: polySurface17
+    100110: polySurface18
+    100112: polySurface19
+    100114: polySurface20
+    100116: polySurface21
+    100118: polySurface22
+    100120: polySurface23
+    100122: polySurface24
+    100124: polySurface25
+    100126: polySurface26
+    100128: polySurface27
+    100130: polySurface28
+    100132: polySurface29
+    100134: polySurface30
+    100136: polySurface31
+    100138: polySurface32
+    100140: polySurface33
+    100142: polySurface34
+    100144: polySurface5
+    100146: polySurface6
+    100148: polySurface7
+    100150: polySurface8
+    100152: polySurface9
+    400000: fear_uvd:Mesh
+    400002: //RootNode
+    400004: g_clock1
+    400006: g_clock2
+    400008: g_clock3
+    400010: g_clock4
+    400012: g_clock5
+    400014: g_clock6
+    400016: g_clock7
+    400018: g_clock8
+    400020: g_clock9
+    400022: p_clock
+    400024: p_clock 1
+    400026: p_clock 2
+    400028: p_clock 3
+    400030: p_clock 4
+    400032: p_clock 5
+    400034: p_clock 6
+    400036: p_clock 7
+    400038: p_clock 8
+    400040: p_hour
+    400042: p_hour 1
+    400044: p_hour 2
+    400046: p_hour 3
+    400048: p_hour 4
+    400050: p_hour 5
+    400052: p_hour 6
+    400054: p_hour 7
+    400056: p_hour 8
+    400058: p_min
+    400060: p_min 1
+    400062: p_min 2
+    400064: p_min 3
+    400066: p_min 4
+    400068: p_min 5
+    400070: p_min 6
+    400072: p_min 7
+    400074: p_min 8
+    400076: p_pivot
+    400078: p_pivot 1
+    400080: p_pivot 2
+    400082: p_pivot 3
+    400084: p_pivot 4
+    400086: p_pivot 5
+    400088: p_pivot 6
+    400090: p_pivot 7
+    400092: p_pivot 8
+    400094: polySurface10
+    400096: polySurface11
+    400098: polySurface12
+    400100: polySurface13
+    400102: polySurface14
+    400104: polySurface15
+    400106: polySurface16
+    400108: polySurface17
+    400110: polySurface18
+    400112: polySurface19
+    400114: polySurface20
+    400116: polySurface21
+    400118: polySurface22
+    400120: polySurface23
+    400122: polySurface24
+    400124: polySurface25
+    400126: polySurface26
+    400128: polySurface27
+    400130: polySurface28
+    400132: polySurface29
+    400134: polySurface30
+    400136: polySurface31
+    400138: polySurface32
+    400140: polySurface33
+    400142: polySurface34
+    400144: polySurface5
+    400146: polySurface6
+    400148: polySurface7
+    400150: polySurface8
+    400152: polySurface9
+    2100000: mat_clockarms
+    2100002: mat_clockface
+    2100004: mat_clockframe
+    2100006: mat_feartentacles
+    2100008: mat_fearblob
+    2300000: p_clock
+    2300002: p_clock 1
+    2300004: p_clock 2
+    2300006: p_clock 3
+    2300008: p_clock 4
+    2300010: p_clock 5
+    2300012: p_clock 6
+    2300014: p_clock 7
+    2300016: p_clock 8
+    2300018: p_hour
+    2300020: p_hour 1
+    2300022: p_hour 2
+    2300024: p_hour 3
+    2300026: p_hour 4
+    2300028: p_hour 5
+    2300030: p_hour 6
+    2300032: p_hour 7
+    2300034: p_hour 8
+    2300036: p_min
+    2300038: p_min 1
+    2300040: p_min 2
+    2300042: p_min 3
+    2300044: p_min 4
+    2300046: p_min 5
+    2300048: p_min 6
+    2300050: p_min 7
+    2300052: p_min 8
+    2300054: p_pivot
+    2300056: p_pivot 1
+    2300058: p_pivot 2
+    2300060: p_pivot 3
+    2300062: p_pivot 4
+    2300064: p_pivot 5
+    2300066: p_pivot 6
+    2300068: p_pivot 7
+    2300070: p_pivot 8
+    2300072: polySurface10
+    2300074: polySurface11
+    2300076: polySurface12
+    2300078: polySurface13
+    2300080: polySurface14
+    2300082: polySurface15
+    2300084: polySurface16
+    2300086: polySurface17
+    2300088: polySurface18
+    2300090: polySurface19
+    2300092: polySurface20
+    2300094: polySurface21
+    2300096: polySurface22
+    2300098: polySurface23
+    2300100: polySurface24
+    2300102: polySurface25
+    2300104: polySurface26
+    2300106: polySurface27
+    2300108: polySurface28
+    2300110: polySurface29
+    2300112: polySurface30
+    2300114: polySurface31
+    2300116: polySurface32
+    2300118: polySurface33
+    2300120: polySurface34
+    2300122: polySurface5
+    2300124: polySurface6
+    2300126: polySurface7
+    2300128: polySurface8
+    2300130: polySurface9
+    3300000: p_clock
+    3300002: p_clock 1
+    3300004: p_clock 2
+    3300006: p_clock 3
+    3300008: p_clock 4
+    3300010: p_clock 5
+    3300012: p_clock 6
+    3300014: p_clock 7
+    3300016: p_clock 8
+    3300018: p_hour
+    3300020: p_hour 1
+    3300022: p_hour 2
+    3300024: p_hour 3
+    3300026: p_hour 4
+    3300028: p_hour 5
+    3300030: p_hour 6
+    3300032: p_hour 7
+    3300034: p_hour 8
+    3300036: p_min
+    3300038: p_min 1
+    3300040: p_min 2
+    3300042: p_min 3
+    3300044: p_min 4
+    3300046: p_min 5
+    3300048: p_min 6
+    3300050: p_min 7
+    3300052: p_min 8
+    3300054: p_pivot
+    3300056: p_pivot 1
+    3300058: p_pivot 2
+    3300060: p_pivot 3
+    3300062: p_pivot 4
+    3300064: p_pivot 5
+    3300066: p_pivot 6
+    3300068: p_pivot 7
+    3300070: p_pivot 8
+    3300072: polySurface10
+    3300074: polySurface11
+    3300076: polySurface12
+    3300078: polySurface13
+    3300080: polySurface14
+    3300082: polySurface15
+    3300084: polySurface16
+    3300086: polySurface17
+    3300088: polySurface18
+    3300090: polySurface19
+    3300092: polySurface20
+    3300094: polySurface21
+    3300096: polySurface22
+    3300098: polySurface23
+    3300100: polySurface24
+    3300102: polySurface25
+    3300104: polySurface26
+    3300106: polySurface27
+    3300108: polySurface28
+    3300110: polySurface29
+    3300112: polySurface30
+    3300114: polySurface31
+    3300116: polySurface32
+    3300118: polySurface33
+    3300120: polySurface34
+    3300122: polySurface5
+    3300124: polySurface6
+    3300126: polySurface7
+    3300128: polySurface8
+    3300130: polySurface9
+    4300000: p_hour
+    4300002: p_min
+    4300004: p_pivot
+    4300006: p_clock
+    4300008: p_hour
+    4300010: p_min
+    4300012: p_pivot
+    4300014: p_clock
+    4300016: p_hour
+    4300018: p_min
+    4300020: p_pivot
+    4300022: p_clock
+    4300024: p_hour
+    4300026: p_min
+    4300028: p_pivot
+    4300030: p_clock
+    4300032: p_hour
+    4300034: p_min
+    4300036: p_pivot
+    4300038: p_clock
+    4300040: p_hour
+    4300042: p_min
+    4300044: p_pivot
+    4300046: p_clock
+    4300048: p_hour
+    4300050: p_min
+    4300052: p_pivot
+    4300054: p_clock
+    4300056: p_hour
+    4300058: p_min
+    4300060: p_pivot
+    4300062: p_clock
+    4300064: p_hour
+    4300066: p_min
+    4300068: p_pivot
+    4300070: p_clock
+    4300072: polySurface5
+    4300074: polySurface6
+    4300076: polySurface7
+    4300078: polySurface8
+    4300080: polySurface9
+    4300082: polySurface10
+    4300084: polySurface11
+    4300086: polySurface12
+    4300088: polySurface13
+    4300090: polySurface14
+    4300092: polySurface15
+    4300094: polySurface16
+    4300096: polySurface17
+    4300098: polySurface18
+    4300100: polySurface19
+    4300102: polySurface20
+    4300104: polySurface21
+    4300106: polySurface22
+    4300108: polySurface23
+    4300110: polySurface24
+    4300112: polySurface25
+    4300114: polySurface26
+    4300116: polySurface27
+    4300118: polySurface28
+    4300120: polySurface29
+    4300122: polySurface30
+    4300124: polySurface31
+    4300126: polySurface32
+    4300128: polySurface33
+    4300130: polySurface34
   externalObjects: {}
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -62,7 +411,7 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 1
+    useFileScale: 0
     previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 0
   tangentSpace:

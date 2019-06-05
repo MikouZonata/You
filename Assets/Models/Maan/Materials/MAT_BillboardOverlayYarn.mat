@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MAT_BillboardOverlay
+  m_Name: MAT_BillboardOverlayYarn
   m_Shader: {fileID: 4800000, guid: 0132e51262e4b494aab08f69ee7d47db, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
