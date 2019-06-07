@@ -28,7 +28,7 @@ public class MaanManager : MonoBehaviour
 
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
-	const float cloudMinTimeBeforeSpawn = 30, cloudMaxTimeBeforeSpawn = 90;
+	const float cloudMinTimeBeforeSpawn = 0, cloudMaxTimeBeforeSpawn = 0;
 	const float cloudSpawningHeight = 20;
 
 	bool cloudWaitingSetup = false;
@@ -39,7 +39,7 @@ public class MaanManager : MonoBehaviour
 	bool cloudChaseSetup = false;
 	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
 	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .33f;
-	float cloudChasingHeight = 14;
+	float cloudChasingHeight = 0;
 
 	public void Init (Transform[] trackPieces, Maan maan)
 	{
