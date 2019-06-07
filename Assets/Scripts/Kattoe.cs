@@ -56,7 +56,7 @@ public class Kattoe : MonoBehaviour
 	Vector3 basePosition;
 
 	bool hopping = false, hopSetup = false;
-	float hopHeight = .4f, hopTime = .3f;
+	float hopHeight = .32f, hopTime = .24f;
 
 	public void Init (MaanManager manager, AudioClip callClip, Transform maanTrans, Transform parentPiece)
 	{
