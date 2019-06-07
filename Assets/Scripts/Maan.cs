@@ -17,7 +17,7 @@ public class Maan : MonoBehaviour
 	Transform cameraTrans;
 	Vector3 _velocity, _cameraRotation;
 
-	float movementSpeed = 15;
+	float movementSpeed = 17;
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 

@@ -15,9 +15,10 @@ public class Kattoe : MonoBehaviour
 	public enum BehaviourStates { Roaming, Spotted, Near, Bonded, RunningAway };
 	BehaviourStates behaviourState = BehaviourStates.Roaming;
 
-	bool roamingDestinationSet = false;
+	bool roamingSetup = false, roamingDestinationSet = false;
 	float _roamingTimer = 0, roamingTime = 0;
 	const float roamingMinTime = 1, roamingmaxTime = 3.6f;
+	const float maxRoamingDistance = 5;
 	const float distanceBeforeSpotted = 16;
 
 	bool spottedSetup = false, spottedAdvancing = false;
@@ -53,7 +54,9 @@ public class Kattoe : MonoBehaviour
 	float callBasePitch, callPitchMax = 1.56f, callPitchMin = 0.4f, callPitchMaxDeviation = .11f;
 
 	Vector3 basePosition;
-	float maxRoamingDistance = 5;
+
+	bool hopping = false, hopSetup = false;
+	float hopHeight = .4f, hopTime = .3f;
 
 	public void Init (MaanManager manager, AudioClip callClip, Transform maanTrans, Transform parentPiece)
 	{
@@ -74,6 +77,7 @@ public class Kattoe : MonoBehaviour
 	private void Update ()
 	{
 		Behaviour();
+		Hop();
 	}
 
 	void Behaviour ()
@@ -82,14 +86,19 @@ public class Kattoe : MonoBehaviour
 			//Idle behaviour in which the kattoe roams about doing its thing
 			case BehaviourStates.Roaming:
 				//Setup
+				if (!roamingSetup) {
+					navMeshAgent.enabled = true;
+					maan.EngagedByKattoe(this, false);
+					roamingDestinationSet = false;
+					roamingSetup = true;
+				}
+
 				if (!roamingDestinationSet) {
 					Vector2 randomPoint = Random.insideUnitCircle * maxRoamingDistance;
 					Vector3 targetPosition = basePosition + new Vector3(randomPoint.x, 0, randomPoint.y);
-					navMeshAgent.enabled = true;
 					navMeshAgent.destination = targetPosition;
 					roamingTime = Random.Range(roamingMinTime, roamingmaxTime);
 					_roamingTimer = 0;
-					maan.EngagedByKattoe(this, false);
 					roamingDestinationSet = true;
 				}
 
@@ -101,6 +110,7 @@ public class Kattoe : MonoBehaviour
 
 				//If Maan is close, enter Spotted state
 				if ((maanTrans.position - transform.position).sqrMagnitude < distanceBeforeSpotted * distanceBeforeSpotted) {
+					roamingSetup = false;
 					Call();
 					behaviourState = BehaviourStates.Spotted;
 					goto case BehaviourStates.Spotted;
@@ -143,6 +153,7 @@ public class Kattoe : MonoBehaviour
 
 					//If Maan en Kattoe are close enough proceed to Near state
 					if ((transform.position - maanTrans.position).sqrMagnitude < spottedTargetDistance * spottedTargetDistance) {
+						spottedSetup = false;
 						Call();
 						behaviourState = BehaviourStates.Near;
 						goto case BehaviourStates.Near;
@@ -174,7 +185,7 @@ public class Kattoe : MonoBehaviour
 
 				//If Maan goes too far away the kattoe resets to roaming
 				if ((transform.position - maanTrans.position).sqrMagnitude > nearMaxDistanceToBond * nearMaxDistanceToBond) {
-					roamingDestinationSet = false;
+					nearSetup = false;
 					behaviourState = BehaviourStates.Roaming;
 					goto case BehaviourStates.Roaming;
 				}
@@ -185,6 +196,7 @@ public class Kattoe : MonoBehaviour
 					Call();
 					bondedTargetTrans = maanTrans.GetComponent<Maan>().KattoeRequestFlockAnchor();
 					navMeshAgent.enabled = true;
+					nearSetup = false;
 					behaviourState = BehaviourStates.Bonded;
 					goto case BehaviourStates.Bonded;
 				}
@@ -224,6 +236,47 @@ public class Kattoe : MonoBehaviour
 					StartCoroutine(RunAway());
 				}
 				break;
+		}
+	}
+
+	void Hop ()
+	{
+		if (!hopSetup) {
+			hopSetup = true;
+			StartCoroutine(HopRoutine());
+		}
+
+		if (navMeshAgent.velocity.sqrMagnitude > 1) {
+			hopping = true;
+		} else {
+			hopping = false;
+		}
+	}
+
+	enum Directions { Down, Up };
+	IEnumerator HopRoutine ()
+	{
+		Transform modelTrans = transform.GetChild(0);
+		float hopSpeed = hopHeight * 2 / hopTime;
+		Directions direction = Directions.Up;
+		float _yPos = 0;
+
+		while (true) {
+			if (direction == Directions.Up && hopping) {
+				_yPos = Mathf.MoveTowards(_yPos, hopHeight, hopSpeed * Time.deltaTime);
+				if (_yPos >= hopHeight) {
+					direction = Directions.Down;
+				}
+			} else {
+				_yPos = Mathf.MoveTowards(_yPos, 0, hopSpeed * Time.deltaTime);
+				if (_yPos <= 0) {
+					direction = Directions.Up;
+				}
+			}
+
+			modelTrans.localPosition = new Vector3(0, _yPos, 0);
+
+			yield return null;
 		}
 	}
 

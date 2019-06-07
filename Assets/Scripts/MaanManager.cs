@@ -29,7 +29,7 @@ public class MaanManager : MonoBehaviour
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
 	const float cloudMinTimeBeforeSpawn = 0, cloudMaxTimeBeforeSpawn = 0;
-	const float cloudSpawningHeight = 20;
+	const float cloudSpawningHeight = 4;
 
 	bool cloudWaitingSetup = false;
 	float _cloudWaitingTimer = 0, cloudWaitingTime;
