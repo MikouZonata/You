@@ -31,7 +31,7 @@ public class Kattoe : MonoBehaviour
 	const float spottedMinMoveTime = .4f, spottedMaxMoveTime = 1.2f;
 	const float spottedTargetDistance = 3;
 	float _spottedTimesLured = 0, spottedLureLimit;
-	const float spottedMinLureLimit = 5, spottedMaxLureLimit = 18, spottedTimePerLure = .2f;
+	const float spottedMinLureLimit = 5, spottedMaxLureLimit = 56, spottedTimePerLure = .1f;
 
 	bool nearSetup = false;
 	Vector3 nearMaanPosition;
@@ -130,7 +130,7 @@ public class Kattoe : MonoBehaviour
 				}
 
 				//If Maan moves away from her initial position after being spotted OR if the times lured exceedes the limit, run away
-				if ((spottedMaanPosition - maanTrans.position).sqrMagnitude > 25 || spottedLureLimit < _spottedTimesLured) {
+				if ((spottedMaanPosition - maanTrans.position).sqrMagnitude > 25) {
 					StartCoroutine(RunAway());
 				}
 
@@ -303,8 +303,10 @@ public class Kattoe : MonoBehaviour
 
 	public void ReceiveLure ()
 	{
-		_spottedAdvanceTimer += spottedTimePerLure;
-		_spottedTimesLured++;
+		if (_spottedTimesLured < spottedLureLimit) {
+			_spottedAdvanceTimer += spottedTimePerLure;
+			_spottedTimesLured++;
+		}
 	}
 
 	void Call ()
