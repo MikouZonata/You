@@ -22,7 +22,6 @@ public class KevinManager : MonoBehaviour
 
 	Transform leaderboard;
 	RectTransform[] leaderboardCards;
-	int minStartingScore = 34, maxStartingScore = 107;
 	string[] driverNames = new string[] { "Daniël", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 29, 40, 49, 68, 75 };
 	float[] driverBaseSpeeds = new float[] { 14, 15.5f, 16.2f, 18, 19 };
