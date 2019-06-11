@@ -1,0 +1,167 @@
+fileFormatVersion: 2
+guid: 8fe074278fe0a1841a76d5a3244f9095
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: g_clock10
+    100004: p_clock
+    100006: p_Cloud
+    100008: p_hour
+    100010: p_min
+    100012: p_pivot
+    100014: pGear1
+    100016: pGear2
+    100018: pGear3
+    100020: pWire1
+    100022: pWire2
+    100024: pWire3
+    100026: pWire4
+    100028: pWire5
+    400000: //RootNode
+    400002: g_clock10
+    400004: p_clock
+    400006: p_Cloud
+    400008: p_hour
+    400010: p_min
+    400012: p_pivot
+    400014: pGear1
+    400016: pGear2
+    400018: pGear3
+    400020: pWire1
+    400022: pWire2
+    400024: pWire3
+    400026: pWire4
+    400028: pWire5
+    2100000: anisotropic1
+    2100002: mat_clockarms
+    2100004: mat_clockface
+    2100006: mat_clockframe
+    2100008: phong1
+    2100010: mat_wire1
+    2100012: mat_wire2
+    2300000: p_clock
+    2300002: p_Cloud
+    2300004: p_hour
+    2300006: p_min
+    2300008: p_pivot
+    2300010: pGear1
+    2300012: pGear2
+    2300014: pGear3
+    2300016: pWire1
+    2300018: pWire2
+    2300020: pWire3
+    2300022: pWire4
+    2300024: pWire5
+    3300000: p_clock
+    3300002: p_Cloud
+    3300004: p_hour
+    3300006: p_min
+    3300008: p_pivot
+    3300010: pGear1
+    3300012: pGear2
+    3300014: pGear3
+    3300016: pWire1
+    3300018: pWire2
+    3300020: pWire3
+    3300022: pWire4
+    3300024: pWire5
+    4300000: p_Cloud
+    4300002: p_hour
+    4300004: p_min
+    4300006: p_pivot
+    4300008: p_clock
+    4300010: pGear1
+    4300012: pGear2
+    4300014: pGear3
+    4300016: pWire1
+    4300018: pWire2
+    4300020: pWire3
+    4300022: pWire4
+    4300024: pWire5
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
