@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MAT_Deco_Cactus1
+  m_Name: MAT_Deco_Cactus2
   m_Shader: {fileID: 4800000, guid: 0132e51262e4b494aab08f69ee7d47db, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c28267d4b0c5d424198a3f8b54a8679c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 692d2045230deba4b944ee10f5f29a05, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OverlayTex:
