@@ -39,7 +39,7 @@ public class Kevin : MonoBehaviour
 	float throttleAudioMaxVolume = .4f;
 
 	float _fatigue = 0;
-	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .01f;
+	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
 	const float fatigueRechargePerPickup = 0.04f;
 	const float fatigueSlowFactorMin = .4f;
 
