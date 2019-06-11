@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 54890622602015003}
   - component: {fileID: 1372264218162915371}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Cactus_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &54890622602015003
 Transform:
@@ -218,12 +218,12 @@ GameObject:
   m_Component:
   - component: {fileID: 950270329413558604}
   - component: {fileID: 4049596379489489989}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Stone_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &950270329413558604
 Transform:
