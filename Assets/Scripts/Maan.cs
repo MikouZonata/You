@@ -165,16 +165,21 @@ public class Maan : MonoBehaviour
 			attemptedAnchor = Util.PickRandom(kattoeAnchors);
 		}
 		occupiedKattoeAnchors.Add(attemptedAnchor);
+		StaticData.kattoesBondedToMaan++;
 		return attemptedAnchor;
 	}
+	public void KattoeLeaveFlock (Transform anchor)
+	{
+		occupiedKattoeAnchors.Remove(anchor);
+		StaticData.kattoesBondedToMaan--;
+	}
 
-	public IEnumerator FadeToBlack (float fadeDelay = .4f, float fadeTime = 1f)
+	public IEnumerator FadeToBlack (float totalTime, float fadeTime = 1)
 	{
 		fadeToBlackDisplay.enabled = true;
-		Color _color = Color.black;
-		fadeToBlackDisplay.color = _color;
+		Color _color = fadeToBlackDisplay.color = Color.black;
 
-		yield return new WaitForSeconds(fadeDelay);
+		yield return new WaitForSeconds(totalTime - fadeTime);
 
 		float transformationValue = 1 / fadeTime;
 		for (float t = fadeTime; t > 0; t -= Time.deltaTime) {

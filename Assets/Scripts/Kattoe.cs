@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using MultiAudioListener;
+using Utility;
 
 public class Kattoe : MonoBehaviour
 {
 	MaanManager manager;
-	AudioSource audioSource;
+	MultiAudioSource audioSource;
+	AudioClip[] callClips;
 	NavMeshAgent navMeshAgent;
 	Maan maan;
 	Transform maanTrans;
@@ -47,7 +50,7 @@ public class Kattoe : MonoBehaviour
 	float _bondedNavTimer = 0, _bondedCallTimer = 0, _bondedLeaveTimer = 0;
 	float bondedTimeBetweenRetargetting = 1;
 	float bondedTimeBetweenCalls, bondedMinTimeBetweenCalls = 1.6f, bondedMaxTimeBetweenCalls = 3.6f;
-	float bondedTimeBeforeLeaving, bondedMinTimeBeforeLeaving = 16, bondedMaxTimeBeforeLeaving = 80;
+	float bondedTimeBeforeLeaving, bondedMinTimeBeforeLeaving = 40, bondedMaxTimeBeforeLeaving = 92;
 
 	const float runAwaySpeed = 20, runAwayTime = 1.2f;
 
@@ -58,16 +61,16 @@ public class Kattoe : MonoBehaviour
 	bool hopping = false, hopSetup = false;
 	float hopHeight = .32f, hopTime = .24f;
 
-	public void Init (MaanManager manager, AudioClip callClip, Transform maanTrans, Transform parentPiece)
+	public void Init (MaanManager manager, AudioClip[] callClips, Transform maanTrans, Transform parentPiece)
 	{
 		this.manager = manager;
 		this.maanTrans = maanTrans;
 		maan = maanTrans.GetComponent<Maan>();
 		this.parentPiece = parentPiece;
 
-		audioSource = GetComponent<AudioSource>();
+		audioSource = GetComponent<MultiAudioSource>();
 		callBasePitch = Random.Range(callPitchMin, callPitchMax);
-		audioSource.clip = callClip;
+		this.callClips = callClips;
 
 		navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -233,6 +236,7 @@ public class Kattoe : MonoBehaviour
 				_bondedLeaveTimer += Time.deltaTime;
 				if (_bondedLeaveTimer >= bondedTimeBeforeLeaving) {
 					Call();
+					maan.KattoeLeaveFlock(bondedTargetTrans);
 					StartCoroutine(RunAway());
 				}
 				break;
@@ -311,7 +315,8 @@ public class Kattoe : MonoBehaviour
 
 	void Call ()
 	{
-		audioSource.pitch = callBasePitch + Random.Range(-callPitchMaxDeviation, callPitchMaxDeviation);
+		audioSource.Pitch = callBasePitch + Random.Range(-callPitchMaxDeviation, callPitchMaxDeviation);
+		audioSource.AudioClip = Util.PickRandom(callClips);
 		audioSource.Play();
 	}
 }

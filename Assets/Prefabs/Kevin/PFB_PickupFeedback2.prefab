@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 291632062}
   - component: {fileID: 291632064}
   - component: {fileID: 291632063}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4709,7 +4709,7 @@ GameObject:
   - component: {fileID: 2454953393029040460}
   - component: {fileID: 9127417916336068608}
   - component: {fileID: 8392973588388682344}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SmallArrows (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9425,6 +9425,18 @@ PrefabInstance:
     - target: {fileID: 100004, guid: 78419d86500152746a775b5efab16b44, type: 3}
       propertyPath: m_Name
       value: PFB_PickupFeedback2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 78419d86500152746a775b5efab16b44, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 78419d86500152746a775b5efab16b44, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 78419d86500152746a775b5efab16b44, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 78419d86500152746a775b5efab16b44, type: 3}
       propertyPath: m_LocalPosition.x

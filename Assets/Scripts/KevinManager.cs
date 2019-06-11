@@ -11,6 +11,7 @@ public class KevinManager : MonoBehaviour
 	bool firstTimeSetup = true;
 	public GameObject[] enemyDriverPrefabs;
 	public GameObject pickupPrefab, pickupFeedbackPrefab;
+	Transform pickupFeedbackParent;
 	const int numberOfDrivers = 6;
 	int numberOfAiDrivers;
 	Kevin kevin;
@@ -25,7 +26,7 @@ public class KevinManager : MonoBehaviour
 	RectTransform[] leaderboardCards;
 	string[] driverNames = new string[] { "Daniel", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 29, 40, 49, 68, 75 };
-	float[] driverBaseSpeeds = new float[] { 14, 15.5f, 16.2f, 18, 19 };
+	float[] driverBaseSpeeds = new float[] { 14.8f, 15.5f, 16.2f, 18, 18.8f };
 	int driverNamesIndex = 0;
 	int[] scores;
 	int[] ranks;
@@ -33,7 +34,7 @@ public class KevinManager : MonoBehaviour
 	Image[] scoreHighlights;
 
 	float[] scoreDownTimers = new float[numberOfDrivers];
-	float scoreDownBaseTime = 16, scoreDownTimePerPoint = .12f;
+	float scoreDownBaseTime = 12, scoreDownTimePerPoint = .09f;
 
 	GameObject[] pickupFeedbackPool = new GameObject[numberOfDrivers];
 
@@ -57,8 +58,10 @@ public class KevinManager : MonoBehaviour
 			}
 
 			//Pickup feedback pool maken
+			pickupFeedbackParent = new GameObject("PickupFeedbackParent").transform;
 			for (int i = 0; i < pickupFeedbackPool.Length; i++) {
 				pickupFeedbackPool[i] = Instantiate(pickupFeedbackPrefab);
+				pickupFeedbackPool[i].transform.parent = pickupFeedbackParent;
 				pickupFeedbackPool[i].SetActive(false);
 			}
 

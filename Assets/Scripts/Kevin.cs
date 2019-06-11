@@ -16,7 +16,7 @@ public class Kevin : MonoBehaviour
 
 	Camera mainCam;
 	Transform mainCamTrans;
-	float FoVBaseDegrees = 60, FoVDegreesPerVelocity = .3f;
+	const float FoVBaseDegrees = 60, FoVDegreesPerVelocity = .3f;
 	Quaternion mainCamDefaultRot;
 
 	ParticleSystem sideDriftParticles;
@@ -27,31 +27,28 @@ public class Kevin : MonoBehaviour
 
 	public TrailRenderer throttleTrail;
 	public Transform modelAnchor;
-	float modelMaxForwardsAngle = 12, modelMaxSidewaysAngle = 9;
+	const float modelMaxForwardsAngle = 12, modelMaxSidewaysAngle = 9;
 	Vector3 _velocity = Vector3.zero;
-	float triggerValue;
-	float throttleMaxForwardSpeed = 28;
-	float throttleAcceleration = 2, throttleDecceleration = .8f, throttleNaturalDecceleration = 18;
+	float _triggerValue;
+	const float throttleMaxForwardSpeed = 28;
+	const float throttleAcceleration = 2, throttleNaturalDecceleration = 18;
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
 	float _fatigue = 0;
-	float fatigueRecoverRate = .167f, fatigueIncreaseRate = .01f;
-	float fatigueRechargePerPickup = 0.04f;
-	float fatigueSlowFactorMin = .4f;
+	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .01f;
+	const float fatigueRechargePerPickup = 0.04f;
+	const float fatigueSlowFactorMin = .4f;
 
-	//float _pickupFatigueFactor = 1;
-	//float pickupFatigueTimeToDeplete = 30, pickupFatigueBoostPerPickup = 0.08f;
-
-	float maxTurnRate = 192, minTurnRate = 76;
-	float turnRateLossPerVelocity = 4.22f;
+	const float maxTurnRate = 192, minTurnRate = 76;
+	const float turnRateLossPerVelocity = 4.22f;
 	float _steeringSideDrift = 0, sideDriftPerVelocity = .42f, sideDriftMaxVelocity = 22, sideDriftMinVelocity = 12;
 	float driftingMaxSideFactor = 5.2f, _driftingSideFactor = 1, driftingMaxTurnFactor = 1.24f, driftingTimeToMax = .12f;
 	float _driftingTurnFactor = 1;
 	float driftingSideAcceleration, driftingTurnAcceleration;
 
 	float _struggleTimer = 0, struggleTime = 10;
-	float struggleMinTime = 2, struggleMaxTime = 5.0f;
+	const float struggleMinTime = 2, struggleMaxTime = 5.0f;
 	Vector3 _struggleVelocity = Vector3.zero;
 
 	bool selectButtonReleased = false;
@@ -114,7 +111,7 @@ public class Kevin : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		triggerValue = gamePadState.Triggers.Right;
+		_triggerValue = gamePadState.Triggers.Right;
 
 		Throttle();
 		Fatigue();
@@ -161,8 +158,8 @@ public class Kevin : MonoBehaviour
 
 	void Throttle ()
 	{
-		if (triggerValue > 0) {
-			_speedPoint = Mathf.MoveTowards(_speedPoint, triggerValue, throttleAcceleration * Time.deltaTime);
+		if (_triggerValue > 0) {
+			_speedPoint = Mathf.MoveTowards(_speedPoint, _triggerValue, throttleAcceleration * Time.deltaTime);
 			_throttleSpeed = Mathf.Pow(_speedPoint, .5f) * throttleMaxForwardSpeed;
 
 		} else {
@@ -175,8 +172,8 @@ public class Kevin : MonoBehaviour
 
 	void ThrottleTrail ()
 	{
-		float actualTriggerValue = triggerValue;
-		if (triggerValue < .12f)
+		float actualTriggerValue = _triggerValue;
+		if (_triggerValue < .12f)
 			actualTriggerValue = 0;
 		throttleTrail.time = Mathf.Lerp(0, throttleTrailMaxTime, actualTriggerValue);
 	}

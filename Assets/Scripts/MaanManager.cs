@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using Utility;
+using MultiAudioListener;
 
 public class MaanManager : MonoBehaviour
 {
@@ -10,9 +11,10 @@ public class MaanManager : MonoBehaviour
 	Maan maan;
 
 	public GameObject[] kattoePrefabs;
-	public AudioClip kattoeClip;
+	public AudioClip[] kattoeClips;
 
 	int activeKattoes = 7;
+	Transform kattoeParent;
 	List<Kattoe> kattoes = new List<Kattoe>();
 	List<Transform> occupiedPieces = new List<Transform>();
 
@@ -23,8 +25,6 @@ public class MaanManager : MonoBehaviour
 	CloudStates cloudState = CloudStates.Dormant;
 
 	float cloudSpawnDistance = 60;
-	float cloudDefaultSize = 24, cloudSmallSize = 18, cloudGrowthRate = 20;
-	float _cloudSize;
 
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
@@ -34,17 +34,25 @@ public class MaanManager : MonoBehaviour
 	bool cloudWaitingSetup = false;
 	float _cloudWaitingTimer = 0, cloudWaitingTime;
 	float cloudWaitingSpeed = 4, cloudWaitingHeight = 0;
-	float minTimeBeforeCloudChase = 3, maxTimeBeforeCloudChase = 6;
+	float minTimeBeforeCloudChase = 1.0f, maxTimeBeforeCloudChase = 3.0f;
 
 	bool cloudChaseSetup = false;
 	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
 	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .33f;
 	float cloudChasingHeight = 0;
+	float cloudChasingDistanceToImpact = 4;
+	float cloudImpactFadeTimeGood = 2, cloudImpactFadeTimeBad = 4f;
+
+	public MultiAudioSource kattoeMusicAudioSource;
+	float _kattoeMusicVolume = 0, kattoeMusicVolumeMutationRate = .5f, kattoeMusicMaxVolume = .5f;
+	int kattoeMusicThreshold = 3;
 
 	public void Init (Transform[] trackPieces, Maan maan)
 	{
 		this.trackPieces = trackPieces;
 		this.maan = maan;
+
+		kattoeParent = new GameObject("KattoeParent").transform;
 
 		Transform[] spawnPositions = Util.PickRandom(activeKattoes, false, trackPieces);
 		for (int i = 0; i < activeKattoes; i++) {
@@ -57,12 +65,14 @@ public class MaanManager : MonoBehaviour
 	{
 		Cloud();
 		CloudVisuals();
+		KattoeMusic();
 	}
 
 	Kattoe CreateKattoe (Transform parentPiece)
 	{
 		Kattoe newKattoe = Instantiate(Util.PickRandom(kattoePrefabs), parentPiece.position, Quaternion.identity).GetComponent<Kattoe>();
-		newKattoe.Init(this, kattoeClip, maan.transform, parentPiece);
+		newKattoe.Init(this, Util.PickRandom(4, false, kattoeClips), maan.transform, parentPiece);
+		newKattoe.transform.parent = kattoeParent;
 		return newKattoe;
 	}
 
@@ -124,11 +134,9 @@ public class MaanManager : MonoBehaviour
 				float distanceCloudToMaan = Vector3.Distance(maan.transform.position, cloudTrans.position);
 				Vector3 _cloudPosition = cloudTrans.position;
 
-				if (distanceCloudToMaan < 24) {
-					_cloudPosition.y = Mathf.MoveTowards(_cloudPosition.y, 0, cloudDescendSpeed * Time.deltaTime);
-				} else {
-					_cloudPosition.y = Mathf.MoveTowards(_cloudPosition.y, cloudChasingHeight, cloudDescendSpeed * Time.deltaTime);
-				}
+
+				_cloudPosition.y = Mathf.MoveTowards(_cloudPosition.y, cloudChasingHeight, cloudDescendSpeed * Time.deltaTime);
+
 
 				Vector2 lateralCloudPos = new Vector2(_cloudPosition.x, _cloudPosition.z);
 				lateralCloudPos = Vector2.MoveTowards(lateralCloudPos, new Vector2(maan.transform.position.x, maan.transform.position.z), _cloudChaseSpeed * Time.deltaTime);
@@ -138,8 +146,8 @@ public class MaanManager : MonoBehaviour
 				cloudTrans.position = _cloudPosition;
 				cloudTrans.LookAt(maan.transform);
 
-				if (distanceCloudToMaan < 10) {
-					StartCoroutine(maan.FadeToBlack());
+				if (distanceCloudToMaan < cloudChasingDistanceToImpact) {
+					StartCoroutine(maan.FadeToBlack(StaticData.playersAreLinked ? cloudImpactFadeTimeGood : cloudImpactFadeTimeBad));
 					Destroy(cloudTrans.gameObject);
 					cloudChaseSetup = false;
 					cloudState = CloudStates.Dormant;
@@ -153,18 +161,6 @@ public class MaanManager : MonoBehaviour
 	{
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
-			float _cloudTargetSize;
-			if (StaticData.playersAreLinked) {
-				cloud.SwitchMaterial(global::Cloud.MaterialOptions.Good);
-				_cloudTargetSize = cloudSmallSize;
-			} else {
-				cloud.SwitchMaterial(global::Cloud.MaterialOptions.Bad);
-				_cloudTargetSize = cloudDefaultSize;
-			}
-
-			_cloudSize = Mathf.MoveTowards(_cloudSize, _cloudTargetSize, cloudGrowthRate * Time.deltaTime);
-			cloudTrans.localScale = new Vector3(_cloudSize, _cloudSize, _cloudSize);
-
 			maan.VisualReactionToCloud(distanceMaanToCloud);
 		} else {
 			maan.VisualReactionToCloud(1000);
@@ -176,13 +172,21 @@ public class MaanManager : MonoBehaviour
 		Vector2 randomRadius = Random.insideUnitCircle.normalized * cloudSpawnDistance;
 		Vector3 spawnPos = new Vector3(maan.transform.position.x + randomRadius.x, cloudSpawningHeight, maan.transform.position.z + randomRadius.y);
 		cloudTrans = Instantiate(cloudPrefab, spawnPos, Quaternion.identity).transform;
-		cloudTrans.localScale = new Vector3(cloudDefaultSize, cloudDefaultSize, cloudDefaultSize);
-		_cloudSize = cloudDefaultSize;
 		cloud = cloudTrans.GetComponent<Cloud>();
 		float riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < riseTime; t += Time.deltaTime) {
 			cloudTrans.position += Vector3.up * cloudWaitingSpeed * Time.deltaTime;
 			yield return null;
 		}
+	}
+
+	void KattoeMusic ()
+	{
+		if (StaticData.kattoesBondedToMaan >= kattoeMusicThreshold) {
+			_kattoeMusicVolume = Mathf.MoveTowards(_kattoeMusicVolume, kattoeMusicMaxVolume, kattoeMusicVolumeMutationRate * Time.deltaTime);
+		} else {
+			_kattoeMusicVolume = Mathf.MoveTowards(_kattoeMusicVolume, 0, kattoeMusicVolumeMutationRate * Time.deltaTime);
+		}
+		kattoeMusicAudioSource.Volume = _kattoeMusicVolume;
 	}
 }

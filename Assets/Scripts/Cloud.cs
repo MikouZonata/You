@@ -4,22 +4,18 @@ using UnityEngine;
 
 public class Cloud : MonoBehaviour
 {
-	public enum MaterialOptions { Good, Bad };
-	public Material goodMaterial, badMaterial;
+	public Transform badCloudTrans;
+	float badCloudDefaultSize = 1, badCloudSmallSize = .2f;
+	float scaleSpeed = .9f;
 
-	new Renderer renderer;
-
-	private void Awake ()
+	void Update ()
 	{
-		renderer = GetComponent<Renderer>();
-	}
-
-	public void SwitchMaterial (MaterialOptions option)
-	{
-		if (option == MaterialOptions.Bad) {
-			renderer.material = badMaterial;
+		float _size = badCloudTrans.localScale.x;
+		if (!StaticData.playersAreLinked) {
+			_size = Mathf.MoveTowards(_size, badCloudDefaultSize, scaleSpeed * Time.deltaTime);
 		} else {
-			renderer.material = goodMaterial;
+			_size = Mathf.MoveTowards(_size, badCloudSmallSize, scaleSpeed * Time.deltaTime);
 		}
+		badCloudTrans.localScale = new Vector3(_size, _size, _size);
 	}
 }

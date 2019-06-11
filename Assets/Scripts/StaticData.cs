@@ -6,4 +6,6 @@ public static class StaticData
 
 	public static float distanceToLink = 11.5f;
 	public static bool playersAreLinked = false;
+
+	public static int kattoesBondedToMaan = 0;
 }

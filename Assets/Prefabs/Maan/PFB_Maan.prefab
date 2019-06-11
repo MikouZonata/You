@@ -182,8 +182,8 @@ GameObject:
   - component: {fileID: 2607124933398308487}
   - component: {fileID: 2607124933398308481}
   - component: {fileID: 2607124933398308486}
-  - component: {fileID: 5252487245808898938}
   - component: {fileID: 53236173026528158}
+  - component: {fileID: 7078923489344581286}
   m_Layer: 15
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -307,14 +307,6 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
---- !u!81 &5252487245808898938
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2607124933398308480}
-  m_Enabled: 1
 --- !u!45 &53236173026528158
 Skybox:
   m_ObjectHideFlags: 0
@@ -324,6 +316,19 @@ Skybox:
   m_GameObject: {fileID: 2607124933398308480}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 2100000, guid: f4953c6b25e79a143b78a71833729f50, type: 2}
+--- !u!114 &7078923489344581286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2607124933398308480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bfed13f5989cb3488076be6b47af218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Volume: 1
 --- !u!1 &2607124934051973264
 GameObject:
   m_ObjectHideFlags: 0
