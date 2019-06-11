@@ -9424,7 +9424,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100004, guid: 78419d86500152746a775b5efab16b44, type: 3}
       propertyPath: m_Name
-      value: PickUpFX
+      value: PFB_PickupFeedback2
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 78419d86500152746a775b5efab16b44, type: 3}
       propertyPath: m_LocalPosition.x
