@@ -176,11 +176,15 @@ public class Maan : MonoBehaviour
 	}
 	IEnumerator PingRoseRoutine (GameObject go)
 	{
+		go.transform.position = transform.position + Vector3.up * .05f;
 		go.GetComponent<MultiAudioSource>().AudioClip = Util.PickRandom(pingClips);
 		go.GetComponent<MultiAudioSource>().Play();
-		go.GetComponent<Animator>().Play("Swirl");
+		Animator[] temp = go.GetComponentsInChildren<Animator>();
+		foreach (Animator a in temp) {
+			a.Play("Swirl");
+		}
 
-		yield return new WaitForSeconds(5);
+		yield return new WaitForSeconds(2);
 		go.SetActive(false);
 	}
 
