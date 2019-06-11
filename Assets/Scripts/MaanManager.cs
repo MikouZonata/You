@@ -43,6 +43,9 @@ public class MaanManager : MonoBehaviour
 	float cloudChasingDistanceToImpact = 4;
 	float cloudImpactFadeTimeGood = 2, cloudImpactFadeTimeBad = 4f;
 
+	MultiAudioSource cloudAudioSource;
+	float cloudAudioMaxVolume = .72f;
+
 	public MultiAudioSource kattoeMusicAudioSource;
 	float _kattoeMusicVolume = 0, kattoeMusicVolumeMutationRate = .5f, kattoeMusicMaxVolume = .5f;
 	int kattoeMusicThreshold = 3;
@@ -64,7 +67,7 @@ public class MaanManager : MonoBehaviour
 	private void Update ()
 	{
 		Cloud();
-		CloudVisuals();
+		CloudFeedback();
 		KattoeMusic();
 	}
 
@@ -134,9 +137,7 @@ public class MaanManager : MonoBehaviour
 				float distanceCloudToMaan = Vector3.Distance(maan.transform.position, cloudTrans.position);
 				Vector3 _cloudPosition = cloudTrans.position;
 
-
 				_cloudPosition.y = Mathf.MoveTowards(_cloudPosition.y, cloudChasingHeight, cloudDescendSpeed * Time.deltaTime);
-
 
 				Vector2 lateralCloudPos = new Vector2(_cloudPosition.x, _cloudPosition.z);
 				lateralCloudPos = Vector2.MoveTowards(lateralCloudPos, new Vector2(maan.transform.position.x, maan.transform.position.z), _cloudChaseSpeed * Time.deltaTime);
@@ -157,13 +158,15 @@ public class MaanManager : MonoBehaviour
 		}
 	}
 
-	void CloudVisuals ()
+	void CloudFeedback ()
 	{
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
 			maan.VisualReactionToCloud(distanceMaanToCloud);
+			cloudAudioSource.Volume = Mathf.Clamp(55 - distanceMaanToCloud, 0, 55) / 55 * cloudAudioMaxVolume;
 		} else {
 			maan.VisualReactionToCloud(1000);
+			cloudAudioSource.Volume = 0;
 		}
 	}
 
@@ -173,6 +176,7 @@ public class MaanManager : MonoBehaviour
 		Vector3 spawnPos = new Vector3(maan.transform.position.x + randomRadius.x, cloudSpawningHeight, maan.transform.position.z + randomRadius.y);
 		cloudTrans = Instantiate(cloudPrefab, spawnPos, Quaternion.identity).transform;
 		cloud = cloudTrans.GetComponent<Cloud>();
+		cloudAudioSource = cloudTrans.GetComponent<MultiAudioSource>();
 		float riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < riseTime; t += Time.deltaTime) {
 			cloudTrans.position += Vector3.up * cloudWaitingSpeed * Time.deltaTime;

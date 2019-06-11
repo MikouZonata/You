@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4863358132707089077}
   - component: {fileID: 3109730302844696659}
   - component: {fileID: 1651116192661971876}
-  - component: {fileID: 8158011057122698723}
   m_Layer: 16
   m_Name: PFB_Cloud
   m_TagString: Untagged
@@ -60,44 +59,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30730f5b1648246419d62c222708fa80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioClip: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: c22328f8db6cb194482ef2dba5fbb7c6, type: 3}
   _output: {fileID: 0}
   _mute: 0
   _bypassEffects: 0
   _bypassListenerEffects: 0
   _bypassReverbZone: 0
   _playOnAwake: 1
-  _loop: 0
-  _priority: 128
-  _volume: 1
-  _pitch: 1
-  _reverbZoneMix: 1
-  _dopplerLevel: 1
-  _spread: 0
-  _volumeRolloff: 0
-  _minDistance: 1
-  _maxDistance: 500
-  OnlyPlayForClosestCamera: 0
---- !u!114 &8158011057122698723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4863358132707089081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30730f5b1648246419d62c222708fa80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _audioClip: {fileID: 0}
-  _output: {fileID: 0}
-  _mute: 0
-  _bypassEffects: 0
-  _bypassListenerEffects: 0
-  _bypassReverbZone: 0
-  _playOnAwake: 1
-  _loop: 0
+  _loop: 1
   _priority: 128
   _volume: 1
   _pitch: 1
@@ -545,23 +514,7 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 100008, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 100010, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 100012, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
@@ -657,6 +610,22 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 2138f455d3df70849bd6f82cac2d5a96, type: 2}
+    - target: {fileID: 100012, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fe074278fe0a1841a76d5a3244f9095, type: 3}
 --- !u!4 &5418449829372025422 stripped
