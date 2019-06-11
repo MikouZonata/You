@@ -166,7 +166,6 @@ public class MaanManager : MonoBehaviour
 			cloudAudioSource.Volume = Mathf.Clamp(55 - distanceMaanToCloud, 0, 55) / 55 * cloudAudioMaxVolume;
 		} else {
 			maan.VisualReactionToCloud(1000);
-			cloudAudioSource.Volume = 0;
 		}
 	}
 

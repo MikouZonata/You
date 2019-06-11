@@ -36,6 +36,10 @@ public class KevinManager : MonoBehaviour
 	float[] scoreDownTimers = new float[numberOfDrivers];
 	float scoreDownBaseTime = 12, scoreDownTimePerPoint = .09f;
 
+	float driverSpeedFluxMax = .7f;
+	float[] driverSpeedFluxTimers;
+	float driverSpeedFluxWavelength = 40;
+
 	GameObject[] pickupFeedbackPool = new GameObject[numberOfDrivers];
 
 	public void Init (Transform[] trackPieces, Kevin kevin)
@@ -71,6 +75,12 @@ public class KevinManager : MonoBehaviour
 			scoreDisplays = new Text[numberOfDrivers];
 			scoreHighlights = new Image[numberOfDrivers];
 			ranks = new int[numberOfDrivers];
+
+			//Setup ai driver speed flux
+			driverSpeedFluxTimers = new float[numberOfAiDrivers];
+			for (int i = 0; i < numberOfAiDrivers; i++) {
+				driverSpeedFluxTimers[i] = Random.Range(0, driverSpeedFluxWavelength);
+			}
 
 			firstTimeSetup = false;
 		}
@@ -129,6 +139,7 @@ public class KevinManager : MonoBehaviour
 		}
 
 		ScoreDownTimers();
+		DriverSpeedFlux();
 	}
 
 	public void PickUpPickup (int driverIndex, int pickupIndex)
@@ -253,6 +264,14 @@ public class KevinManager : MonoBehaviour
 		}
 	}
 
+	void DriverSpeedFlux ()
+	{
+		for (int i = 0; i < numberOfAiDrivers; i++) {
+			driverSpeedFluxTimers[i] += Time.deltaTime;
+			driverAgents[i].speed = driverBaseSpeeds[i] + Mathf.Sin(driverSpeedFluxTimers[i] * (Mathf.PI * 2) / driverSpeedFluxWavelength) * driverSpeedFluxMax;
+		}
+	}
+
 	//Als iemand een puntje haalt licht hun score counter even op
 	IEnumerator HighlightScore (int driverIndex)
 	{
@@ -279,7 +298,7 @@ public class KevinManager : MonoBehaviour
 			t.gameObject.SetActive(false);
 		}
 
-		kevin.transform.position = kevinSpawnPosition;
+		//kevin.transform.position = kevinSpawnPosition;
 		kevin.transform.rotation = Quaternion.identity;
 		Init(trackPieces, kevin);
 	}
