@@ -30,21 +30,21 @@ public class Kevin : MonoBehaviour
 	float modelMaxForwardsAngle = 12, modelMaxSidewaysAngle = 9;
 	Vector3 _velocity = Vector3.zero;
 	float triggerValue;
-	float throttleMaxForwardSpeed = 26, throttleMaxBackwardsSpeed = 11;
+	float throttleMaxForwardSpeed = 28;
 	float throttleAcceleration = 2, throttleDecceleration = .8f, throttleNaturalDecceleration = 18;
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
 	float _fatigue = 0;
-	float fatigueGrowRate = .166f, fatigueShrinkRate = .015f;
+	float fatigueRecoverRate = .167f, fatigueIncreaseRate = .01f;
 	float fatigueRechargePerPickup = 0.04f;
-	float fatigueSlowFactorMin = .48f;
+	float fatigueSlowFactorMin = .4f;
 
 	//float _pickupFatigueFactor = 1;
 	//float pickupFatigueTimeToDeplete = 30, pickupFatigueBoostPerPickup = 0.08f;
 
-	float maxTurnRate = 178, minTurnRate = 76;
-	float turnRateLossPerVelocity = 4.2f;
+	float maxTurnRate = 192, minTurnRate = 76;
+	float turnRateLossPerVelocity = 4.22f;
 	float _steeringSideDrift = 0, sideDriftPerVelocity = .42f, sideDriftMaxVelocity = 22, sideDriftMinVelocity = 12;
 	float driftingMaxSideFactor = 5.2f, _driftingSideFactor = 1, driftingMaxTurnFactor = 1.24f, driftingTimeToMax = .12f;
 	float _driftingTurnFactor = 1;
@@ -162,32 +162,12 @@ public class Kevin : MonoBehaviour
 	void Throttle ()
 	{
 		if (triggerValue > 0) {
-			if (_speedPoint >= 0) {
-				_speedPoint = Mathf.MoveTowards(_speedPoint, triggerValue, throttleAcceleration * Time.deltaTime);
-				_throttleSpeed = Mathf.Pow(_speedPoint, .5f) * throttleMaxForwardSpeed;
-			} else {
-				_speedPoint = Mathf.MoveTowards(_speedPoint, triggerValue, (throttleAcceleration + throttleDecceleration) * Time.deltaTime);
-				if (_speedPoint == 0)
-					_speedPoint += 0.01f;
-				_throttleSpeed = Mathf.Pow(Mathf.Abs(_speedPoint), .5f) * -throttleMaxBackwardsSpeed;
-			}
-		} else if (triggerValue < 0) {
-			if (_speedPoint >= 0) {
-				_speedPoint = Mathf.MoveTowards(_speedPoint, triggerValue, (throttleAcceleration + throttleDecceleration) * Time.deltaTime);
-				if (_speedPoint == 0)
-					_speedPoint -= 0.01f;
-				_throttleSpeed = Mathf.Pow(Mathf.Abs(_speedPoint), .5f) * throttleMaxForwardSpeed;
-			} else {
-				_speedPoint = Mathf.MoveTowards(_speedPoint, triggerValue, throttleAcceleration * Time.deltaTime);
-				_throttleSpeed = Mathf.Pow(Mathf.Abs(_speedPoint), .5f) * -throttleMaxBackwardsSpeed;
-			}
+			_speedPoint = Mathf.MoveTowards(_speedPoint, triggerValue, throttleAcceleration * Time.deltaTime);
+			_throttleSpeed = Mathf.Pow(_speedPoint, .5f) * throttleMaxForwardSpeed;
+
 		} else {
 			_throttleSpeed = Mathf.MoveTowards(_throttleSpeed, 0, throttleNaturalDecceleration * Time.deltaTime);
-			if (_throttleSpeed >= 0) {
-				_speedPoint = Mathf.Pow(_throttleSpeed / throttleMaxForwardSpeed, 2);
-			} else {
-				_speedPoint = Mathf.Pow(_throttleSpeed / throttleMaxBackwardsSpeed, 2) * -1;
-			}
+			_speedPoint = Mathf.Pow(_throttleSpeed / throttleMaxForwardSpeed, 2);
 		}
 
 		ThrottleTrail();
@@ -204,9 +184,9 @@ public class Kevin : MonoBehaviour
 	void Fatigue ()
 	{
 		if (StaticData.playersAreLinked) {
-			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueGrowRate * Time.deltaTime);
+			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueRecoverRate * Time.deltaTime);
 		} else {
-			_fatigue = Mathf.MoveTowards(_fatigue, 1, fatigueShrinkRate * Time.deltaTime);
+			_fatigue = Mathf.MoveTowards(_fatigue, 1, fatigueIncreaseRate * Time.deltaTime);
 		}
 	}
 	float FatigueSlowFactor ()

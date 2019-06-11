@@ -22,14 +22,17 @@ public class KevinManager : MonoBehaviour
 
 	Transform leaderboard;
 	RectTransform[] leaderboardCards;
-	int minStartingScore = 34, maxStartingScore = 107;
-	string[] driverNames = new string[] { "Twem", "Bosje", "Valentijn", "Herman", "Richard", "Bojan", "Arie", "Tuur", "Luan", "Earl", "Aran", "Micah", "Tijmen", "Lenny", "Romy", "Elmar", "Larissa", "Eva", "Robert" };
-	string[] shuffledDriverNames;
+	string[] driverNames = new string[] { "Daniël", "Lenny", "Tim", "Valentijn", "Richard" };
+	int[] driverStartingScores = new int[] { 29, 40, 49, 68, 75 };
+	float[] driverBaseSpeeds = new float[] { 14, 15.5f, 16.2f, 18, 19 };
 	int driverNamesIndex = 0;
 	int[] scores;
 	int[] ranks;
 	Text[] scoreDisplays;
 	Image[] scoreHighlights;
+
+	float[] scoreDownTimers = new float[numberOfDrivers];
+	float scoreDownBaseTime = 16, scoreDownTimePerPoint = .12f;
 
 	GameObject[] pickupFeedbackPool = new GameObject[numberOfDrivers];
 
@@ -77,6 +80,7 @@ public class KevinManager : MonoBehaviour
 		for (int i = 0; i < numberOfAiDrivers; i++) {
 			driverAgents[i] = Instantiate(enemyDriverPrefab, Util.PickRandom(trackPieces).position, Quaternion.identity, driverParent.transform).GetComponent<NavMeshAgent>();
 			driverAgents[i].name = i.ToString();
+			driverAgents[i].speed = driverBaseSpeeds[i];
 		}
 
 		//Pickups for everyone
@@ -86,8 +90,10 @@ public class KevinManager : MonoBehaviour
 
 		//Vul het leaderboard met naampjes en stuff
 		leaderboard = kevin.leaderboard;
-		shuffledDriverNames = Util.Shuffle(driverNames);
 		scores = new int[numberOfDrivers];
+		for (int i = 0; i < scoreDownTimers.Length; i++) {
+			scoreDownTimers[i] = 0;
+		}
 
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
 			leaderboardCards[driver] = leaderboard.GetChild(driver).GetComponent<RectTransform>();
@@ -95,11 +101,11 @@ public class KevinManager : MonoBehaviour
 			scoreDisplays[driver] = leaderboardCards[driver].GetChild(3).GetComponent<Text>();
 
 			if (driver < numberOfAiDrivers) {
-				leaderboardCards[driver].GetChild(1).GetComponent<Text>().text = shuffledDriverNames[driverNamesIndex];
+				leaderboardCards[driver].GetChild(1).GetComponent<Text>().text = driverNames[driverNamesIndex];
 				driverNamesIndex++;
-				if (driverNamesIndex >= shuffledDriverNames.Length)
+				if (driverNamesIndex >= driverNames.Length)
 					driverNamesIndex = 0;
-				scores[driver] = Random.Range(minStartingScore, maxStartingScore);
+				scores[driver] = driverStartingScores[driver];
 				scoreDisplays[driver].text = scores[driver].ToString();
 			} else {
 				leaderboardCards[driver].GetChild(1).GetComponent<Text>().text = "Kevin";
@@ -121,6 +127,8 @@ public class KevinManager : MonoBehaviour
 				PickUpPickup(i, driverTargets[i]);
 			}
 		}
+
+		ScoreDownTimers();
 	}
 
 	public void PickUpPickup (int driverIndex, int pickupIndex)
@@ -185,10 +193,13 @@ public class KevinManager : MonoBehaviour
 			driverAgents[driverIndex].destination = pickupPool[targetPickupIndex].position;
 	}
 
-	void AddPointToScore (int driverIndex)
+	void AddPointToScore (int driverIndex, int score = 1)
 	{
-		scores[driverIndex]++;
-		StartCoroutine(HighlightScore(driverIndex));
+		scores[driverIndex] += score;
+		scoreDownTimers[driverIndex] = 0;
+		if (score > 0) {
+			StartCoroutine(HighlightScore(driverIndex));
+		}
 
 		//Creeer een nieuwe lijst met gesorteerde scores
 		List<int> sortedScores = scores.ToList();
@@ -212,6 +223,18 @@ public class KevinManager : MonoBehaviour
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
 			leaderboardCards[driver].anchoredPosition = new Vector2(0, ranks[driver] * distanceBetweenCards);
 			scoreDisplays[driver].text = scores[driver].ToString();
+		}
+	}
+
+	void ScoreDownTimers ()
+	{
+		for (int i = 0; i < numberOfDrivers; i++) {
+			scoreDownTimers[i] += Time.deltaTime;
+
+			if (scoreDownTimers[i] >= scoreDownBaseTime - scores[i] * scoreDownTimePerPoint) {
+				AddPointToScore(i, -1);
+				scoreDownTimers[i] = 0;
+			}
 		}
 	}
 
