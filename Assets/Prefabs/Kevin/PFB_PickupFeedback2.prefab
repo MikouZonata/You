@@ -9415,6 +9415,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7084281147563960743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9207796204039916789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30730f5b1648246419d62c222708fa80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioClip: {fileID: 8300000, guid: c583abe65a1728c40869781174c0a631, type: 3}
+  _output: {fileID: 0}
+  _mute: 0
+  _bypassEffects: 0
+  _bypassListenerEffects: 0
+  _bypassReverbZone: 0
+  _playOnAwake: 1
+  _loop: 0
+  _priority: 128
+  _volume: 0.7
+  _pitch: 1
+  _reverbZoneMix: 1
+  _dopplerLevel: 1
+  _spread: 0
+  _volumeRolloff: 0
+  _minDistance: 1
+  _maxDistance: 500
+  OnlyPlayForClosestCamera: 1
 --- !u!1001 &9207796204039883345
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9422,22 +9452,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 100004, guid: 78419d86500152746a775b5efab16b44, type: 3}
-      propertyPath: m_Name
-      value: PFB_PickupFeedback2
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: 78419d86500152746a775b5efab16b44, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 78419d86500152746a775b5efab16b44, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 78419d86500152746a775b5efab16b44, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 78419d86500152746a775b5efab16b44, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -9493,6 +9507,22 @@ PrefabInstance:
     - target: {fileID: 400004, guid: 78419d86500152746a775b5efab16b44, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.010000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 78419d86500152746a775b5efab16b44, type: 3}
+      propertyPath: m_Name
+      value: PFB_PickupFeedback2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 78419d86500152746a775b5efab16b44, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 78419d86500152746a775b5efab16b44, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 78419d86500152746a775b5efab16b44, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 78419d86500152746a775b5efab16b44, type: 3}
       propertyPath: m_LocalScale.x

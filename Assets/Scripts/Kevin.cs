@@ -24,8 +24,7 @@ public class Kevin : MonoBehaviour
 	float sideDriftDefaultEmission;
 
 	public LineRenderer linkRenderer;
-
-	public TrailRenderer throttleTrail;
+	
 	public Transform modelAnchor;
 	const float modelMaxForwardsAngle = 12, modelMaxSidewaysAngle = 9;
 	Vector3 _velocity = Vector3.zero;
@@ -166,16 +165,6 @@ public class Kevin : MonoBehaviour
 			_throttleSpeed = Mathf.MoveTowards(_throttleSpeed, 0, throttleNaturalDecceleration * Time.deltaTime);
 			_speedPoint = Mathf.Pow(_throttleSpeed / throttleMaxForwardSpeed, 2);
 		}
-
-		ThrottleTrail();
-	}
-
-	void ThrottleTrail ()
-	{
-		float actualTriggerValue = _triggerValue;
-		if (_triggerValue < .12f)
-			actualTriggerValue = 0;
-		throttleTrail.time = Mathf.Lerp(0, throttleTrailMaxTime, actualTriggerValue);
 	}
 
 	void Fatigue ()
