@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8982510240244116433}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Maan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8982510240244116433
 Transform:
@@ -151,12 +151,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7705190588511493604}
   - component: {fileID: 8639873173118131030}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Tree_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7705190588511493604
 Transform:
@@ -230,12 +230,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6259900494939572988}
   - component: {fileID: 3982278961380080036}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Crystal_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6259900494939572988
 Transform:

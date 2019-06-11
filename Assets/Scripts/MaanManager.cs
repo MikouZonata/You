@@ -28,13 +28,13 @@ public class MaanManager : MonoBehaviour
 
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
-	const float cloudMinTimeBeforeSpawn = 0, cloudMaxTimeBeforeSpawn = 0;
+	const float cloudMinTimeBeforeSpawn = 40, cloudMaxTimeBeforeSpawn = 84;
 	const float cloudSpawningHeight = 4;
 
 	bool cloudWaitingSetup = false;
 	float _cloudWaitingTimer = 0, cloudWaitingTime;
 	float cloudWaitingSpeed = 4, cloudWaitingHeight = 0;
-	float minTimeBeforeCloudChase = 1.0f, maxTimeBeforeCloudChase = 3.0f;
+	float minTimeBeforeCloudChase = 1.0f, maxTimeBeforeCloudChase = 2.2f;
 
 	bool cloudChaseSetup = false;
 	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
