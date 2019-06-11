@@ -22,7 +22,7 @@ public class KevinManager : MonoBehaviour
 
 	Transform leaderboard;
 	RectTransform[] leaderboardCards;
-	string[] driverNames = new string[] { "Daniël", "Lenny", "Tim", "Valentijn", "Richard" };
+	string[] driverNames = new string[] { "Daniï¿½l", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 29, 40, 49, 68, 75 };
 	float[] driverBaseSpeeds = new float[] { 14, 15.5f, 16.2f, 18, 19 };
 	int driverNamesIndex = 0;
@@ -146,7 +146,6 @@ public class KevinManager : MonoBehaviour
 				} else {
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, kevin.transform));
 				}
-				StartCoroutine(SetActiveWithDelay(feedbackGO, false, 1));
 				break;
 			}
 		}
@@ -162,10 +161,24 @@ public class KevinManager : MonoBehaviour
 
 	IEnumerator PickupFeedbackRoutine (GameObject feedbackGO, Transform followTrans)
 	{
-		for (float t = 0; t < 2; t += Time.deltaTime) {
+		AnimatorStateInfo _animStateInfo;
+		Animator animator = feedbackGO.GetComponent<Animator>();
+		animator.enabled = true;
+		animator.Play("PickUpFX", 0, 0);
+
+		for (float t = 0; t < 3; t += Time.deltaTime) {
 			feedbackGO.transform.position = followTrans.position + Vector3.up;
+
+			if (animator.enabled) {
+				_animStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+				if (!_animStateInfo.IsName("PickUpFX")) {
+					animator.enabled = false;
+				}
+			}
+
 			yield return null;
 		}
+
 		feedbackGO.SetActive(false);
 	}
 
@@ -253,12 +266,6 @@ public class KevinManager : MonoBehaviour
 		}
 
 		scoreHighlights[driverIndex].color = new Color(1, 1, 1, 0);
-	}
-
-	IEnumerator SetActiveWithDelay (GameObject gameObject, bool state, float delay)
-	{
-		yield return new WaitForSeconds(delay);
-		gameObject.SetActive(state);
 	}
 
 	public void Reset ()
