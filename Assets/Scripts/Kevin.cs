@@ -147,7 +147,7 @@ public class Kevin : MonoBehaviour
 	{
 		Vector3[] positions;
 		if (StaticData.playersAreLinked) {
-			positions = new Vector3[] { transform.position, otherPlayer.position };
+			positions = new Vector3[] { transform.position + Vector3.up, otherPlayer.position + Vector3.up };
 		} else {
 			positions = new Vector3[] { transform.position, transform.position };
 		}

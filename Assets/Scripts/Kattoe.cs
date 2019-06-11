@@ -50,7 +50,7 @@ public class Kattoe : MonoBehaviour
 	float _bondedNavTimer = 0, _bondedCallTimer = 0, _bondedLeaveTimer = 0;
 	float bondedTimeBetweenRetargetting = 1;
 	float bondedTimeBetweenCalls, bondedMinTimeBetweenCalls = 1.6f, bondedMaxTimeBetweenCalls = 3.6f;
-	float bondedTimeBeforeLeaving, bondedMinTimeBeforeLeaving = 40, bondedMaxTimeBeforeLeaving = 92;
+	float bondedTimeBeforeLeaving, bondedMinTimeBeforeLeaving = 72, bondedMaxTimeBeforeLeaving = 130;
 
 	const float runAwaySpeed = 20, runAwayTime = 1.2f;
 

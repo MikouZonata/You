@@ -121,7 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3344160401166277591}
   m_Layer: 0
-  m_Name: PFB_Deco_Bush1
+  m_Name: PFB_Deco_Bins1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -373,6 +373,16 @@ PrefabInstance:
     - target: {fileID: 4306883662812432, guid: 157d3991f7c11074580d15b504f6b23a, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23546192630465082, guid: 157d3991f7c11074580d15b504f6b23a,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23546192630465082, guid: 157d3991f7c11074580d15b504f6b23a,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 157d3991f7c11074580d15b504f6b23a, type: 3}
