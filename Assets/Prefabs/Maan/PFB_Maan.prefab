@@ -407,7 +407,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerIndex: 0
-  pingGO: {fileID: 6590388614772136261}
+  pingExclamation: {fileID: 6590388614772136261}
+  pingRoseFeedback: {fileID: 3783534224250053606, guid: 71a0c465804c6924fbbc2e189751a70c,
+    type: 3}
+  pingClips:
+  - {fileID: 8300000, guid: 0893d489c418b7245b630735f42ed720, type: 3}
+  - {fileID: 8300000, guid: 562b84cd4670f7849ad747a57b4a55e2, type: 3}
+  - {fileID: 8300000, guid: c16397145a37e1343a05549866e70790, type: 3}
   kattoeAnchors:
   - {fileID: 2499557017714399925}
   - {fileID: 2863657581455241218}

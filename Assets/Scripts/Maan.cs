@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 using XInputDotNetPure;
 using Utility;
+using MultiAudioListener;
 
 public class Maan : MonoBehaviour
 {
@@ -21,7 +22,10 @@ public class Maan : MonoBehaviour
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 
-	public GameObject pingGO;
+	public GameObject pingExclamation, pingRoseFeedback;
+	public AudioClip[] pingClips;
+	Transform pingParent;
+	List<GameObject> pingFeedbackPool = new List<GameObject>();
 	SpriteRenderer pingRenderer;
 	float pingActiveTime = .3f;
 
@@ -49,7 +53,8 @@ public class Maan : MonoBehaviour
 
 		fadeToBlackDisplay.enabled = false;
 
-		pingRenderer = pingGO.GetComponent<SpriteRenderer>();
+		pingParent = new GameObject("PingFeedbackParent").transform;
+		pingRenderer = pingExclamation.GetComponent<SpriteRenderer>();
 		pingRenderer.color = new Color(1, 1, 1, 0);
 
 		this.manager = manager;
@@ -138,14 +143,26 @@ public class Maan : MonoBehaviour
 	}
 	void Ping ()
 	{
-		StopCoroutine(PingRoutine());
-		StartCoroutine(PingRoutine());
+		StopCoroutine(PingExclamationRoutine());
+		StartCoroutine(PingExclamationRoutine());
 
+		for (int i = 0; i < pingFeedbackPool.Count; i++) {
+			if (!pingFeedbackPool[i].activeSelf) {
+				StartCoroutine(PingRoseRoutine(pingFeedbackPool[i]));
+				goto Finish;
+			}
+		}
+
+		GameObject temp = Instantiate(pingRoseFeedback, transform.position, Quaternion.identity);
+		temp.transform.parent = pingParent;
+		StartCoroutine(PingRoseRoutine(temp));
+
+		Finish:
 		for (int i = 0; i < kattoesInRange.Count; i++) {
 			kattoesInRange[i].ReceiveLure();
 		}
 	}
-	IEnumerator PingRoutine ()
+	IEnumerator PingExclamationRoutine ()
 	{
 		pingRenderer.color = Color.white;
 		float colorFactor = 1 / pingActiveTime;
@@ -156,6 +173,15 @@ public class Maan : MonoBehaviour
 		}
 
 		pingRenderer.color = new Color(1,1,1,0);
+	}
+	IEnumerator PingRoseRoutine (GameObject go)
+	{
+		go.GetComponent<MultiAudioSource>().AudioClip = Util.PickRandom(pingClips);
+		go.GetComponent<MultiAudioSource>().Play();
+		go.GetComponent<Animator>().Play("Swirl");
+
+		yield return new WaitForSeconds(5);
+		go.SetActive(false);
 	}
 
 	public Transform KattoeRequestFlockAnchor ()
