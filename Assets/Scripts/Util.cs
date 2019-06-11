@@ -6,13 +6,16 @@ namespace Utility
 
 	public static class Util
 	{
-		//UTILITY METHODS
 		public static T PickRandom<T> (params T[] values)
 		{
 			return values[Random.Range(0, values.Length)];
 		}
 		public static T[] PickRandom<T> (int howMany = 2, bool canContainDuplicates = true, params T[] values)
 		{
+			if (howMany > values.Length) {
+				throw new System.ArgumentOutOfRangeException("howMany", howMany, "howMany value is higher than values.length!");
+			}
+
 			T[] result = new T[howMany];
 
 			if (canContainDuplicates) {
