@@ -1037,7 +1037,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerIndex: 0
   linkRenderer: {fileID: 7796570651651278999}
-  throttleTrail: {fileID: 0}
   modelAnchor: {fileID: 4431606092988745753}
   leaderboard: {fileID: 5723247996987091382}
 --- !u!1 &3706047650364933275
@@ -2306,9 +2305,9 @@ MonoBehaviour:
   _dopplerLevel: 1
   _spread: 0
   _volumeRolloff: 0
-  _minDistance: 1
+  _minDistance: 500
   _maxDistance: 500
-  OnlyPlayForClosestCamera: 0
+  OnlyPlayForClosestCamera: 1
 --- !u!1 &7406246438178242459
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 using Utility;
+using MultiAudioListener;
 
 public class Kevin : MonoBehaviour
 {
@@ -34,8 +35,11 @@ public class Kevin : MonoBehaviour
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
 
+	MultiAudioSource throttleAudioSource;
+	float throttleAudioMaxVolume = .4f;
+
 	float _fatigue = 0;
-	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .01f;
+	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
 	const float fatigueRechargePerPickup = 0.04f;
 	const float fatigueSlowFactorMin = .4f;
 
@@ -62,6 +66,8 @@ public class Kevin : MonoBehaviour
 		mainCam = transform.GetChild(0).GetComponent<Camera>();
 		mainCamTrans = mainCam.transform;
 		mainCamDefaultRot = mainCamTrans.rotation;
+
+		throttleAudioSource = GetComponentInChildren<MultiAudioSource>();
 
 		sideDriftParticles = GetComponentInChildren<ParticleSystem>();
 		sideDriftEmissionModule = sideDriftParticles.emission;
@@ -165,6 +171,13 @@ public class Kevin : MonoBehaviour
 			_throttleSpeed = Mathf.MoveTowards(_throttleSpeed, 0, throttleNaturalDecceleration * Time.deltaTime);
 			_speedPoint = Mathf.Pow(_throttleSpeed / throttleMaxForwardSpeed, 2);
 		}
+
+		ThrottleAudio();
+	}
+
+	void ThrottleAudio ()
+	{
+		throttleAudioSource.Volume = throttleAudioMaxVolume * _triggerValue;
 	}
 
 	void Fatigue ()
@@ -181,7 +194,6 @@ public class Kevin : MonoBehaviour
 		result = 1 - (1 - fatigueSlowFactorMin) * _fatigue;
 		return result;
 	}
-
 
 	float Steering ()
 	{
