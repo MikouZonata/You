@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 
 	private void Awake ()
 	{
+		Cursor.visible = false;
+
 		Transform trackPiecesParent = level.transform;
 		trackPieces = new Transform[trackPiecesParent.childCount];
 		for (int i = 0; i < trackPieces.Length; i++) {
