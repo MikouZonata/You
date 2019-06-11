@@ -38,8 +38,6 @@ public class KevinManager : MonoBehaviour
 
 	GameObject[] pickupFeedbackPool = new GameObject[numberOfDrivers];
 
-	Vector3 kevinSpawnPosition;
-
 	public void Init (Transform[] trackPieces, Kevin kevin)
 	{
 		this.trackPieces = trackPieces;
@@ -119,8 +117,6 @@ public class KevinManager : MonoBehaviour
 
 		//Add 1 punt zodat het scoreboard zichzelf formateert.
 		AddPointToScore(0);
-
-		kevinSpawnPosition = kevin.transform.position;
 	}
 
 	void Update ()
