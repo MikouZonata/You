@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a3912696c1958334d995ba5f30d52f61
+guid: 27a92c723023deb48a60c8a76c59643a
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: enemy_racer_meisje_1
+    100000: enemy_racer_meisje_2
+    100002: //RootNode
     100004: lamphoofd_Group1245
     100006: mixamorig:Head
     100008: mixamorig:HeadTop_End
@@ -71,8 +71,8 @@ ModelImporter:
     100130: mixamorig:Spine
     100132: mixamorig:Spine1
     100134: mixamorig:Spine2
-    400000: //RootNode
-    400002: enemy_racer_meisje_1
+    400000: enemy_racer_meisje_2
+    400002: //RootNode
     400004: lamphoofd_Group1245
     400006: mixamorig:Head
     400008: mixamorig:HeadTop_End
@@ -143,11 +143,11 @@ ModelImporter:
     2100002: lambert2
     2300000: lamphoofd_Group1245
     3300000: lamphoofd_Group1245
-    4300000: enemy_racer_meisje_1
+    4300000: enemy_racer_meisje_2
     4300002: lamphoofd_Group1245
     7400000: Take 001
     9500000: //RootNode
-    13700000: enemy_racer_meisje_1
+    13700000: enemy_racer_meisje_2
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -179,7 +179,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 100
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1

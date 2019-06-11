@@ -9,7 +9,8 @@ using Utility;
 public class KevinManager : MonoBehaviour
 {
 	bool firstTimeSetup = true;
-	public GameObject enemyDriverPrefab, pickupPrefab, pickupFeedbackPrefab;
+	public GameObject[] enemyDriverPrefabs;
+	public GameObject pickupPrefab, pickupFeedbackPrefab;
 	const int numberOfDrivers = 6;
 	int numberOfAiDrivers;
 	Kevin kevin;
@@ -22,7 +23,7 @@ public class KevinManager : MonoBehaviour
 
 	Transform leaderboard;
 	RectTransform[] leaderboardCards;
-	string[] driverNames = new string[] { "Dani�l", "Lenny", "Tim", "Valentijn", "Richard" };
+	string[] driverNames = new string[] { "Daniel", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 29, 40, 49, 68, 75 };
 	float[] driverBaseSpeeds = new float[] { 14, 15.5f, 16.2f, 18, 19 };
 	int driverNamesIndex = 0;
@@ -78,7 +79,7 @@ public class KevinManager : MonoBehaviour
 		driverAgents = new NavMeshAgent[numberOfAiDrivers];
 		GameObject driverParent = new GameObject("DriverParent");
 		for (int i = 0; i < numberOfAiDrivers; i++) {
-			driverAgents[i] = Instantiate(enemyDriverPrefab, Util.PickRandom(trackPieces).position, Quaternion.identity, driverParent.transform).GetComponent<NavMeshAgent>();
+			driverAgents[i] = Instantiate(Util.PickRandom(enemyDriverPrefabs), Util.PickRandom(trackPieces).position, Quaternion.identity, driverParent.transform).GetComponent<NavMeshAgent>();
 			driverAgents[i].name = i.ToString();
 			driverAgents[i].speed = driverBaseSpeeds[i];
 		}
@@ -209,6 +210,8 @@ public class KevinManager : MonoBehaviour
 	void AddPointToScore (int driverIndex, int score = 1)
 	{
 		scores[driverIndex] += score;
+		if (scores[driverIndex] < 0)
+			scores[driverIndex] = 0;
 		scoreDownTimers[driverIndex] = 0;
 		if (score > 0) {
 			StartCoroutine(HighlightScore(driverIndex));
