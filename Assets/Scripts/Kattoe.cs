@@ -54,7 +54,7 @@ public class Kattoe : MonoBehaviour
 
 	const float runAwaySpeed = 20, runAwayTime = 1.2f;
 
-	float callBasePitch, callPitchMax = 1.56f, callPitchMin = 0.4f, callPitchMaxDeviation = .11f;
+	float callBasePitch, callPitchMax = 1.16f, callPitchMin = 0.9f, callPitchMaxDeviation = .08f;
 
 	Vector3 basePosition;
 

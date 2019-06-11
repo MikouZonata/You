@@ -71,7 +71,7 @@ public class MaanManager : MonoBehaviour
 	Kattoe CreateKattoe (Transform parentPiece)
 	{
 		Kattoe newKattoe = Instantiate(Util.PickRandom(kattoePrefabs), parentPiece.position, Quaternion.identity).GetComponent<Kattoe>();
-		newKattoe.Init(this, Util.PickRandom(4, false, kattoeClips), maan.transform, parentPiece);
+		newKattoe.Init(this, Util.PickRandom(3, false, kattoeClips), maan.transform, parentPiece);
 		newKattoe.transform.parent = kattoeParent;
 		return newKattoe;
 	}

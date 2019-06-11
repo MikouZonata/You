@@ -695,6 +695,7 @@ namespace MultiAudioListener
             audioSource.rolloffMode = VolumeRolloff;
             audioSource.minDistance = MinDistance;
             audioSource.maxDistance = MaxDistance;
+			audioSource.time = 0;
         }
     }
 }

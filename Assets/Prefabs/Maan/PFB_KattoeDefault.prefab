@@ -102,7 +102,7 @@ MonoBehaviour:
   _bypassEffects: 0
   _bypassListenerEffects: 0
   _bypassReverbZone: 0
-  _playOnAwake: 1
+  _playOnAwake: 0
   _loop: 0
   _priority: 128
   _volume: 1
