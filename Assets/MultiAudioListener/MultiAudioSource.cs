@@ -409,6 +409,7 @@ namespace MultiAudioListener
                 _safetyAudioSource.Play();
                 foreach (var audioSource in _subAudioSources)
                 {
+					audioSource.Value.time = 0;
                     audioSource.Value.Play();
                 }
             }
