@@ -72,7 +72,22 @@ ModelImporter:
     9500000: //RootNode
     13700000: unamed
     2186277476908879412: ImportLogs
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: maan_body
+    second: {fileID: 2100000, guid: 5e995fc69c9aff3448e0c62fca0c330d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: maan_shorts
+    second: {fileID: 2100000, guid: 702c0c4030981c147ad6c1011a352e24, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: maan_tshirt
+    second: {fileID: 2100000, guid: ed98d2a233cecff47bfa88be65dcf3ec, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -124,7 +139,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 0
-    previousCalculatedGlobalScale: 0.01
+    previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
