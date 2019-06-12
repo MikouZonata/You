@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6784411993131929079}
   m_Layer: 0
-  m_Name: LineRender
+  m_Name: PFB_ThrottleTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4672,7 +4672,7 @@ ParticleSystem:
 --- !u!199 &6784411993764562269
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -9379,7 +9379,7 @@ ParticleSystem:
 --- !u!199 &6784411993805132769
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -9515,23 +9515,14 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.00000004222482
-        value: 0.18464316
+        time: 0
+        value: 0.6324078
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.49852476
-        value: 0.4216835
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 0.18464316
@@ -9555,7 +9546,7 @@ TrailRenderer:
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
-      ctime1: 31418
+      ctime1: 34502
       ctime2: 65535
       ctime3: 65535
       ctime4: 0
@@ -9563,7 +9554,7 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 19082
+      atime1: 8674
       atime2: 65535
       atime3: 65535
       atime4: 0

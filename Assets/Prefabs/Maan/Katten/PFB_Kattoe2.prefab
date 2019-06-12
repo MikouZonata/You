@@ -125,6 +125,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 812eea9ff851a164298aa45fa03a7b08, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 812eea9ff851a164298aa45fa03a7b08, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
