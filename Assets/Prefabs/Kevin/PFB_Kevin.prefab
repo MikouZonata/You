@@ -2727,7 +2727,7 @@ PrefabInstance:
     - target: {fileID: 120820338692447620, guid: bb26f8e5c0ad8f14da7b9d734c3f8bd7,
         type: 3}
       propertyPath: m_Parameters.widthMultiplier
-      value: 0.2
+      value: 0.45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb26f8e5c0ad8f14da7b9d734c3f8bd7, type: 3}
