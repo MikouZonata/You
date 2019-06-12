@@ -57604,9 +57604,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kattoePrefabs:
-  - {fileID: 5732275570360577111, guid: 29d2cbb107dc23a419fcf8d159a0adce, type: 3}
-  - {fileID: 3638384296423494269, guid: 2521fb27cdc5b624a90b82162da48c00, type: 3}
-  - {fileID: 9075081444588459349, guid: b1d9d499f7bd292478e712ea555217d3, type: 3}
+  - {fileID: 2059544279951097078, guid: cf000b42814b37e488e38aacaab00157, type: 3}
+  - {fileID: 2740632686032284293, guid: 1f58aa62ea47129489a60a6beefd2b13, type: 3}
+  - {fileID: 5041948687251410133, guid: b9437e9094e7e7849ab802799b7fc3f8, type: 3}
+  - {fileID: 3346738951180494059, guid: 29ace11f978093e4088e5c2acefb360f, type: 3}
+  - {fileID: 7069697692491413113, guid: 1598b1907b7068d4580449359546ade6, type: 3}
+  - {fileID: 2907584843548426471, guid: ac26febb4e6933345b8fb55ce17958c9, type: 3}
+  - {fileID: 1310323281881424991, guid: 5a9c47690852f2e4195306ffc4db85f6, type: 3}
+  - {fileID: 6558255753168329707, guid: 10926fe8ec2cba4479e337402316d9da, type: 3}
+  - {fileID: 117526691184617064, guid: 54374651a3bf934468095a5781578382, type: 3}
   kattoeClips:
   - {fileID: 8300000, guid: d04344b25944fbb4ca1b9fcd0d42e661, type: 3}
   - {fileID: 8300000, guid: 5502237b0a202cf47befce84e53d8e8c, type: 3}
