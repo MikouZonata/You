@@ -2675,6 +2675,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LinkedLine
       objectReference: {fileID: 0}
+    - target: {fileID: 1105284601248760, guid: bb26f8e5c0ad8f14da7b9d734c3f8bd7, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 4232122095287836, guid: bb26f8e5c0ad8f14da7b9d734c3f8bd7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -25.124622

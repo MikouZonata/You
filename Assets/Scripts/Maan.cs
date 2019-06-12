@@ -20,6 +20,8 @@ public class Maan : MonoBehaviour
 
 	float movementSpeed = 17;
 
+	public LineRenderer linkRenderer;
+
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 
 	public GameObject pingExclamation, pingRoseFeedback;
@@ -65,6 +67,8 @@ public class Maan : MonoBehaviour
 	{
 		gamePadState = GamePad.GetState(playerIndex);
 
+		ShowLink();
+
 		if (GetAButtonDown()) {
 			Ping();
 		}
@@ -100,6 +104,17 @@ public class Maan : MonoBehaviour
 		transform.Rotate(new Vector3(0, gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime, 0));
 		_cameraZAngle = Mathf.Clamp(_cameraZAngle - gamePadState.ThumbSticks.Right.Y * cameraZSensitivity * Time.deltaTime, cameraMinZAngle, cameraMaxZAngle);
 		cameraTrans.localRotation = Quaternion.Euler(new Vector3(_cameraZAngle, 0, 0));
+	}
+
+	void ShowLink ()
+	{
+		Vector3[] positions;
+		if (StaticData.playersAreLinked) {
+			positions = new Vector3[] { transform.position + Vector3.up, otherPlayer.position + Vector3.up };
+		} else {
+			positions = new Vector3[] { transform.position, transform.position };
+		}
+		linkRenderer.SetPositions(positions);
 	}
 
 	Vector3 cameraDefaultPosition;

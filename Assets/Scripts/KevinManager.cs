@@ -26,7 +26,7 @@ public class KevinManager : MonoBehaviour
 	RectTransform[] leaderboardCards;
 	string[] driverNames = new string[] { "Daniel", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 32, 40, 49, 68, 75 };
-	float[] driverBaseSpeeds = new float[] { 15.7f, 16.8f, 17.5f, 18.9f, 19.6f };
+	float[] driverBaseSpeeds = new float[] { 15.5f, 16.5f, 17.2f, 18.6f, 19.2f };
 	int driverNamesIndex = 0;
 	int[] scores;
 	int[] ranks;
@@ -34,7 +34,7 @@ public class KevinManager : MonoBehaviour
 	Image[] scoreHighlights;
 
 	float[] scoreDownTimers = new float[numberOfDrivers];
-	float scoreDownBaseTime = 12, scoreDownTimePerPoint = .09f;
+	float scoreDownBaseTime = 12, scoreDownTimePerPoint = .075f;
 
 	float driverSpeedFluxMax = 1.2f;
 	float[] driverSpeedFluxTimers;
