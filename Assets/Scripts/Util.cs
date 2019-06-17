@@ -94,6 +94,15 @@ namespace Utility
 			return result;
 		}
 
+		public static int Distance (int lhs, int rhs)
+		{
+			return Mathf.Abs(lhs - rhs);
+		}
+		public static float Distance (float lhs, float rhs)
+		{
+			return Mathf.Abs(lhs - rhs);
+		}
+
 		//EXTIONSION METHODS
 		public static float SqrDistanceTo (this Vector3 lhs, Vector3 rhs)
 		{

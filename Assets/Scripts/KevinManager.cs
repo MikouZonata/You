@@ -25,12 +25,12 @@ public class KevinManager : MonoBehaviour
 	Transform leaderboard;
 	RectTransform[] leaderboardCards;
 	string[] driverNames = new string[] { "Daniel", "Lenny", "Tim", "Valentijn", "Richard" };
-	int[] driverStartingScores = new int[] { 32, 40, 49, 68, 75 };
-	float[] driverBaseSpeeds = new float[] { 12.5f, 13.8f, 15f, 17.6f, 18.2f };
+	int[] driverStartingScores = new int[] { 52, 46, 38, 31, 26 };
+	float[] driverBaseSpeeds = new float[] { 16.2f, 15.6f, 13f, 12.1f, 10.6f };
 	int driverNamesIndex = 0;
 	int[] scores;
 	int[] ranks;
-	Text[] scoreDisplays;
+	Text[][] scoreDisplays;
 	Image[] scoreHighlights;
 
 	float[] scoreDownTimers = new float[numberOfDrivers];
@@ -72,7 +72,7 @@ public class KevinManager : MonoBehaviour
 
 			//Setup stuff voor leaderboard
 			leaderboardCards = new RectTransform[numberOfDrivers];
-			scoreDisplays = new Text[numberOfDrivers];
+			scoreDisplays = new Text[numberOfDrivers][];
 			scoreHighlights = new Image[numberOfDrivers];
 			ranks = new int[numberOfDrivers];
 
@@ -109,18 +109,18 @@ public class KevinManager : MonoBehaviour
 
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
 			leaderboardCards[driver] = leaderboard.GetChild(driver).GetComponent<RectTransform>();
-			scoreHighlights[driver] = leaderboardCards[driver].GetChild(2).GetComponent<Image>();
-			scoreDisplays[driver] = leaderboardCards[driver].GetChild(3).GetComponent<Text>();
+			scoreHighlights[driver] = leaderboardCards[driver].GetComponent<LeaderboardCard>().highlightImage;
+			scoreDisplays[driver] = new Text[3];
+			for (int i=0; i<3; i++) {
+				scoreDisplays[driver][i] = leaderboardCards[driver].GetComponent<LeaderboardCard>().scoreTexts[i];
+			}
 
 			if (driver < numberOfAiDrivers) {
-				leaderboardCards[driver].GetChild(1).GetComponent<Text>().text = driverNames[driverNamesIndex];
-				driverNamesIndex++;
-				if (driverNamesIndex >= driverNames.Length)
-					driverNamesIndex = 0;
 				scores[driver] = driverStartingScores[driver];
-				scoreDisplays[driver].text = scores[driver].ToString();
+				foreach (Text t in scoreDisplays[driver]) {
+					t.text = scores[driver].ToString();
+				}
 			} else {
-				leaderboardCards[driver].GetChild(1).GetComponent<Text>().text = "Kevin";
 				scores[driver] = 0;
 			}
 		}
@@ -245,10 +245,17 @@ public class KevinManager : MonoBehaviour
 		}
 
 		//Update leaderboardCards naar hun juiste posities en vul strings in
-		float distanceBetweenCards = -116;
+		float distanceBetweenCards = -52, rankTwoBasePosition = -8;
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
-			leaderboardCards[driver].anchoredPosition = new Vector2(0, ranks[driver] * distanceBetweenCards);
-			scoreDisplays[driver].text = scores[driver].ToString();
+			if (ranks[driver] == 0) {
+				leaderboardCards[driver].anchoredPosition = new Vector2(0, 0);
+			} else {
+				leaderboardCards[driver].anchoredPosition = new Vector2(0, rankTwoBasePosition + ranks[driver] * distanceBetweenCards);
+			}
+
+			foreach (Text t in scoreDisplays[driver]) {
+				t.text = scores[driver].ToString();
+			}
 		}
 	}
 
