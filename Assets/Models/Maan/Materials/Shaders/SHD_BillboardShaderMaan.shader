@@ -44,6 +44,8 @@
             {
                 fixed4 col = tex2D(_MainTex, i.uv) * tex2D(_OverlayTex, i.uv) * _Intensity + _Tint;
 				col.a = tex2D(_MainTex, i.uv).a;
+				if (col.a == 0.0)
+					discard;
                 return col;
             }
             ENDCG
