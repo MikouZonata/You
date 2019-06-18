@@ -21,6 +21,7 @@ public class Maan : MonoBehaviour
 
 	float movementSpeed = 17;
 
+	public GameObject cameraPrefab;
 	float cameraMaxZAngle = 42, cameraMinZAngle = -32;
 	float _cameraZAngle = 0;
 	float cameraXSensitivity = 260, cameraZSensitivity = 150;
@@ -31,6 +32,9 @@ public class Maan : MonoBehaviour
 	float screenShakeMaxIntensity = .14f, visualMaxDistanceToCloud = 55, visualReactionMinDistanceToCloud = 12;
 	float _screenShakeIntensity = 0, screenShakeIntensityGrowth = .18f;
 	float _postProcessingWeight, postProcessingWeightGrowth = .3f;
+
+	Transform modelTrans;
+	float _modelYAngle = 0;
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 
@@ -54,9 +58,12 @@ public class Maan : MonoBehaviour
 		gamePadState = GamePad.GetState(playerIndex);
 
 		rig = GetComponent<Rigidbody>();
-		cameraAnchorTrans = transform.GetChild(0);
-		cameraDefaultPosition = cameraAnchorTrans.localPosition;
+
+		cameraAnchorTrans = Instantiate(cameraPrefab, transform.position, transform.rotation).transform;
 		cameraTrans = cameraAnchorTrans.GetChild(0);
+		cameraDefaultPosition = cameraTrans.localPosition;
+
+		modelTrans = transform.GetChild(0);
 
 		postProcessVolumes = GetComponentsInChildren<PostProcessVolume>();
 		postProcessVolumes[0].profile = defaultPPProfile;
@@ -79,6 +86,8 @@ public class Maan : MonoBehaviour
 		gamePadState = GamePad.GetState(playerIndex);
 		_leftStickInput = new Vector2(gamePadState.ThumbSticks.Left.X, gamePadState.ThumbSticks.Left.Y);
 
+		CameraMovement();
+		ModelRotation();
 		ShowLink();
 
 		if (GetAButtonDown()) {
@@ -92,9 +101,7 @@ public class Maan : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		//_velocity = transform.rotation * CharacterMovement();
-		_velocity = transform.forward * movementSpeed * _leftStickInput.magnitude;
-		CameraMovement();
+		_velocity = transform.rotation * CharacterMovement();
 		rig.velocity = _velocity;
 	}
 
@@ -106,13 +113,17 @@ public class Maan : MonoBehaviour
 		if (result.sqrMagnitude > movementSpeed * movementSpeed) {
 			result = result.normalized * movementSpeed;
 		}
+		result = Quaternion.Euler(0, _cameraYAngle, 0) * result;
 		return result;
 	}
 
 	float _cameraYAngle = 0;
 	void CameraMovement ()
 	{
+		cameraAnchorTrans.position = transform.position;
+
 		_cameraYAngle += gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime;
+		_modelYAngle -= gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime;
 		if (_cameraYAngle < -180) {
 			_cameraYAngle += 360;
 		} else if (_cameraYAngle > 180) {
@@ -120,23 +131,19 @@ public class Maan : MonoBehaviour
 		}
 		_cameraZAngle = Mathf.Clamp(_cameraZAngle - gamePadState.ThumbSticks.Right.Y * cameraZSensitivity * Time.deltaTime,
 			cameraMinZAngle, cameraMaxZAngle);
-		cameraAnchorTrans.localRotation = Quaternion.Euler(new Vector3(_cameraZAngle, _cameraYAngle, 0));
+		cameraAnchorTrans.rotation = Quaternion.Euler(new Vector3(_cameraZAngle, _cameraYAngle, 0));
 		cameraTrans.LookAt(transform.position + Quaternion.Euler(_cameraZAngle, _cameraYAngle, 0) * Vector3.forward * 2.5f);
-		
-		float desiredAngle = Vector2.Angle(Vector2.up, _leftStickInput);
-		if (_leftStickInput.x < 0)
-			desiredAngle *= -1;
-		desiredAngle = _cameraYAngle + desiredAngle;
+	}
 
-		if (Util.Distance(transform.eulerAngles.y, desiredAngle) < 1) {
-			return;
+	void ModelRotation ()
+	{
+		if (_leftStickInput.magnitude > 0.1f) {
+			_modelYAngle = Vector2.Angle(_leftStickInput, Vector2.up);
+			if (_leftStickInput.x < 0) {
+				_modelYAngle *= -1;
+			}
 		}
-
-		float rotation = desiredAngle < transform.eulerAngles.y ? -360 : 360;
-		transform.Rotate(0, rotation * Time.deltaTime, 0);
-		_cameraYAngle -= rotation * Time.deltaTime;
-
-		//transform.Rotate(new Vector3(0, gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime, 0));
+		modelTrans.rotation = Quaternion.Euler(0, _modelYAngle + _cameraYAngle, 0);
 	}
 
 	void ShowLink ()
@@ -173,7 +180,7 @@ public class Maan : MonoBehaviour
 		_postProcessingWeight = Mathf.MoveTowards(_postProcessingWeight, _targetPPWeight, postProcessingWeightGrowth * Time.deltaTime);
 
 		Vector3 screenShakeResult = new Vector3(Mathf.Sin(Time.time * 100), Mathf.Sin(Time.time * 120 + 1), 0);
-		cameraAnchorTrans.localPosition = cameraDefaultPosition + screenShakeResult * _screenShakeIntensity;
+		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * _screenShakeIntensity;
 		postProcessVolumes[1].weight = _postProcessingWeight;
 	}
 
