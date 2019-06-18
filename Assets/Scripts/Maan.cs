@@ -12,15 +12,25 @@ public class Maan : MonoBehaviour
 {
 	public PlayerIndex playerIndex = PlayerIndex.One;
 	GamePadState gamePadState;
+	Vector2 _leftStickInput;
 	MaanManager manager;
 	Transform otherPlayer;
 	Rigidbody rig;
-	Transform cameraTrans;
+	Transform cameraAnchorTrans, cameraTrans;
 	Vector3 _velocity, _cameraRotation;
 
 	float movementSpeed = 17;
 
+	float cameraMaxZAngle = 42, cameraMinZAngle = -32;
+	float _cameraZAngle = 0;
+	float cameraXSensitivity = 260, cameraZSensitivity = 150;
+
 	public LineRenderer linkRenderer;
+
+	Vector3 cameraDefaultPosition;
+	float screenShakeMaxIntensity = .14f, visualMaxDistanceToCloud = 55, visualReactionMinDistanceToCloud = 12;
+	float _screenShakeIntensity = 0, screenShakeIntensityGrowth = .18f;
+	float _postProcessingWeight, postProcessingWeightGrowth = .3f;
 
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 
@@ -44,8 +54,9 @@ public class Maan : MonoBehaviour
 		gamePadState = GamePad.GetState(playerIndex);
 
 		rig = GetComponent<Rigidbody>();
-		cameraTrans = transform.GetChild(0);
-		cameraDefaultPosition = cameraTrans.localPosition;
+		cameraAnchorTrans = transform.GetChild(0);
+		cameraDefaultPosition = cameraAnchorTrans.localPosition;
+		cameraTrans = cameraAnchorTrans.GetChild(0);
 
 		postProcessVolumes = GetComponentsInChildren<PostProcessVolume>();
 		postProcessVolumes[0].profile = defaultPPProfile;
@@ -66,6 +77,7 @@ public class Maan : MonoBehaviour
 	private void Update ()
 	{
 		gamePadState = GamePad.GetState(playerIndex);
+		_leftStickInput = new Vector2(gamePadState.ThumbSticks.Left.X, gamePadState.ThumbSticks.Left.Y);
 
 		ShowLink();
 
@@ -80,7 +92,8 @@ public class Maan : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		_velocity = transform.rotation * CharacterMovement();
+		//_velocity = transform.rotation * CharacterMovement();
+		_velocity = transform.forward * movementSpeed * _leftStickInput.magnitude;
 		CameraMovement();
 		rig.velocity = _velocity;
 	}
@@ -96,14 +109,34 @@ public class Maan : MonoBehaviour
 		return result;
 	}
 
-	float cameraMaxZAngle = 42, cameraMinZAngle = -32;
-	float _cameraZAngle = 0;
-	float cameraXSensitivity = 260, cameraZSensitivity = 150;
+	float _cameraYAngle = 0;
 	void CameraMovement ()
 	{
-		transform.Rotate(new Vector3(0, gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime, 0));
-		_cameraZAngle = Mathf.Clamp(_cameraZAngle - gamePadState.ThumbSticks.Right.Y * cameraZSensitivity * Time.deltaTime, cameraMinZAngle, cameraMaxZAngle);
-		cameraTrans.localRotation = Quaternion.Euler(new Vector3(_cameraZAngle, 0, 0));
+		_cameraYAngle += gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime;
+		if (_cameraYAngle < -180) {
+			_cameraYAngle += 360;
+		} else if (_cameraYAngle > 180) {
+			_cameraYAngle -= 360;
+		}
+		_cameraZAngle = Mathf.Clamp(_cameraZAngle - gamePadState.ThumbSticks.Right.Y * cameraZSensitivity * Time.deltaTime,
+			cameraMinZAngle, cameraMaxZAngle);
+		cameraAnchorTrans.localRotation = Quaternion.Euler(new Vector3(_cameraZAngle, _cameraYAngle, 0));
+		cameraTrans.LookAt(transform.position + Quaternion.Euler(_cameraZAngle, _cameraYAngle, 0) * Vector3.forward * 2.5f);
+		
+		float desiredAngle = Vector2.Angle(Vector2.up, _leftStickInput);
+		if (_leftStickInput.x < 0)
+			desiredAngle *= -1;
+		desiredAngle = _cameraYAngle + desiredAngle;
+
+		if (Util.Distance(transform.eulerAngles.y, desiredAngle) < 1) {
+			return;
+		}
+
+		float rotation = desiredAngle < transform.eulerAngles.y ? -360 : 360;
+		transform.Rotate(0, rotation * Time.deltaTime, 0);
+		_cameraYAngle -= rotation * Time.deltaTime;
+
+		//transform.Rotate(new Vector3(0, gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime, 0));
 	}
 
 	void ShowLink ()
@@ -117,10 +150,6 @@ public class Maan : MonoBehaviour
 		linkRenderer.SetPositions(positions);
 	}
 
-	Vector3 cameraDefaultPosition;
-	float screenShakeMaxIntensity = .14f, visualMaxDistanceToCloud = 55, visualReactionMinDistanceToCloud = 12;
-	float _screenShakeIntensity = 0, screenShakeIntensityGrowth = .18f;
-	float _postProcessingWeight, postProcessingWeightGrowth = .3f;
 	public void VisualReactionToCloud (float distanceMaanToCloud)
 	{
 		float _targetIntensity;
@@ -144,7 +173,7 @@ public class Maan : MonoBehaviour
 		_postProcessingWeight = Mathf.MoveTowards(_postProcessingWeight, _targetPPWeight, postProcessingWeightGrowth * Time.deltaTime);
 
 		Vector3 screenShakeResult = new Vector3(Mathf.Sin(Time.time * 100), Mathf.Sin(Time.time * 120 + 1), 0);
-		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * _screenShakeIntensity;
+		cameraAnchorTrans.localPosition = cameraDefaultPosition + screenShakeResult * _screenShakeIntensity;
 		postProcessVolumes[1].weight = _postProcessingWeight;
 	}
 
