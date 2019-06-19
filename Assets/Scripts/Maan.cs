@@ -22,7 +22,7 @@ public class Maan : MonoBehaviour
 	float movementSpeed = 17;
 
 	public GameObject cameraPrefab;
-	float cameraMaxZAngle = 42, cameraMinZAngle = -32;
+	float cameraMaxZAngle = 42, cameraMinZAngle = -40;
 	float _cameraZAngle = 0;
 	float cameraXSensitivity = 260, cameraZSensitivity = 150;
 

@@ -105,13 +105,13 @@ public class Kevin : MonoBehaviour
 			struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 		}
 
-		if (gamePadState.Buttons.Back == ButtonState.Pressed && selectButtonReleased) {
-			manager.Reset();
-			_velocity = Vector3.zero;
-			selectButtonReleased = false;
-		} else if (gamePadState.Buttons.Back == ButtonState.Released) {
-			selectButtonReleased = true;
-		}
+		//if (gamePadState.Buttons.Back == ButtonState.Pressed && selectButtonReleased) {
+		//	manager.Reset();
+		//	_velocity = Vector3.zero;
+		//	selectButtonReleased = false;
+		//} else if (gamePadState.Buttons.Back == ButtonState.Released) {
+		//	selectButtonReleased = true;
+		//}
 	}
 
 	void FixedUpdate ()

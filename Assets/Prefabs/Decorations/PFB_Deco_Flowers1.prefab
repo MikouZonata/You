@@ -319,7 +319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1384188304481740, guid: c84eb0f6f0a4da84694d8963ccfb7326, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 4294967295
+      value: 119
       objectReference: {fileID: 0}
     - target: {fileID: 4594855980507196, guid: c84eb0f6f0a4da84694d8963ccfb7326, type: 3}
       propertyPath: m_LocalPosition.x

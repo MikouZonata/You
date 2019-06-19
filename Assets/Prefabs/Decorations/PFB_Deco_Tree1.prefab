@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 119
   m_IsActive: 1
 --- !u!4 &9146471842340052602
 Transform:
@@ -93,7 +93,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 119
   m_IsActive: 1
 --- !u!4 &9146471842542455630
 Transform:
@@ -118,6 +118,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9146471842542455630}
     m_Modifications:
+    - target: {fileID: 1063318417263782, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
+      propertyPath: m_Name
+      value: Kevin
+      objectReference: {fileID: 0}
+    - target: {fileID: 1063318417263782, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1063318417263782, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
+      objectReference: {fileID: 0}
     - target: {fileID: 4134732444032162, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -173,18 +185,6 @@ PrefabInstance:
     - target: {fileID: 4134732444032162, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1063318417263782, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
-      propertyPath: m_Name
-      value: Kevin
-      objectReference: {fileID: 0}
-    - target: {fileID: 1063318417263782, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 1063318417263782, guid: 9d52ac551b742a0498454db5048fa352, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 23226434234862096, guid: 9d52ac551b742a0498454db5048fa352,
         type: 3}
