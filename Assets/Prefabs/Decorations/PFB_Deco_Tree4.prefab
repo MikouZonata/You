@@ -140,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1779960499939414435}
   - component: {fileID: 1508199501957359797}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Cactus_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

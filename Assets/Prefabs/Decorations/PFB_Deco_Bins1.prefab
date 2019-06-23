@@ -73,7 +73,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8369550521526649422}
   - component: {fileID: 963994419250205382}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Sandbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
