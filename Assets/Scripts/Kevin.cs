@@ -52,7 +52,7 @@ public class Kevin : MonoBehaviour
 	float driftingSideAcceleration, driftingTurnAcceleration;
 
 	float _struggleTimer = 0, struggleTime = 10;
-	const float struggleMinTime = 2, struggleMaxTime = 5.0f;
+	const float struggleMinTime = 1.2f, struggleMaxTime = 3.0f;
 	Vector3 _struggleVelocity = Vector3.zero;
 
 	bool selectButtonReleased = false;
@@ -104,7 +104,7 @@ public class Kevin : MonoBehaviour
 		ShowLink();
 		ModelRotation();
 
-		if (gamePadState.ThumbSticks.Left.X == 0 || gamePadState.ThumbSticks.Left.Y == 0 || gamePadState.Triggers.Right == 0 || gamePadState.Triggers.Left == 0) {
+		if (!StaticData.playersAreLinked && rig.velocity.sqrMagnitude < 1) {
 			_struggleTimer += Time.deltaTime;
 			if (_struggleTimer > struggleTime) {
 				StartCoroutine(Struggle());
