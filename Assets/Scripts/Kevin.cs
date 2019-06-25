@@ -39,7 +39,7 @@ public class Kevin : MonoBehaviour
 	MultiAudioSource throttleAudioSource;
 	float throttleAudioMaxVolume = .4f;
 
-	float _fatigue = 0;
+	float _fatigue = .5f;
 	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
 	const float fatigueRechargePerPickup = 0.04f;
 	const float fatigueSlowFactorMin = .4f;
@@ -63,6 +63,7 @@ public class Kevin : MonoBehaviour
 	string fmodHoverPath = "event:/Kevin/Hover_Engine";
 	FMOD.Studio.EventInstance fmodHoverInstance;
 	FMOD.Studio.ParameterInstance fmodHoverPitch;
+	float fmodHoverPitchThreshold = .65f;
 	bool fmodHoverPlaying = false;
 
 	public void Init (KevinManager manager, Transform otherPlayer)
@@ -189,8 +190,8 @@ public class Kevin : MonoBehaviour
 		}
 
 		float _hoverPitch = 1;
-		if (_fatigue > .5f) {
-			_hoverPitch = 1 - (_fatigue - .5f) * 2;
+		if (_fatigue > fmodHoverPitchThreshold) {
+			_hoverPitch = 1 - (_fatigue - fmodHoverPitchThreshold) * 1 / fmodHoverPitchThreshold;
 		}
 		Debug.Log(_hoverPitch);
 		fmodHoverPitch.setValue(_hoverPitch);
