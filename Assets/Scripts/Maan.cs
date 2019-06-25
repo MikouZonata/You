@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 using XInputDotNetPure;
 using Utility;
-using MultiAudioListener;
+using FMODUnity;
 
 public class Maan : MonoBehaviour
 {
@@ -39,7 +39,6 @@ public class Maan : MonoBehaviour
 	List<Kattoe> kattoesInRange = new List<Kattoe>();
 
 	public GameObject pingExclamation, pingRoseFeedback;
-	public AudioClip[] pingClips;
 	Transform pingParent;
 	List<GameObject> pingFeedbackPool = new List<GameObject>();
 	SpriteRenderer pingRenderer;
@@ -47,11 +46,23 @@ public class Maan : MonoBehaviour
 
 	public Transform[] kattoeAnchors;
 	List<Transform> occupiedKattoeAnchors = new List<Transform>();
+	public int KattoesBonded
+	{
+		get {
+			return occupiedKattoeAnchors.Count;
+		}
+	}
 
 	public PostProcessProfile defaultPPProfile, nearCloudPPProfile;
 	PostProcessVolume[] postProcessVolumes;
 
 	public Image fadeToBlackDisplay;
+
+	//FMOD
+	string fmodWhistlePath = "event:/Maan/Calling_Cats_Maan";
+	const int fmodWhistlePoolSize = 8;
+	int _fmodWhistlePoolIndex = 0;
+	FMOD.Studio.EventInstance[] fmodWhistleInstances = new FMOD.Studio.EventInstance[fmodWhistlePoolSize];
 
 	public void Init (MaanManager manager, Transform otherPlayer)
 	{
@@ -76,6 +87,10 @@ public class Maan : MonoBehaviour
 		pingParent = new GameObject("PingFeedbackParent").transform;
 		pingRenderer = pingExclamation.GetComponent<SpriteRenderer>();
 		pingRenderer.color = new Color(1, 1, 1, 0);
+
+		for (int i = 0; i < fmodWhistlePoolSize; i++) {
+			fmodWhistleInstances[i] = RuntimeManager.CreateInstance(fmodWhistlePath);
+		}
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
@@ -197,6 +212,11 @@ public class Maan : MonoBehaviour
 		StopCoroutine(PingExclamationRoutine());
 		StartCoroutine(PingExclamationRoutine());
 
+		fmodWhistleInstances[_fmodWhistlePoolIndex].start();
+		_fmodWhistlePoolIndex++;
+		if (_fmodWhistlePoolIndex >= fmodWhistlePoolSize)
+			_fmodWhistlePoolIndex = 0;
+		
 		for (int i = 0; i < pingFeedbackPool.Count; i++) {
 			if (!pingFeedbackPool[i].activeSelf) {
 				StartCoroutine(PingRoseRoutine(pingFeedbackPool[i]));
@@ -228,8 +248,6 @@ public class Maan : MonoBehaviour
 	IEnumerator PingRoseRoutine (GameObject go)
 	{
 		go.transform.position = transform.position + Vector3.up * .05f;
-		go.GetComponent<MultiAudioSource>().AudioClip = Util.PickRandom(pingClips);
-		go.GetComponent<MultiAudioSource>().Play();
 		Animator[] temp = go.GetComponentsInChildren<Animator>();
 		foreach (Animator a in temp) {
 			a.Play("Swirl");
@@ -246,19 +264,17 @@ public class Maan : MonoBehaviour
 			attemptedAnchor = Util.PickRandom(kattoeAnchors);
 		}
 		occupiedKattoeAnchors.Add(attemptedAnchor);
-		StaticData.kattoesBondedToMaan++;
 		return attemptedAnchor;
 	}
 	public void KattoeLeaveFlock (Transform anchor)
 	{
 		occupiedKattoeAnchors.Remove(anchor);
-		StaticData.kattoesBondedToMaan--;
 	}
 
-	public IEnumerator FadeToBlack (float totalTime, float fadeTime = 1)
+	public IEnumerator FadeToBlack (float totalTime, Color fadeColor, float fadeTime = 1)
 	{
 		fadeToBlackDisplay.enabled = true;
-		Color _color = fadeToBlackDisplay.color = Color.black;
+		Color _color = fadeToBlackDisplay.color = fadeColor;
 
 		yield return new WaitForSeconds(totalTime - fadeTime);
 

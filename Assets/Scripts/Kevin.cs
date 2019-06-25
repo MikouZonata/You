@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 using Utility;
 using MultiAudioListener;
+using FMODUnity;
 
 public class Kevin : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class Kevin : MonoBehaviour
 	float sideDriftDefaultEmission;
 
 	public LineRenderer linkRenderer;
-	
+
 	public Transform modelAnchor;
 	const float modelMaxForwardsAngle = 12, modelMaxSidewaysAngle = 9;
 	Vector3 _velocity = Vector3.zero;
@@ -58,6 +59,12 @@ public class Kevin : MonoBehaviour
 
 	public Transform leaderboard;
 
+	//FMOD
+	string fmodHoverPath = "event:/Kevin/Hover_Engine";
+	FMOD.Studio.EventInstance fmodHoverInstance;
+	FMOD.Studio.ParameterInstance fmodHoverPitch;
+	bool fmodHoverPlaying = false;
+
 	public void Init (KevinManager manager, Transform otherPlayer)
 	{
 		gamePadState = GamePad.GetState(playerIndex);
@@ -80,6 +87,9 @@ public class Kevin : MonoBehaviour
 		driftingTurnAcceleration = (driftingMaxTurnFactor - 1) / driftingTimeToMax;
 
 		struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
+
+		fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
+		fmodHoverInstance.getParameter("Engine_Pitch", out fmodHoverPitch);
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
@@ -104,14 +114,6 @@ public class Kevin : MonoBehaviour
 			_struggleTimer = 0;
 			struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 		}
-
-		//if (gamePadState.Buttons.Back == ButtonState.Pressed && selectButtonReleased) {
-		//	manager.Reset();
-		//	_velocity = Vector3.zero;
-		//	selectButtonReleased = false;
-		//} else if (gamePadState.Buttons.Back == ButtonState.Released) {
-		//	selectButtonReleased = true;
-		//}
 	}
 
 	void FixedUpdate ()
@@ -177,7 +179,21 @@ public class Kevin : MonoBehaviour
 
 	void ThrottleAudio ()
 	{
-		throttleAudioSource.Volume = throttleAudioMaxVolume * _triggerValue;
+		if (gamePadState.Triggers.Right == 0 && fmodHoverPlaying) {
+			fmodHoverPlaying = false;
+			fmodHoverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+		}
+		if (gamePadState.Triggers.Right > 0 && !fmodHoverPlaying) {
+			fmodHoverPlaying = true;
+			fmodHoverInstance.start();
+		}
+
+		float _hoverPitch = 1;
+		if (_fatigue > .5f) {
+			_hoverPitch = 1 - (_fatigue - .5f) * 2;
+		}
+		Debug.Log(_hoverPitch);
+		fmodHoverPitch.setValue(_hoverPitch);
 	}
 
 	void Fatigue ()

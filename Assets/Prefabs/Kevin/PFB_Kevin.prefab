@@ -1212,7 +1212,6 @@ GameObject:
   - component: {fileID: 3706047649649401553}
   - component: {fileID: 3706047649649401555}
   - component: {fileID: 2269215657140922725}
-  - component: {fileID: 3099907922658209195}
   m_Layer: 10
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1285,19 +1284,6 @@ Skybox:
   m_GameObject: {fileID: 3706047649649401554}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 2100000, guid: fa59961305b931447985459309d1359a, type: 2}
---- !u!114 &3099907922658209195
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3706047649649401554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bfed13f5989cb3488076be6b47af218, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Volume: 1
 --- !u!1 &3706047649862686899
 GameObject:
   m_ObjectHideFlags: 0
@@ -2773,7 +2759,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4946067622767251533}
-  - component: {fileID: 5069345457155002245}
   m_Layer: 10
   m_Name: HoverAudio
   m_TagString: Untagged
@@ -2795,36 +2780,6 @@ Transform:
   m_Father: {fileID: 3706047649862686901}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5069345457155002245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7194802964836077597}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30730f5b1648246419d62c222708fa80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _audioClip: {fileID: 8300000, guid: 7231aba7bb4021744a731497c04a93bb, type: 3}
-  _output: {fileID: 0}
-  _mute: 0
-  _bypassEffects: 0
-  _bypassListenerEffects: 0
-  _bypassReverbZone: 0
-  _playOnAwake: 1
-  _loop: 1
-  _priority: 128
-  _volume: 0
-  _pitch: 1
-  _reverbZoneMix: 1
-  _dopplerLevel: 1
-  _spread: 0
-  _volumeRolloff: 0
-  _minDistance: 500
-  _maxDistance: 500
-  OnlyPlayForClosestCamera: 1
 --- !u!1 &7286357306851553112
 GameObject:
   m_ObjectHideFlags: 0
@@ -3636,15 +3591,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe5373feaa1a88f419dff1b4bf3a7953, type: 3}
---- !u!4 &7122060055241691689 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4133816443170040, guid: fe5373feaa1a88f419dff1b4bf3a7953,
-    type: 3}
-  m_PrefabInstance: {fileID: 7122456339448037073}
-  m_PrefabAsset: {fileID: 0}
 --- !u!120 &7166109631541296331 stripped
 LineRenderer:
   m_CorrespondingSourceObject: {fileID: 120241440168165914, guid: fe5373feaa1a88f419dff1b4bf3a7953,
+    type: 3}
+  m_PrefabInstance: {fileID: 7122456339448037073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7122060055241691689 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4133816443170040, guid: fe5373feaa1a88f419dff1b4bf3a7953,
     type: 3}
   m_PrefabInstance: {fileID: 7122456339448037073}
   m_PrefabAsset: {fileID: 0}

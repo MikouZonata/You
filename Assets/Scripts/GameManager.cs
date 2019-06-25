@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 using Utility;
+using FMODUnity;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,11 @@ public class GameManager : MonoBehaviour
 	KevinManager kevinManager;
 	MaanManager maanManager;
 	Transform[] trackPieces;
+
+	//FMOD
+	string fmodLinkedPath = "event:/Linked_Up";
+	FMOD.Studio.EventInstance fmodLinkedInstance;
+	bool fmodLinkedPlaying = false;
 
 	private void Awake ()
 	{
@@ -73,6 +79,8 @@ public class GameManager : MonoBehaviour
 
 		maanManager.Init(trackPieces, maan);
 		kevinManager.Init(trackPieces, kevin);
+
+		fmodLinkedInstance = RuntimeManager.CreateInstance(fmodLinkedPath);
 	}
 
 	private void Update ()
@@ -87,5 +95,16 @@ public class GameManager : MonoBehaviour
 		} else {
 			StaticData.playersAreLinked = false;
 		}
+
+
+		if (fmodLinkedPlaying && !StaticData.playersAreLinked) {
+			fmodLinkedPlaying = false;
+			fmodLinkedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+		}
+		if (!fmodLinkedPlaying && StaticData.playersAreLinked) {
+			fmodLinkedPlaying = true;
+			fmodLinkedInstance.start();
+		}
+
 	}
 }

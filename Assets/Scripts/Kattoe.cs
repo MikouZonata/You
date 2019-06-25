@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using MultiAudioListener;
+using FMODUnity;
 using Utility;
 
 public class Kattoe : MonoBehaviour
 {
 	MaanManager manager;
-	MultiAudioSource audioSource;
-	AudioClip[] callClips;
 	NavMeshAgent navMeshAgent;
 	Maan maan;
 	Transform maanTrans;
@@ -54,23 +52,28 @@ public class Kattoe : MonoBehaviour
 
 	const float runAwaySpeed = 20, runAwayTime = 1.2f;
 
-	float callBasePitch, callPitchMax = 1.16f, callPitchMin = 0.9f, callPitchMaxDeviation = .08f;
+	float callBasePitch, callPitchMax = 1.00f, callPitchMin = 0.00f;
 
 	Vector3 basePosition;
 
 	bool hopping = false, hopSetup = false;
 	float hopHeight = .32f, hopTime = .24f;
 
-	public void Init (MaanManager manager, AudioClip[] callClips, Transform maanTrans, Transform parentPiece)
+	//FMOD
+	string fmodCallPath = "event:/Maan/Cats";
+	FMOD.Studio.EventInstance fmodCallInstance;
+	FMOD.Studio.ParameterInstance fmodCallPitch;
+
+	public void Init (MaanManager manager, Transform maanTrans, Transform parentPiece)
 	{
 		this.manager = manager;
 		this.maanTrans = maanTrans;
 		maan = maanTrans.GetComponent<Maan>();
 		this.parentPiece = parentPiece;
 
-		audioSource = GetComponent<MultiAudioSource>();
-		callBasePitch = Random.Range(callPitchMin, callPitchMax);
-		this.callClips = callClips;
+		fmodCallInstance = RuntimeManager.CreateInstance(fmodCallPath);
+		fmodCallInstance.getParameter("Pitch", out fmodCallPitch);
+		fmodCallPitch.setValue(Random.Range(callPitchMin, callPitchMax));
 
 		navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -315,8 +318,6 @@ public class Kattoe : MonoBehaviour
 
 	void Call ()
 	{
-		audioSource.Pitch = callBasePitch + Random.Range(-callPitchMaxDeviation, callPitchMaxDeviation);
-		audioSource.AudioClip = Util.PickRandom(callClips);
-		audioSource.Play();
+		fmodCallInstance.start();
 	}
 }

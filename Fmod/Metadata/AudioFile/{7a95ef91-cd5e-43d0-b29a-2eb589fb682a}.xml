@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{7a95ef91-cd5e-43d0-b29a-2eb589fb682a}">
+        <property name="assetPath">
+            <value>Kevin_Mts_4.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.66668749999999999</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{8be549c0-ebac-4855-a2f4-6a1e586966e5}</destination>
+        </relationship>
+    </object>
+</objects>

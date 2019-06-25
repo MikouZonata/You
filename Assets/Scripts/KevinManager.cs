@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using Utility;
+using FMODUnity;
 
 public class KevinManager : MonoBehaviour
 {
@@ -142,8 +143,13 @@ public class KevinManager : MonoBehaviour
 		DriverSpeedFlux();
 	}
 
+	string fmodKevinPickupEvent = "event:/Kevin/Pick-up";
+	string fmodDriverPickupEvent = "event:/Kevin/Pick-up_Opponent";
+	FMOD.Studio.EventInstance fmodPickupInstance;
+
 	public void PickUpPickup (int driverIndex, int pickupIndex)
 	{
+
 		//Verwijder oude pickup.
 		pickupPool[pickupIndex].gameObject.SetActive(false);
 
@@ -152,10 +158,15 @@ public class KevinManager : MonoBehaviour
 				feedbackGO.transform.position = pickupPool[pickupIndex].position;
 				feedbackGO.SetActive(true);
 				if (driverIndex != 5) {
-
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, driverAgents[driverIndex].transform));
+					if (Vector3.Distance(kevin.transform.position, driverAgents[driverIndex].transform.position) < 45) {
+						fmodPickupInstance = RuntimeManager.CreateInstance(fmodDriverPickupEvent);
+						fmodPickupInstance.start();
+					}
 				} else {
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, kevin.transform));
+					fmodPickupInstance = RuntimeManager.CreateInstance(fmodKevinPickupEvent);
+					fmodPickupInstance.start();
 				}
 				break;
 			}
