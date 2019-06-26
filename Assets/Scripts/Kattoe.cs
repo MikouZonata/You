@@ -71,11 +71,9 @@ public class Kattoe : MonoBehaviour
 		maan = maanTrans.GetComponent<Maan>();
 		this.parentPiece = parentPiece;
 
-		if (FMODCollabPatch.fmodAvailable) {
-			fmodCallInstance = RuntimeManager.CreateInstance(fmodCallPath);
-			fmodCallInstance.getParameter("Pitch", out fmodCallPitch);
-			fmodCallPitch.setValue(Random.Range(callPitchMin, callPitchMax));
-		}
+		fmodCallInstance = RuntimeManager.CreateInstance(fmodCallPath);
+		fmodCallInstance.getParameter("Pitch", out fmodCallPitch);
+		fmodCallPitch.setValue(Random.Range(callPitchMin, callPitchMax));
 
 		navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -320,8 +318,6 @@ public class Kattoe : MonoBehaviour
 
 	void Call ()
 	{
-		if (FMODCollabPatch.fmodAvailable) {
-			fmodCallInstance.start();
-		}
+		fmodCallInstance.start();
 	}
 }

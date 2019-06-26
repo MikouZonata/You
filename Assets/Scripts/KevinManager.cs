@@ -28,7 +28,6 @@ public class KevinManager : MonoBehaviour
 	string[] driverNames = new string[] { "Daniel", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 52, 46, 38, 31, 21 };
 	float[] driverBaseSpeeds = new float[] { 16.2f, 14.8f, 11f, 9.1f, 7.6f };
-	int driverNamesIndex = 0;
 	int[] scores;
 	int[] ranks;
 	Text[][] scoreDisplays;
@@ -162,18 +161,14 @@ public class KevinManager : MonoBehaviour
 				feedbackGO.SetActive(true);
 				if (driverIndex != 5) {
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, driverAgents[driverIndex].transform));
-					if (FMODCollabPatch.fmodAvailable) {
-						if (Vector3.Distance(kevin.transform.position, driverAgents[driverIndex].transform.position) < 45) {
-							fmodPickupInstance = RuntimeManager.CreateInstance(fmodDriverPickupEvent);
-							fmodPickupInstance.start();
-						}
+					if (Vector3.Distance(kevin.transform.position, driverAgents[driverIndex].transform.position) < 45) {
+						fmodPickupInstance = RuntimeManager.CreateInstance(fmodDriverPickupEvent);
+						fmodPickupInstance.start();
 					}
 				} else {
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, kevin.transform));
-					if (FMODCollabPatch.fmodAvailable) {
-						fmodPickupInstance = RuntimeManager.CreateInstance(fmodKevinPickupEvent);
-						fmodPickupInstance.start();
-					}
+					fmodPickupInstance = RuntimeManager.CreateInstance(fmodKevinPickupEvent);
+					fmodPickupInstance.start();
 				}
 				break;
 			}

@@ -33,7 +33,6 @@ public class Kevin : MonoBehaviour
 	const float throttleMaxForwardSpeed = 28;
 	const float throttleAcceleration = 2, throttleNaturalDecceleration = 18;
 	float _speedPoint = 0, _throttleSpeed = 0;
-	float throttleTrailMaxTime = .08f;
 
 	float _fatigue = .5f;
 	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
@@ -50,8 +49,6 @@ public class Kevin : MonoBehaviour
 	float _struggleTimer = 0, struggleTime = 10;
 	const float struggleMinTime = 1.2f, struggleMaxTime = 3.0f;
 	Vector3 _struggleVelocity = Vector3.zero;
-
-	bool selectButtonReleased = false;
 
 	public Transform leaderboard;
 
@@ -82,11 +79,9 @@ public class Kevin : MonoBehaviour
 		driftingTurnAcceleration = (driftingMaxTurnFactor - 1) / driftingTimeToMax;
 
 		struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
-
-		if (FMODCollabPatch.fmodAvailable) {
+		
 			fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
 			fmodHoverInstance.getParameter("Engine_Pitch", out fmodHoverPitch);
-		}
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;

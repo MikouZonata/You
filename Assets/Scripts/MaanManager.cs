@@ -67,11 +67,9 @@ public class MaanManager : MonoBehaviour
 			occupiedPieces.Add(spawnPositions[i]);
 		}
 
-		if (FMODCollabPatch.fmodAvailable) {
-			fmodCloudInstance = RuntimeManager.CreateInstance(fmodCloudPath);
-			fmodCloudInstance.getParameter("Stress", out fmodCloudStateParameter);
-			fmodKattoeMusicInstance = RuntimeManager.CreateInstance(fmodKattoeMusicPath);
-		}
+		fmodCloudInstance = RuntimeManager.CreateInstance(fmodCloudPath);
+		fmodCloudInstance.getParameter("Stress", out fmodCloudStateParameter);
+		fmodKattoeMusicInstance = RuntimeManager.CreateInstance(fmodKattoeMusicPath);
 	}
 
 	private void Update ()
@@ -163,10 +161,8 @@ public class MaanManager : MonoBehaviour
 						StaticData.playersAreLinked ? new Color(.55f, .6f, .6f) : Color.black));
 					Destroy(cloudTrans.gameObject);
 					cloudChaseSetup = false;
-					if (FMODCollabPatch.fmodAvailable) {
-						fmodCloudInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-						fmodCloudPlaying = false;
-					}
+					fmodCloudInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+					fmodCloudPlaying = false;
 					cloudState = CloudStates.Dormant;
 					goto case CloudStates.Dormant;
 				}
@@ -180,14 +176,12 @@ public class MaanManager : MonoBehaviour
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
 			maan.VisualReactionToCloud(distanceMaanToCloud);
-			if (FMODCollabPatch.fmodAvailable) {
-				if (StaticData.playersAreLinked) {
-					_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 0, Time.deltaTime * 2);
-				} else {
-					_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 1, Time.deltaTime * 2);
-				}
-				fmodCloudStateParameter.setValue(_fmodCloudState);
+			if (StaticData.playersAreLinked) {
+				_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 0, Time.deltaTime * 2);
+			} else {
+				_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 1, Time.deltaTime * 2);
 			}
+			fmodCloudStateParameter.setValue(_fmodCloudState);
 		} else {
 			maan.VisualReactionToCloud(1000);
 		}
@@ -200,10 +194,8 @@ public class MaanManager : MonoBehaviour
 		cloudTrans = Instantiate(cloudPrefab, spawnPos, Quaternion.identity).transform;
 		cloud = cloudTrans.GetComponent<Cloud>();
 
-		if (FMODCollabPatch.fmodAvailable) {
-			RuntimeManager.AttachInstanceToGameObject(fmodCloudInstance, cloudTrans, cloudTrans.GetComponent<Rigidbody>());
-			fmodCloudInstance.start();
-		}
+		RuntimeManager.AttachInstanceToGameObject(fmodCloudInstance, cloudTrans, cloudTrans.GetComponent<Rigidbody>());
+		fmodCloudInstance.start();
 
 		float _riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < _riseTime; t += Time.deltaTime) {
@@ -214,15 +206,13 @@ public class MaanManager : MonoBehaviour
 
 	void KattoeMusic ()
 	{
-		if (FMODCollabPatch.fmodAvailable) {
-			if (!fmodKattoeMusicPlaying && maan.KattoesBonded >= kattoeMusicThreshold) {
-				fmodKattoeMusicPlaying = true;
-				fmodKattoeMusicInstance.start();
-			}
-			if (fmodKattoeMusicPlaying && maan.KattoesBonded < kattoeMusicThreshold) {
-				fmodKattoeMusicPlaying = false;
-				fmodKattoeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-			}
+		if (!fmodKattoeMusicPlaying && maan.KattoesBonded >= kattoeMusicThreshold) {
+			fmodKattoeMusicPlaying = true;
+			fmodKattoeMusicInstance.start();
+		}
+		if (fmodKattoeMusicPlaying && maan.KattoesBonded < kattoeMusicThreshold) {
+			fmodKattoeMusicPlaying = false;
+			fmodKattoeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 		}
 	}
 }

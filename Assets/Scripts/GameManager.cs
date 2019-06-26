@@ -80,9 +80,7 @@ public class GameManager : MonoBehaviour
 		maanManager.Init(trackPieces, maan);
 		kevinManager.Init(trackPieces, kevin);
 
-		if (FMODCollabPatch.fmodAvailable) {
-			fmodLinkedInstance = RuntimeManager.CreateInstance(fmodLinkedPath);
-		}
+		fmodLinkedInstance = RuntimeManager.CreateInstance(fmodLinkedPath);
 	}
 
 	private void Update ()
@@ -98,15 +96,13 @@ public class GameManager : MonoBehaviour
 			StaticData.playersAreLinked = false;
 		}
 
-		if (FMODCollabPatch.fmodAvailable) {
-			if (fmodLinkedPlaying && !StaticData.playersAreLinked) {
-				fmodLinkedPlaying = false;
-				fmodLinkedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-			}
-			if (!fmodLinkedPlaying && StaticData.playersAreLinked) {
-				fmodLinkedPlaying = true;
-				fmodLinkedInstance.start();
-			}
+		if (fmodLinkedPlaying && !StaticData.playersAreLinked) {
+			fmodLinkedPlaying = false;
+			fmodLinkedInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+		}
+		if (!fmodLinkedPlaying && StaticData.playersAreLinked) {
+			fmodLinkedPlaying = true;
+			fmodLinkedInstance.start();
 		}
 	}
 }
