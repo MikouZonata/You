@@ -106,7 +106,7 @@ public class KevinManager : MonoBehaviour
 		}
 
 		//Vul het leaderboard met naampjes en stuff
-		leaderboard = kevin.leaderboard;
+		leaderboard = kevin.leaderboardFrame;
 		scores = new int[numberOfDrivers];
 		for (int i = 0; i < scoreDownTimers.Length; i++) {
 			scoreDownTimers[i] = 0;

@@ -9,6 +9,7 @@ using FMODUnity;
 
 public class Kevin : MonoBehaviour
 {
+	[HideInInspector]
 	public PlayerIndex playerIndex = PlayerIndex.Two;
 	GamePadState gamePadState;
 	KevinManager manager;
@@ -38,6 +39,9 @@ public class Kevin : MonoBehaviour
 	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
 	const float fatigueRechargePerPickup = 0.04f;
 	const float fatigueSlowFactorMin = .4f;
+	public GameObject fatigueSmokeGO;
+	bool fatigueSmokePlaying = false;
+	const float fatigueSmokeThreshold = .68f;
 
 	const float maxTurnRate = 192, minTurnRate = 76;
 	const float turnRateLossPerVelocity = 4.22f;
@@ -50,7 +54,7 @@ public class Kevin : MonoBehaviour
 	const float struggleMinTime = 1.2f, struggleMaxTime = 3.0f;
 	Vector3 _struggleVelocity = Vector3.zero;
 
-	public Transform leaderboard;
+	public Transform leaderboardFrame;
 
 	//FMOD
 	string fmodHoverPath = "event:/Kevin/Hover_Engine";
@@ -79,9 +83,11 @@ public class Kevin : MonoBehaviour
 		driftingTurnAcceleration = (driftingMaxTurnFactor - 1) / driftingTimeToMax;
 
 		struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
-		
-			fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
-			fmodHoverInstance.getParameter("Engine_Pitch", out fmodHoverPitch);
+
+		fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
+		fmodHoverInstance.getParameter("Engine_Pitch", out fmodHoverPitch);
+
+		fatigueSmokeGO.SetActive(false);
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;
@@ -193,6 +199,15 @@ public class Kevin : MonoBehaviour
 			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueRecoverRate * Time.deltaTime);
 		} else {
 			_fatigue = Mathf.MoveTowards(_fatigue, 1, fatigueIncreaseRate * Time.deltaTime);
+		}
+
+		if (!fatigueSmokePlaying && _fatigue > fatigueSmokeThreshold) {
+			fatigueSmokeGO.SetActive(true);
+			fatigueSmokePlaying = true;
+		}
+		if (fatigueSmokePlaying && _fatigue < fatigueSmokeThreshold) {
+			fatigueSmokeGO.SetActive(false);
+			fatigueSmokePlaying = false;
 		}
 	}
 	float FatigueSlowFactor ()

@@ -10,6 +10,7 @@ using FMODUnity;
 
 public class Maan : MonoBehaviour
 {
+	[HideInInspector]
 	public PlayerIndex playerIndex = PlayerIndex.One;
 	GamePadState gamePadState;
 	Vector2 _leftStickInput;
