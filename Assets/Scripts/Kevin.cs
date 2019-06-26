@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using XInputDotNetPure;
 using Utility;
-using MultiAudioListener;
 using FMODUnity;
 
 public class Kevin : MonoBehaviour
@@ -35,9 +34,6 @@ public class Kevin : MonoBehaviour
 	const float throttleAcceleration = 2, throttleNaturalDecceleration = 18;
 	float _speedPoint = 0, _throttleSpeed = 0;
 	float throttleTrailMaxTime = .08f;
-
-	MultiAudioSource throttleAudioSource;
-	float throttleAudioMaxVolume = .4f;
 
 	float _fatigue = .5f;
 	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
@@ -75,8 +71,6 @@ public class Kevin : MonoBehaviour
 		mainCamTrans = mainCam.transform;
 		mainCamDefaultRot = mainCamTrans.rotation;
 
-		throttleAudioSource = GetComponentInChildren<MultiAudioSource>();
-
 		sideDriftParticles = GetComponentInChildren<ParticleSystem>();
 		sideDriftEmissionModule = sideDriftParticles.emission;
 		sideDriftDefaultEmission = sideDriftEmissionModule.rateOverTime.constant;
@@ -89,8 +83,10 @@ public class Kevin : MonoBehaviour
 
 		struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 
-		fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
-		fmodHoverInstance.getParameter("Engine_Pitch", out fmodHoverPitch);
+		if (FMODCollabPatch.fmodAvailable) {
+			fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
+			fmodHoverInstance.getParameter("Engine_Pitch", out fmodHoverPitch);
+		}
 
 		this.manager = manager;
 		this.otherPlayer = otherPlayer;

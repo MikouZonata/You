@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="MixerGroup" id="{d3245b8f-17e5-4ec1-a53a-1b8f4c6fe2a0}">
+        <property name="name">
+            <value>Monster</value>
+        </property>
+        <relationship name="effectChain">
+            <destination>{6989eaef-f4a8-47c5-b5b3-c58b6e579392}</destination>
+        </relationship>
+        <relationship name="panner">
+            <destination>{3fc8fdf6-ef3e-4776-b246-0599d00900d2}</destination>
+        </relationship>
+        <relationship name="output">
+            <destination>{86996095-7ca3-476c-b128-f4eedecf085e}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusEffectChain" id="{6989eaef-f4a8-47c5-b5b3-c58b6e579392}">
+        <relationship name="effects">
+            <destination>{f7a12f27-d573-48c1-b47a-38607d96e7a5}</destination>
+            <destination>{9818c6a2-1a04-4f12-81e6-81f45b104411}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusPanner" id="{3fc8fdf6-ef3e-4776-b246-0599d00900d2}"/>
+    <object class="MixerBusFader" id="{f7a12f27-d573-48c1-b47a-38607d96e7a5}"/>
+    <object class="Sidechain" id="{9818c6a2-1a04-4f12-81e6-81f45b104411}">
+        <relationship name="targets">
+            <destination>{7c64ba09-d37e-45b7-98a9-3dfa71e4a326}</destination>
+        </relationship>
+    </object>
+</objects>

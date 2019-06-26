@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{bb88c123-4445-4bfa-b9cd-964628665336}">
+        <property name="assetPath">
+            <value>Mts_6.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.16329166666666667</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{8be549c0-ebac-4855-a2f4-6a1e586966e5}</destination>
+        </relationship>
+    </object>
+</objects>
