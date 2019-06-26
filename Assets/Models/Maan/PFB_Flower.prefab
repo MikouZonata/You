@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 551020076217323360}
   - component: {fileID: 551020076217323361}
   - component: {fileID: 551020076217323362}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PFB_Flower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 119
   m_IsActive: 1
 --- !u!4 &551020076217323360
 Transform:

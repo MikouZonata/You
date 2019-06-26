@@ -193,7 +193,6 @@ public class Kevin : MonoBehaviour
 		if (_fatigue > fmodHoverPitchThreshold) {
 			_hoverPitch = 1 - (_fatigue - fmodHoverPitchThreshold) * 1 / fmodHoverPitchThreshold;
 		}
-		Debug.Log(_hoverPitch);
 		fmodHoverPitch.setValue(_hoverPitch);
 	}
 

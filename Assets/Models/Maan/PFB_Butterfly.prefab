@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6539907591988514083}
   - component: {fileID: 6539907591988514080}
   - component: {fileID: 6539907591988514081}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: PFB_Butterfly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
