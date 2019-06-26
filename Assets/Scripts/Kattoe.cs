@@ -41,6 +41,7 @@ public class Kattoe : MonoBehaviour
 	const float nearTimeBeforeBond = 2;
 
 	public GameObject bondedFeedbackPrefab;
+	public GameObject bondedHeartsPrefab;
 	float bondedFeedBackHeight = 2.2f;
 	bool bondedSetup = false;
 	Transform bondedTargetTrans;
@@ -73,7 +74,8 @@ public class Kattoe : MonoBehaviour
 		maan = maanTrans.GetComponent<Maan>();
 		this.parentPiece = parentPiece;
 
-		callFeedback = Instantiate(callFeedbackPrefab,transform.position, transform.rotation, transform);
+		callFeedback = Instantiate(callFeedbackPrefab,transform.position + Vector3.up, transform.rotation, transform);
+		callFeedback.SetActive(false);
 		fmodCallInstance = RuntimeManager.CreateInstance(fmodCallPath);
 		fmodCallInstance.getParameter("Pitch", out fmodCallPitch);
 		fmodCallPitch.setValue(Random.Range(callPitchMin, callPitchMax));
@@ -221,6 +223,7 @@ public class Kattoe : MonoBehaviour
 					_bondedCallTimer = 0;
 					_bondedLeaveTimer = 0;
 					maan.EngagedByKattoe(this, false);
+					bondedHeartsPrefab = Instantiate(bondedHeartsPrefab, transform.position + Vector3.up, transform.rotation, transform);
 					bondedSetup = true;
 				}
 
@@ -294,6 +297,9 @@ public class Kattoe : MonoBehaviour
 	{
 		behaviourState = BehaviourStates.RunningAway;
 		navMeshAgent.enabled = false;
+		if (bondedHeartsPrefab != null) {
+			Destroy(bondedHeartsPrefab);
+		}
 
 		Vector3 runningDirection;
 		transform.LookAt(maanTrans);
@@ -322,5 +328,13 @@ public class Kattoe : MonoBehaviour
 	void Call ()
 	{
 		fmodCallInstance.start();
+		callFeedback.SetActive(true);
+		StopCoroutine(DisableCallFeedback());
+		StartCoroutine(DisableCallFeedback());
+	}
+	IEnumerator DisableCallFeedback ()
+	{
+		yield return new WaitForSeconds(1);
+		callFeedback.SetActive(false);
 	}
 }

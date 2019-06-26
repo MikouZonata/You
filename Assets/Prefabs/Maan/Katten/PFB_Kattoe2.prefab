@@ -49,6 +49,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bondedFeedbackPrefab: {fileID: 2921974523966438034, guid: d77929156758cf44d8d91a9c733d315b,
     type: 3}
+  bondedHeartsPrefab: {fileID: 1177631155066895373, guid: 567a56a508c2846449234e90c11d65e2,
+    type: 3}
+  callFeedbackPrefab: {fileID: 3931254001705818453, guid: a8af34b9c9d71044dbe2b9b96715f838,
+    type: 3}
 --- !u!195 &2430243675155670526
 NavMeshAgent:
   m_ObjectHideFlags: 0
