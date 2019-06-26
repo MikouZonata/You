@@ -74,7 +74,7 @@ public class Kattoe : MonoBehaviour
 		maan = maanTrans.GetComponent<Maan>();
 		this.parentPiece = parentPiece;
 
-		callFeedback = Instantiate(callFeedbackPrefab,transform.position + Vector3.up, transform.rotation, transform);
+		callFeedback = Instantiate(callFeedbackPrefab,transform.position + transform.forward * .7f + Vector3.up * 1.7f, transform.rotation, transform);
 		callFeedback.SetActive(false);
 		fmodCallInstance = RuntimeManager.CreateInstance(fmodCallPath);
 		fmodCallInstance.getParameter("Pitch", out fmodCallPitch);
@@ -223,7 +223,7 @@ public class Kattoe : MonoBehaviour
 					_bondedCallTimer = 0;
 					_bondedLeaveTimer = 0;
 					maan.EngagedByKattoe(this, false);
-					bondedHeartsPrefab = Instantiate(bondedHeartsPrefab, transform.position + Vector3.up, transform.rotation, transform);
+					bondedHeartsPrefab = Instantiate(bondedHeartsPrefab, transform.position + transform.forward * .7f + Vector3.up * 1.7f, transform.rotation, transform);
 					bondedSetup = true;
 				}
 
