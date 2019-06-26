@@ -41,7 +41,7 @@ public class MaanManager : MonoBehaviour
 	float cloudChasingHeight = 0;
 	float cloudChasingDistanceToImpact = 4;
 	float cloudImpactFadeTimeGood = 2, cloudImpactFadeTimeBad = 4f;
-	
+
 	int kattoeMusicThreshold = 1;
 
 	//FMOD
@@ -67,9 +67,11 @@ public class MaanManager : MonoBehaviour
 			occupiedPieces.Add(spawnPositions[i]);
 		}
 
-		fmodCloudInstance = RuntimeManager.CreateInstance(fmodCloudPath);
-		fmodCloudInstance.getParameter("Stress", out fmodCloudStateParameter);
-		fmodKattoeMusicInstance = RuntimeManager.CreateInstance(fmodKattoeMusicPath);
+		if (FMODCollabPatch.fmodAvailable) {
+			fmodCloudInstance = RuntimeManager.CreateInstance(fmodCloudPath);
+			fmodCloudInstance.getParameter("Stress", out fmodCloudStateParameter);
+			fmodKattoeMusicInstance = RuntimeManager.CreateInstance(fmodKattoeMusicPath);
+		}
 	}
 
 	private void Update ()
@@ -157,12 +159,14 @@ public class MaanManager : MonoBehaviour
 
 				if (distanceCloudToMaan < cloudChasingDistanceToImpact) {
 					StartCoroutine(maan.FadeToBlack(
-						StaticData.playersAreLinked ? cloudImpactFadeTimeGood : cloudImpactFadeTimeBad, 
-						StaticData.playersAreLinked ? new Color(.55f,.6f,.6f) : Color.black));
+						StaticData.playersAreLinked ? cloudImpactFadeTimeGood : cloudImpactFadeTimeBad,
+						StaticData.playersAreLinked ? new Color(.55f, .6f, .6f) : Color.black));
 					Destroy(cloudTrans.gameObject);
 					cloudChaseSetup = false;
-					fmodCloudInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-					fmodCloudPlaying = false;
+					if (FMODCollabPatch.fmodAvailable) {
+						fmodCloudInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+						fmodCloudPlaying = false;
+					}
 					cloudState = CloudStates.Dormant;
 					goto case CloudStates.Dormant;
 				}
@@ -176,12 +180,14 @@ public class MaanManager : MonoBehaviour
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
 			maan.VisualReactionToCloud(distanceMaanToCloud);
-			if (StaticData.playersAreLinked) {
-				_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 0, Time.deltaTime * 2);
-			} else {
-				_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 1, Time.deltaTime * 2);
+			if (FMODCollabPatch.fmodAvailable) {
+				if (StaticData.playersAreLinked) {
+					_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 0, Time.deltaTime * 2);
+				} else {
+					_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 1, Time.deltaTime * 2);
+				}
+				fmodCloudStateParameter.setValue(_fmodCloudState);
 			}
-			fmodCloudStateParameter.setValue(_fmodCloudState);
 		} else {
 			maan.VisualReactionToCloud(1000);
 		}
@@ -194,8 +200,10 @@ public class MaanManager : MonoBehaviour
 		cloudTrans = Instantiate(cloudPrefab, spawnPos, Quaternion.identity).transform;
 		cloud = cloudTrans.GetComponent<Cloud>();
 
-		RuntimeManager.AttachInstanceToGameObject(fmodCloudInstance, cloudTrans, cloudTrans.GetComponent<Rigidbody>());
-		fmodCloudInstance.start();
+		if (FMODCollabPatch.fmodAvailable) {
+			RuntimeManager.AttachInstanceToGameObject(fmodCloudInstance, cloudTrans, cloudTrans.GetComponent<Rigidbody>());
+			fmodCloudInstance.start();
+		}
 
 		float _riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < _riseTime; t += Time.deltaTime) {
@@ -206,13 +214,15 @@ public class MaanManager : MonoBehaviour
 
 	void KattoeMusic ()
 	{
-		if (!fmodKattoeMusicPlaying && maan.KattoesBonded >= kattoeMusicThreshold) {
-			fmodKattoeMusicPlaying = true;
-			fmodKattoeMusicInstance.start();
-		}
-		if (fmodKattoeMusicPlaying && maan.KattoesBonded < kattoeMusicThreshold) {
-			fmodKattoeMusicPlaying = false;
-			fmodKattoeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+		if (FMODCollabPatch.fmodAvailable) {
+			if (!fmodKattoeMusicPlaying && maan.KattoesBonded >= kattoeMusicThreshold) {
+				fmodKattoeMusicPlaying = true;
+				fmodKattoeMusicInstance.start();
+			}
+			if (fmodKattoeMusicPlaying && maan.KattoesBonded < kattoeMusicThreshold) {
+				fmodKattoeMusicPlaying = false;
+				fmodKattoeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+			}
 		}
 	}
 }

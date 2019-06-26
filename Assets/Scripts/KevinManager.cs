@@ -43,6 +43,11 @@ public class KevinManager : MonoBehaviour
 
 	GameObject[] pickupFeedbackPool = new GameObject[numberOfDrivers];
 
+	//FMOD
+	string fmodKevinPickupEvent = "event:/Kevin/Pick-up";
+	string fmodDriverPickupEvent = "event:/Kevin/Pick-up_Opponent";
+	FMOD.Studio.EventInstance fmodPickupInstance;
+
 	public void Init (Transform[] trackPieces, Kevin kevin)
 	{
 		this.trackPieces = trackPieces;
@@ -112,7 +117,7 @@ public class KevinManager : MonoBehaviour
 			leaderboardCards[driver] = leaderboard.GetChild(driver).GetComponent<RectTransform>();
 			scoreHighlights[driver] = leaderboardCards[driver].GetComponent<LeaderboardCard>().highlightImage;
 			scoreDisplays[driver] = new Text[3];
-			for (int i=0; i<3; i++) {
+			for (int i = 0; i < 3; i++) {
 				scoreDisplays[driver][i] = leaderboardCards[driver].GetComponent<LeaderboardCard>().scoreTexts[i];
 			}
 
@@ -143,9 +148,7 @@ public class KevinManager : MonoBehaviour
 		DriverSpeedFlux();
 	}
 
-	string fmodKevinPickupEvent = "event:/Kevin/Pick-up";
-	string fmodDriverPickupEvent = "event:/Kevin/Pick-up_Opponent";
-	FMOD.Studio.EventInstance fmodPickupInstance;
+
 
 	public void PickUpPickup (int driverIndex, int pickupIndex)
 	{
@@ -159,14 +162,18 @@ public class KevinManager : MonoBehaviour
 				feedbackGO.SetActive(true);
 				if (driverIndex != 5) {
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, driverAgents[driverIndex].transform));
-					if (Vector3.Distance(kevin.transform.position, driverAgents[driverIndex].transform.position) < 45) {
-						fmodPickupInstance = RuntimeManager.CreateInstance(fmodDriverPickupEvent);
-						fmodPickupInstance.start();
+					if (FMODCollabPatch.fmodAvailable) {
+						if (Vector3.Distance(kevin.transform.position, driverAgents[driverIndex].transform.position) < 45) {
+							fmodPickupInstance = RuntimeManager.CreateInstance(fmodDriverPickupEvent);
+							fmodPickupInstance.start();
+						}
 					}
 				} else {
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, kevin.transform));
-					fmodPickupInstance = RuntimeManager.CreateInstance(fmodKevinPickupEvent);
-					fmodPickupInstance.start();
+					if (FMODCollabPatch.fmodAvailable) {
+						fmodPickupInstance = RuntimeManager.CreateInstance(fmodKevinPickupEvent);
+						fmodPickupInstance.start();
+					}
 				}
 				break;
 			}
