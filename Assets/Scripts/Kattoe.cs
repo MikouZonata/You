@@ -52,6 +52,8 @@ public class Kattoe : MonoBehaviour
 
 	const float runAwaySpeed = 20, runAwayTime = 1.2f;
 
+	public GameObject callFeedbackPrefab;
+	GameObject callFeedback;
 	float callBasePitch, callPitchMax = 1.00f, callPitchMin = 0.00f;
 
 	Vector3 basePosition;
@@ -71,6 +73,7 @@ public class Kattoe : MonoBehaviour
 		maan = maanTrans.GetComponent<Maan>();
 		this.parentPiece = parentPiece;
 
+		callFeedback = Instantiate(callFeedbackPrefab,transform.position, transform.rotation, transform);
 		fmodCallInstance = RuntimeManager.CreateInstance(fmodCallPath);
 		fmodCallInstance.getParameter("Pitch", out fmodCallPitch);
 		fmodCallPitch.setValue(Random.Range(callPitchMin, callPitchMax));

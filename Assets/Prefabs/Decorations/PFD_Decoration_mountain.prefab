@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2940806584984234138}
   - component: {fileID: 7840707349601907729}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Stone_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2940806584984234138
 Transform:
@@ -89,12 +89,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7319272727915715294}
   - component: {fileID: 6895238593110907706}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Stone_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7319272727915715294
 Transform:
@@ -167,12 +167,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 379658584796676705}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Kevin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &379658584796676705
 Transform:
@@ -199,12 +199,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1265040448107487817}
   - component: {fileID: 1671598168063869790}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: TEX_Stone_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1265040448107487817
 Transform:
@@ -277,12 +277,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1038316978601444194}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Maan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1038316978601444194
 Transform:
@@ -315,7 +315,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6612899582975523132
 Transform:
@@ -345,8 +345,12 @@ PrefabInstance:
       value: mountain
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: aa4098079279a954cbc70475441158fd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: aa4098079279a954cbc70475441158fd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: aa4098079279a954cbc70475441158fd, type: 3}
       propertyPath: m_LocalPosition.x
