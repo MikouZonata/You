@@ -42,6 +42,7 @@ public class Kattoe : MonoBehaviour
 
 	public GameObject bondedFeedbackPrefab;
 	public GameObject bondedHeartsPrefab;
+	GameObject bondedHeartsGO;
 	float bondedFeedBackHeight = 2.2f;
 	bool bondedSetup = false;
 	Transform bondedTargetTrans;
@@ -223,7 +224,7 @@ public class Kattoe : MonoBehaviour
 					_bondedCallTimer = 0;
 					_bondedLeaveTimer = 0;
 					maan.EngagedByKattoe(this, false);
-					bondedHeartsPrefab = Instantiate(bondedHeartsPrefab, transform.position + transform.forward * .7f + Vector3.up * 1.7f, transform.rotation, transform);
+					bondedHeartsGO = Instantiate(bondedHeartsPrefab, transform.position + transform.forward * .7f + Vector3.up * 1.7f, transform.rotation, transform);
 					bondedSetup = true;
 				}
 
@@ -297,8 +298,8 @@ public class Kattoe : MonoBehaviour
 	{
 		behaviourState = BehaviourStates.RunningAway;
 		navMeshAgent.enabled = false;
-		if (bondedHeartsPrefab != null) {
-			Destroy(bondedHeartsPrefab);
+		if (bondedHeartsGO != null) {
+			Destroy(bondedHeartsGO);
 		}
 
 		Vector3 runningDirection;

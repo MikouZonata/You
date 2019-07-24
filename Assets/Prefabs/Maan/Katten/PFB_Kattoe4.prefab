@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 5442516513303751908}
   - component: {fileID: 2594678505719893568}
   - component: {fileID: 3009347998441270160}
-  - component: {fileID: 1895525066499772969}
-  - component: {fileID: 938994748483234379}
   m_Layer: 18
   m_Name: PFB_Kattoe4
   m_TagString: Untagged
@@ -75,49 +73,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
---- !u!135 &1895525066499772969
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3346738951180494059}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &938994748483234379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3346738951180494059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30730f5b1648246419d62c222708fa80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _audioClip: {fileID: 0}
-  _output: {fileID: 0}
-  _mute: 0
-  _bypassEffects: 0
-  _bypassListenerEffects: 0
-  _bypassReverbZone: 0
-  _playOnAwake: 0
-  _loop: 0
-  _priority: 128
-  _volume: 1
-  _pitch: 1
-  _reverbZoneMix: 1
-  _dopplerLevel: 1
-  _spread: 0
-  _volumeRolloff: 0
-  _minDistance: 1
-  _maxDistance: 500
-  OnlyPlayForClosestCamera: 0
 --- !u!1001 &4032461316773320428
 PrefabInstance:
   m_ObjectHideFlags: 0

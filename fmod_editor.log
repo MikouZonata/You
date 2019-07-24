@@ -7,13 +7,101 @@
 [LOG] OutputWASAPI::init                       : Output buffer size: 4096 samples, latency: 10.67ms, period: 10.00ms, DSP buffer: 1024 * 4
 [LOG] Thread::initThread                       : Init FMOD stream thread. Priority: 2, Stack Size: 65536, Semaphore: No, Sleep Time: 10, Looping: Yes.
 [LOG] Thread::initThread                       : Init FMOD mixer thread. Priority: 3, Stack Size: 49152, Semaphore: No, Sleep Time: 0, Looping: Yes.
-[LOG] AsyncManager::init                       : manager 0000000032BEE7C8 isAsync 0 updatePeriod 0.02
+[LOG] AsyncManager::init                       : manager 000000003FCCCBE8 isAsync 0 updatePeriod 0.02
 [LOG] AsyncManager::init                       : done
 [LOG] PlaybackSystem::init                     : 
 [LOG] Thread::initThread                       : Init FMOD Studio sample load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
 [LOG] PlaybackSystem::init                     : done
 [LOG] Thread::initThread                       : Init FMOD Studio bank load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
 [LOG] Manager::init                            : done.
+[LOG] Manager::readBank                        : fileversion = 99, compatVersion = 99 (oldest = 44, newest = 103)
+[LOG] SoundI::release                          :  (0000000033ADF738)
+[LOG] SoundI::release                          :     Leaves II (0000000034981AB8)
+[LOG] SoundI::release                          :  (0000000033ADFCF8)
+[LOG] SoundI::release                          :     Leaves III (0000000034982138)
+[LOG] SoundI::release                          :  (000000005E37AAC8)
+[LOG] SoundI::release                          :     Leaves IV (00000000349822D8)
+[LOG] SoundI::release                          :  (00000000347F9358)
+[LOG] SoundI::release                          :     Leaves V (00000000344257B8)
+[LOG] SoundI::release                          :  (000000005E37AC38)
+[LOG] SoundI::release                          :     Leaves VI (0000000034423A78)
+[LOG] SoundI::release                          :  (000000005E37B1F8)
+[LOG] SoundI::release                          :     Leaves VII (00000000344240F8)
+[LOG] SoundI::release                          :  (00000000347F9078)
+[LOG] SoundI::release                          :     Leaves VIII (0000000034425478)
+[LOG] SoundI::release                          :  (000000005E37B4D8)
+[LOG] SoundI::release                          :     Leaves I (0000000034424438)
+[LOG] SoundI::release                          :  (000000005E37B088)
+[LOG] SoundI::release                          :     Maan_Mts_1 (0000000034423F58)
+[LOG] SoundI::release                          :  (00000000347F8948)
+[LOG] SoundI::release                          :     Maan_Mts_2 (0000000034425138)
+[LOG] SoundI::release                          : Linked_Up_Shimmer (0000000044608B38)
+[LOG] SoundI::release                          :     Linked_Up_Shimmer (00000000387A1C18)
+[LOG] SoundI::release                          :     Linked_Up_Shimmer (00000000384CB468)
+[LOG] SoundI::release                          : Kevin Ambience Short (0000000021F99DA8)
+[LOG] SoundI::release                          :     Kevin Ambience Short (0000000034881FD8)
+[LOG] SoundI::release                          :     Kevin Ambience Short (000000004533D6B8)
+[LOG] SoundI::release                          : Birdies (00000000384CB618)
+[LOG] SoundI::release                          :     Birdies (0000000034881958)
+[LOG] SoundI::release                          :     Birdies (000000004533D508)
+[LOG] SoundI::release                          :  (0000000033ADF178)
+[LOG] SoundI::release                          :     Maan_Mts_3 (00000000387A2298)
+[LOG] SoundI::release                          :  (0000000033ADF008)
+[LOG] SoundI::release                          :     Maan_Mts_4 (00000000387A20F8)
+[LOG] SoundI::release                          :  (00000000347F8F08)
+[LOG] SoundI::release                          :     Maan_Mts_5 (00000000344252D8)
+[LOG] SoundI::release                          :  (0000000033ADF458)
+[LOG] SoundI::release                          :     Maan_Mts_6 (0000000034981778)
+[LOG] SoundI::release                          :  (0000000033ADF5C8)
+[LOG] SoundI::release                          :     Maan_Mts_7 (0000000034981918)
+[LOG] SoundI::release                          :  (00000000347D48F8)
+[LOG] SoundI::release                          :     Maan_Mts_8 (0000000034881C98)
+[LOG] SoundI::release                          :  (00000000347F87D8)
+[LOG] SoundI::release                          :     Maan_Mts_9 (0000000034424F98)
+[LOG] SoundI::release                          :  (00000000347F91E8)
+[LOG] SoundI::release                          :     Maan_Mts_10 (0000000034425618)
+[LOG] SoundI::release                          :  (00000000347D4788)
+[LOG] SoundI::release                          :     Cat_1 (0000000034881AF8)
+[LOG] SoundI::release                          :  (00000000347D4D48)
+[LOG] SoundI::release                          :     Cat_2 (0000000034882318)
+[LOG] SoundI::release                          :  (00000000347F94C8)
+[LOG] SoundI::release                          :     Cat_3 (00000000348817B8)
+[LOG] SoundI::release                          :  (00000000347D4A68)
+[LOG] SoundI::release                          :     Cat_4 (0000000034881E38)
+[LOG] SoundI::release                          :  (0000000033ADFB88)
+[LOG] SoundI::release                          :     Cat_5 (0000000034981F98)
+[LOG] SoundI::release                          :  (0000000033ADF2E8)
+[LOG] SoundI::release                          :     Cat_6 (00000000349815D8)
+[LOG] SoundI::release                          :  (000000005E37ADA8)
+[LOG] SoundI::release                          :     Cat_7 (0000000034423C18)
+[LOG] SoundI::release                          :  (000000005E37B368)
+[LOG] SoundI::release                          :     Cat_8 (0000000034424298)
+[LOG] SoundI::release                          :  (00000000347D4BD8)
+[LOG] SoundI::release                          :     Cat_9 (0000000034882178)
+[LOG] SoundI::release                          :  (00000000347F8AB8)
+[LOG] SoundI::release                          :     Cat_10 (0000000034424AB8)
+[LOG] SoundI::release                          :  (00000000347F8C28)
+[LOG] SoundI::release                          :     Cat_11 (0000000034424778)
+[LOG] SoundI::release                          :  (000000005E37AF18)
+[LOG] SoundI::release                          :     Cat_12 (0000000034423DB8)
+[LOG] SoundI::release                          :  (0000000033ADFA18)
+[LOG] SoundI::release                          :     Cat_13 (0000000034981DF8)
+[LOG] SoundI::release                          :  (0000000033ADF8A8)
+[LOG] SoundI::release                          :     Cat_14 (0000000034981C58)
+[LOG] SoundI::release                          :  (00000000347F8D98)
+[LOG] SoundI::release                          :     Cat_15 (0000000034424DF8)
+[LOG] SoundI::release                          :  (0000000044605F48)
+[LOG] SoundI::release                          :     Cat_16 (00000000387A1F58)
+[LOG] SoundI::release                          :  (0000000044605DD8)
+[LOG] SoundI::release                          :     Cat_17 (00000000387A1DB8)
+[LOG] Thread::callback                         : FMOD Studio update thread finished.
+[LOG] Thread::callback                         : FMOD Studio bank load thread finished.
+[LOG] Thread::callback                         : FMOD Studio sample load thread finished.
+[LOG] LiveUpdate::release                      : 
+[LOG] LiveUpdate::reset                        : Reset connection (reason Disconnected)
+[LOG] Thread::callback                         : FMOD stream thread finished.
+[LOG] Thread::callback                         : FMOD mixer thread finished.
+[LOG] SystemI::close                           : Closed.
 [LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
 [LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
 [LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
@@ -27,4 +115,6 @@
 [LOG] LiveUpdate::reset                        : Reset connection (reason Disconnected)
 [LOG] Thread::callback                         : FMOD stream thread finished.
 [LOG] Thread::callback                         : FMOD mixer thread finished.
+[LOG] Thread::callback                         : FMOD nonblocking thread (0) finished.
+[LOG] Thread::callback                         : FMOD file thread finished.
 [LOG] SystemI::close                           : Closed.
