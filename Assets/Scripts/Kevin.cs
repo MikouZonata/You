@@ -95,6 +95,8 @@ public class Kevin : MonoBehaviour
 
 	public void Destroy ()
 	{
+		StopAllCoroutines();
+
 		fmodHoverInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 		Destroy(gameObject);
 	}

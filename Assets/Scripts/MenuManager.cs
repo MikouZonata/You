@@ -5,7 +5,7 @@ using XInputDotNetPure;
 
 public class MenuManager : MonoBehaviour
 {
-	GameManager manager;
+	GameManager _gameManager;
 	public GameObject kevinCanvas, maanCanvas;
 
 	GamePadState[] gamePadStates = new GamePadState[2];
@@ -13,22 +13,38 @@ public class MenuManager : MonoBehaviour
 	const float timeBeforeTimeOut = 3;
 	float _timer = 0;
 
+	private void Awake ()
+	{
+		_gameManager = GetComponent<GameManager>();
+	}
+
 	void Update ()
 	{
-		bool anyInputDetected = false;
-		for (int i = 0; i < 2; i++) {
-			gamePadStates[i] = GamePad.GetState((PlayerIndex) i);
+		if (!StaticData.menuActive) {
+			bool anyInputDetected = false;
+			for (int i = 0; i < 2; i++) {
+				gamePadStates[i] = GamePad.GetState((PlayerIndex) i);
 
-			if (AnyInput(gamePadStates[i]))
-				anyInputDetected = true;
-		}
+				if (AnyInput(gamePadStates[i]))
+					anyInputDetected = true;
+			}
 
-		if (anyInputDetected) {
-			_timer = 0;
+			if (anyInputDetected) {
+				_timer = 0;
+			} else {
+				_timer += Time.deltaTime;
+				if (_timer >= timeBeforeTimeOut) {
+					ActivateMenu();
+				}
+			}
 		} else {
-			_timer += Time.deltaTime;
-			if (_timer >= timeBeforeTimeOut) {
-				ActivateMenu();
+			for (int i = 0; i < 2; i++) {
+				gamePadStates[i] = GamePad.GetState((PlayerIndex) i);
+
+				if (AnyInput(gamePadStates[i])) {
+					DeactivateMenu();
+					return;
+				}
 			}
 		}
 	}
@@ -66,6 +82,13 @@ public class MenuManager : MonoBehaviour
 
 	void ActivateMenu ()
 	{
-		Debug.Log("Menu Activated");
+		_gameManager.ActivateMenu();
+		StaticData.menuActive = true;
+	}
+
+	void DeactivateMenu ()
+	{
+		_gameManager.DeactivateMenu();
+		StaticData.menuActive = false;
 	}
 }

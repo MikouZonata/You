@@ -100,7 +100,9 @@ public class Maan : MonoBehaviour
 
 	public void Destroy ()
 	{
-		Destroy(cameraTrans.gameObject);
+		StopAllCoroutines();
+
+		Destroy(cameraAnchorTrans.gameObject);
 		Destroy(pingParent.gameObject);
 
 		foreach (FMOD.Studio.EventInstance instance in fmodWhistleInstances) {

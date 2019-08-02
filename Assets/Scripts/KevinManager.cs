@@ -9,13 +9,14 @@ using FMODUnity;
 
 public class KevinManager : MonoBehaviour
 {
-	bool firstTimeSetup = true;
+	bool _firstTimeSetup = true;
 	public GameObject[] enemyDriverPrefabs;
 	public GameObject pickupPrefab, pickupFeedbackPrefab;
 	Transform pickupFeedbackParent;
 	const int numberOfDrivers = 6;
 	const int numberOfAiDrivers = 5;
 	Kevin _kevin;
+	Transform driverParent;
 	NavMeshAgent[] _driverAgents;
 	int[] driverTargets = new int[numberOfDrivers];
 
@@ -23,7 +24,7 @@ public class KevinManager : MonoBehaviour
 
 	Transform[] _trackPieces;
 
-	Transform leaderboard;
+	Transform _leaderboard;
 	RectTransform[] leaderboardCards;
 	string[] driverNames = new string[] { "Daniel", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 52, 46, 38, 31, 21 };
@@ -47,12 +48,12 @@ public class KevinManager : MonoBehaviour
 	string fmodDriverPickupEvent = "event:/Kevin/Pick-up_Opponent";
 	FMOD.Studio.EventInstance fmodPickupInstance;
 
-	public void Init (Transform[] trackPieces, Kevin kevin)
+	public void Init (Transform[] trackPieces, Kevin _kevin)
 	{
 		_trackPieces = trackPieces;
-		_kevin = kevin;
+		this._kevin = _kevin;
 
-		if (firstTimeSetup) {
+		if (_firstTimeSetup) {
 			//Maak alle pickups
 			_pickupPool = new Transform[trackPieces.Length];
 			GameObject pickupParent = new GameObject("PickupParent");
@@ -70,28 +71,24 @@ public class KevinManager : MonoBehaviour
 				pickupFeedbackPool[i].SetActive(false);
 			}
 
-			//Geef Kevin een naam die overeenkomt met zijn driverIndex
-			kevin.name = 5.ToString();
-
 			//Setup stuff voor leaderboard
 			leaderboardCards = new RectTransform[numberOfDrivers];
 			_scoreDisplays = new Text[numberOfDrivers][];
 			_scoreHighlights = new Image[numberOfDrivers];
 			_ranks = new int[numberOfDrivers];
 
-			//Setup ai driver speed flux
+			//Setup een parent voor de drivers en ai driver speed flux
+			driverParent = new GameObject("DriverParent").transform;
 			driverSpeedFluxTimers = new float[numberOfAiDrivers];
 			for (int i = 0; i < numberOfAiDrivers; i++) {
 				driverSpeedFluxTimers[i] = Random.Range(0, driverSpeedFluxWavelength);
 			}
 
-			firstTimeSetup = false;
+			_firstTimeSetup = false;
 		}
-
 
 		//Instantiate alle drivers
 		_driverAgents = new NavMeshAgent[numberOfAiDrivers];
-		GameObject driverParent = new GameObject("DriverParent");
 		for (int i = 0; i < numberOfAiDrivers; i++) {
 			_driverAgents[i] = Instantiate(Util.PickRandom(enemyDriverPrefabs), Util.PickRandom(trackPieces).position, Quaternion.identity, driverParent.transform).GetComponent<NavMeshAgent>();
 			_driverAgents[i].name = i.ToString();
@@ -103,15 +100,18 @@ public class KevinManager : MonoBehaviour
 			AssignNewPickup(i, true);
 		}
 
+		//Geef Kevin een naam die overeenkomt met zijn driverIndex
+		_kevin.name = "5";
+
 		//Vul het leaderboard met naampjes en stuff
-		leaderboard = kevin.leaderboardFrame;
+		_leaderboard = _kevin.leaderboardFrame;
 		_scores = new int[numberOfDrivers];
 		for (int i = 0; i < scoreDownTimers.Length; i++) {
 			scoreDownTimers[i] = 0;
 		}
 
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
-			leaderboardCards[driver] = leaderboard.GetChild(driver).GetComponent<RectTransform>();
+			leaderboardCards[driver] = _leaderboard.GetChild(driver).GetComponent<RectTransform>();
 			_scoreHighlights[driver] = leaderboardCards[driver].GetComponent<LeaderboardCard>().highlightImage;
 			_scoreDisplays[driver] = new Text[3];
 			for (int i = 0; i < 3; i++) {
@@ -132,17 +132,35 @@ public class KevinManager : MonoBehaviour
 		AddPointToScore(0);
 	}
 
-	void Update ()
+	public void Deactivate ()
 	{
-		//Check of een ai driver een pickup bereikt.
-		for (int i = 0; i < numberOfAiDrivers; i++) {
-			if ((_driverAgents[i].transform.position - _driverAgents[i].destination).sqrMagnitude < 1.5f) {
-				PickUpPickup(i, driverTargets[i]);
-			}
+		StopAllCoroutines();
+
+		foreach (NavMeshAgent agent in _driverAgents) {
+			Destroy(agent.gameObject);
+		}
+		foreach (Transform t in _pickupPool) {
+			t.gameObject.SetActive(false);
 		}
 
-		ScoreDownTimers();
-		DriverSpeedFlux();
+		fmodPickupInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
+		_kevin.Destroy();
+	}
+
+	void Update ()
+	{
+		if (!StaticData.menuActive) {
+			//Check of een ai driver een pickup bereikt.
+			for (int i = 0; i < numberOfAiDrivers; i++) {
+				if ((_driverAgents[i].transform.position - _driverAgents[i].destination).sqrMagnitude < 1.5f) {
+					PickUpPickup(i, driverTargets[i]);
+				}
+			}
+
+			ScoreDownTimers();
+			DriverSpeedFlux();
+		}
 	}
 
 
@@ -305,20 +323,6 @@ public class KevinManager : MonoBehaviour
 		}
 
 		_scoreHighlights[driverIndex].color = new Color(1, 1, 1, 0);
-	}
-
-	public void Deactivate ()
-	{
-		foreach (NavMeshAgent agent in _driverAgents) {
-			Destroy(agent.gameObject);
-		}
-		foreach (Transform t in _pickupPool) {
-			t.gameObject.SetActive(false);
-		}
-
-		fmodPickupInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-
-		_kevin.Destroy();
 	}
 }
 

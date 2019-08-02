@@ -19,8 +19,6 @@ public class GameManager : MonoBehaviour
 	MaanManager _maanManager;
 	Transform[] trackPieces;
 
-	bool menuActive = true;
-
 	//FMOD
 	string fmodLinkedPath = "event:/Linked_Up";
 	FMOD.Studio.EventInstance fmodLinkedInstance;
@@ -35,7 +33,12 @@ public class GameManager : MonoBehaviour
 	{
 		if (_firstTimeInit) {
 			Display.displays[0].Activate();
-			Display.displays[1].Activate();
+#if UNITY_EDITOR
+#else
+			if (Display.displays.Length > 0) {
+				Display.displays[1].Activate();
+			}
+#endif
 			Cursor.visible = false;
 
 			Transform trackPiecesParent = level.transform;
@@ -74,7 +77,7 @@ public class GameManager : MonoBehaviour
 
 	void Update ()
 	{
-		if (!menuActive) {
+		if (!StaticData.menuActive) {
 			if (Vector3.Distance(_kevin.transform.position, _maan.transform.position) <= StaticData.distanceToLink) {
 				StaticData.playersAreLinked = true;
 			} else {
@@ -94,13 +97,11 @@ public class GameManager : MonoBehaviour
 
 	public void ActivateMenu ()
 	{
-		menuActive = true;
 		DeactivateGame();
 	}
 
 	public void DeactivateMenu ()
 	{
-		menuActive = false;
 		Init();
 	}
 }
