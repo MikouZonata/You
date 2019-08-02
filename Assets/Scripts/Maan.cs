@@ -19,6 +19,7 @@ public class Maan : MonoBehaviour
 	Rigidbody rig;
 	Transform cameraAnchorTrans, cameraTrans;
 	Vector3 _velocity, _cameraRotation;
+	bool _firstTimeInit = true;
 
 	float movementSpeed = 17;
 
@@ -97,6 +98,18 @@ public class Maan : MonoBehaviour
 		this.otherPlayer = otherPlayer;
 	}
 
+	public void Destroy ()
+	{
+		Destroy(cameraTrans.gameObject);
+		Destroy(pingParent.gameObject);
+
+		foreach (FMOD.Studio.EventInstance instance in fmodWhistleInstances) {
+			instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+		}
+
+		Destroy(gameObject);
+	}
+
 	private void Update ()
 	{
 		gamePadState = GamePad.GetState(playerIndex);
@@ -108,10 +121,6 @@ public class Maan : MonoBehaviour
 
 		if (GetAButtonDown()) {
 			Ping();
-		}
-
-		if (gamePadState.Buttons.Back == ButtonState.Pressed) {
-			SceneManager.LoadScene(1);
 		}
 	}
 

@@ -10,90 +10,76 @@ using FMODUnity;
 
 public class GameManager : MonoBehaviour
 {
-	public enum DisplayModes { TwoMonitors, SplitScreen };
-	public DisplayModes displayMode = DisplayModes.TwoMonitors;
 	public GameObject level;
 	public GameObject kevinPrefab, maanPrefab;
-	Kevin kevin;
-	Maan maan;
-	KevinManager kevinManager;
-	MaanManager maanManager;
+	bool _firstTimeInit = true;
+	Kevin _kevin;
+	Maan _maan;
+	KevinManager _kevinManager;
+	MaanManager _maanManager;
 	Transform[] trackPieces;
+
+	bool menuActive = true;
 
 	//FMOD
 	string fmodLinkedPath = "event:/Linked_Up";
 	FMOD.Studio.EventInstance fmodLinkedInstance;
 	bool fmodLinkedPlaying = false;
 
-	private void Awake ()
+	void Awake ()
 	{
-		Cursor.visible = false;
+		Init();
+	}
 
-		Transform trackPiecesParent = level.transform;
-		trackPieces = new Transform[trackPiecesParent.childCount];
-		for (int i = 0; i < trackPieces.Length; i++) {
-			trackPieces[i] = trackPiecesParent.GetChild(i);
+	void Init ()
+	{
+		if (_firstTimeInit) {
+			Display.displays[0].Activate();
+			Display.displays[1].Activate();
+			Cursor.visible = false;
+
+			Transform trackPiecesParent = level.transform;
+			trackPieces = new Transform[trackPiecesParent.childCount];
+			for (int i = 0; i < trackPieces.Length; i++) {
+				trackPieces[i] = trackPiecesParent.GetChild(i);
+			}
+
+			_maanManager = GetComponent<MaanManager>();
+			_kevinManager = GetComponent<KevinManager>();
+
+			_firstTimeInit = false;
 		}
 
-		maan = (Instantiate(maanPrefab, new Vector3(-1, .05f, 0), Quaternion.identity).GetComponent<Maan>());
-		maan.playerIndex = (PlayerIndex) 0;
-		StaticData.playerTransforms[0] = maan.transform;
-		kevin = (Instantiate(kevinPrefab, new Vector3(1, .05f, 0), Quaternion.identity).GetComponent<Kevin>());
-		kevin.playerIndex = (PlayerIndex) 1;
-		StaticData.playerTransforms[1] = kevin.transform;
+		_maan = (Instantiate(maanPrefab, new Vector3(-1, .05f, 0), Quaternion.identity).GetComponent<Maan>());
+		_maan.playerIndex = (PlayerIndex) 0;
+		StaticData.playerTransforms[0] = _maan.transform;
+		_kevin = (Instantiate(kevinPrefab, new Vector3(1, .05f, 0), Quaternion.identity).GetComponent<Kevin>());
+		_kevin.playerIndex = (PlayerIndex) 1;
+		StaticData.playerTransforms[1] = _kevin.transform;
 
-		Camera[] maansCameras = maan.GetComponentsInChildren<Camera>();
-		Camera[] kevinsCameras = kevin.GetComponentsInChildren<Camera>();
-		Display.displays[0].Activate();
-		switch (displayMode) {
-			case DisplayModes.TwoMonitors:
-				if (Display.displays.Length > 1) {
-					Display.displays[1].Activate();
-				}
-				foreach (Camera c in maansCameras) {
-					c.rect = new Rect(0, 0, 1, 1);
-					c.targetDisplay = 0;
-				}
-				foreach (Camera c in kevinsCameras) {
-					c.rect = new Rect(0, 0, 1, 1);
-					c.targetDisplay = 1;
-				}
-				break;
-			case DisplayModes.SplitScreen:
-				foreach (Camera c in maansCameras) {
-					c.rect = new Rect(0, 0.5f, 1, .5f);
-					c.targetDisplay = 0;
-				}
-				foreach (Camera c in kevinsCameras) {
-					c.rect = new Rect(0, 0, 1, .5f);
-					c.targetDisplay = 0;
-				}
-				break;
-		}
+		_maan.Init(_maanManager, _kevin.transform);
+		_kevin.Init(_kevinManager, _maan.transform);
 
-		maanManager = GetComponent<MaanManager>();
-		kevinManager = GetComponent<KevinManager>();
-
-		maan.Init(maanManager, kevin.transform);
-		kevin.Init(kevinManager, maan.transform);
-
-		maanManager.Init(trackPieces, maan);
-		kevinManager.Init(trackPieces, kevin);
+		_maanManager.Init(trackPieces, _maan);
+		_kevinManager.Init(trackPieces, _kevin);
 
 		fmodLinkedInstance = RuntimeManager.CreateInstance(fmodLinkedPath);
 	}
 
-	private void Update ()
+	private void DeactivateGame ()
 	{
-		GamePadState[] gamePadStates = new GamePadState[4];
-		for (int i = 0; i < gamePadStates.Length; i++) {
-			gamePadStates[i] = GamePad.GetState((PlayerIndex) i);
-		}
+		_kevinManager.Deactivate();
+		_maanManager.Deactivate();
+	}
 
-		if (Vector3.Distance(kevin.transform.position, maan.transform.position) <= StaticData.distanceToLink) {
-			StaticData.playersAreLinked = true;
-		} else {
-			StaticData.playersAreLinked = false;
+	void Update ()
+	{
+		if (!menuActive) {
+			if (Vector3.Distance(_kevin.transform.position, _maan.transform.position) <= StaticData.distanceToLink) {
+				StaticData.playersAreLinked = true;
+			} else {
+				StaticData.playersAreLinked = false;
+			}
 		}
 
 		if (fmodLinkedPlaying && !StaticData.playersAreLinked) {
@@ -104,5 +90,17 @@ public class GameManager : MonoBehaviour
 			fmodLinkedPlaying = true;
 			fmodLinkedInstance.start();
 		}
+	}
+
+	public void ActivateMenu ()
+	{
+		menuActive = true;
+		DeactivateGame();
+	}
+
+	public void DeactivateMenu ()
+	{
+		menuActive = false;
+		Init();
 	}
 }

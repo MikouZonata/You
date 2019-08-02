@@ -93,6 +93,12 @@ public class Kevin : MonoBehaviour
 		this.otherPlayer = otherPlayer;
 	}
 
+	public void Destroy ()
+	{
+		fmodHoverInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+		Destroy(gameObject);
+	}
+
 	private void Update ()
 	{
 		gamePadState = GamePad.GetState(playerIndex);

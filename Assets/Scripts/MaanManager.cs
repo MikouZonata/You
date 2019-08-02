@@ -7,8 +7,9 @@ using FMODUnity;
 
 public class MaanManager : MonoBehaviour
 {
-	Transform[] trackPieces;
-	Maan maan;
+	Transform[] _trackPieces;
+	Maan _maan;
+	bool _firstTimeInit = true;
 
 	public GameObject[] kattoePrefabs;
 
@@ -56,8 +57,13 @@ public class MaanManager : MonoBehaviour
 
 	public void Init (Transform[] trackPieces, Maan maan)
 	{
-		this.trackPieces = trackPieces;
-		this.maan = maan;
+		if (_firstTimeInit) {
+			_trackPieces = trackPieces;
+
+			_firstTimeInit = false;
+		}
+
+		_maan = maan;
 
 		kattoeParent = new GameObject("KattoeParent").transform;
 
@@ -82,7 +88,7 @@ public class MaanManager : MonoBehaviour
 	Kattoe CreateKattoe (Transform parentPiece)
 	{
 		Kattoe newKattoe = Instantiate(Util.PickRandom(kattoePrefabs), parentPiece.position, Quaternion.identity).GetComponent<Kattoe>();
-		newKattoe.Init(this, maan.transform, parentPiece);
+		newKattoe.Init(this, _maan.transform, parentPiece);
 		newKattoe.transform.parent = kattoeParent;
 		return newKattoe;
 	}
@@ -97,9 +103,9 @@ public class MaanManager : MonoBehaviour
 	IEnumerator ReplaceKattoe ()
 	{
 		yield return new WaitForSeconds(9);
-		Transform pieceAttempt = Util.PickRandom(trackPieces);
+		Transform pieceAttempt = Util.PickRandom(_trackPieces);
 		while (occupiedPieces.Contains(pieceAttempt)) {
-			pieceAttempt = Util.PickRandom(trackPieces);
+			pieceAttempt = Util.PickRandom(_trackPieces);
 		}
 		kattoes.Add(CreateKattoe(pieceAttempt));
 	}
@@ -142,21 +148,21 @@ public class MaanManager : MonoBehaviour
 				}
 				_cloudChaseSpeed += cloudChaseAcceleration * Time.deltaTime;
 
-				float distanceCloudToMaan = Vector3.Distance(maan.transform.position, cloudTrans.position);
+				float distanceCloudToMaan = Vector3.Distance(_maan.transform.position, cloudTrans.position);
 				Vector3 _cloudPosition = cloudTrans.position;
 
 				_cloudPosition.y = Mathf.MoveTowards(_cloudPosition.y, cloudChasingHeight, cloudDescendSpeed * Time.deltaTime);
 
 				Vector2 lateralCloudPos = new Vector2(_cloudPosition.x, _cloudPosition.z);
-				lateralCloudPos = Vector2.MoveTowards(lateralCloudPos, new Vector2(maan.transform.position.x, maan.transform.position.z), _cloudChaseSpeed * Time.deltaTime);
+				lateralCloudPos = Vector2.MoveTowards(lateralCloudPos, new Vector2(_maan.transform.position.x, _maan.transform.position.z), _cloudChaseSpeed * Time.deltaTime);
 				_cloudPosition.x = lateralCloudPos.x;
 				_cloudPosition.z = lateralCloudPos.y;
 
 				cloudTrans.position = _cloudPosition;
-				cloudTrans.LookAt(maan.transform);
+				cloudTrans.LookAt(_maan.transform);
 
 				if (distanceCloudToMaan < cloudChasingDistanceToImpact) {
-					StartCoroutine(maan.FadeToBlack(
+					StartCoroutine(_maan.FadeToBlack(
 						StaticData.playersAreLinked ? cloudImpactFadeTimeGood : cloudImpactFadeTimeBad,
 						StaticData.playersAreLinked ? new Color(.55f, .6f, .6f) : Color.black));
 					Destroy(cloudTrans.gameObject);
@@ -174,8 +180,8 @@ public class MaanManager : MonoBehaviour
 	void CloudFeedback ()
 	{
 		if (cloudState != CloudStates.Dormant) {
-			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
-			maan.VisualReactionToCloud(distanceMaanToCloud);
+			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, _maan.transform.position);
+			_maan.VisualReactionToCloud(distanceMaanToCloud);
 			if (StaticData.playersAreLinked) {
 				_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 0, Time.deltaTime * 2);
 			} else {
@@ -183,14 +189,14 @@ public class MaanManager : MonoBehaviour
 			}
 			fmodCloudStateParameter.setValue(_fmodCloudState);
 		} else {
-			maan.VisualReactionToCloud(1000);
+			_maan.VisualReactionToCloud(1000);
 		}
 	}
 
 	IEnumerator SpawnCloud ()
 	{
 		Vector2 randomRadius = Random.insideUnitCircle.normalized * cloudSpawnDistance;
-		Vector3 spawnPos = new Vector3(maan.transform.position.x + randomRadius.x, cloudSpawningHeight, maan.transform.position.z + randomRadius.y);
+		Vector3 spawnPos = new Vector3(_maan.transform.position.x + randomRadius.x, cloudSpawningHeight, _maan.transform.position.z + randomRadius.y);
 		cloudTrans = Instantiate(cloudPrefab, spawnPos, Quaternion.identity).transform;
 		cloud = cloudTrans.GetComponent<Cloud>();
 
@@ -206,13 +212,19 @@ public class MaanManager : MonoBehaviour
 
 	void KattoeMusic ()
 	{
-		if (!fmodKattoeMusicPlaying && maan.KattoesBonded >= kattoeMusicThreshold) {
+		if (!fmodKattoeMusicPlaying && _maan.KattoesBonded >= kattoeMusicThreshold) {
 			fmodKattoeMusicPlaying = true;
 			fmodKattoeMusicInstance.start();
 		}
-		if (fmodKattoeMusicPlaying && maan.KattoesBonded < kattoeMusicThreshold) {
+		if (fmodKattoeMusicPlaying && _maan.KattoesBonded < kattoeMusicThreshold) {
 			fmodKattoeMusicPlaying = false;
 			fmodKattoeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 		}
+	}
+
+	public void Deactivate ()
+	{
+
+		_maan.Destroy();
 	}
 }

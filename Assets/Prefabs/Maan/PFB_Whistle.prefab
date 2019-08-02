@@ -28783,7 +28783,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3783534224250053605}
   - component: {fileID: 2036115539}
-  - component: {fileID: 7912514746694127071}
   m_Layer: 0
   m_Name: PFB_Whistle
   m_TagString: Untagged
@@ -28844,36 +28843,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7912514746694127071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3783534224250053606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30730f5b1648246419d62c222708fa80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _audioClip: {fileID: 0}
-  _output: {fileID: 0}
-  _mute: 0
-  _bypassEffects: 0
-  _bypassListenerEffects: 0
-  _bypassReverbZone: 0
-  _playOnAwake: 1
-  _loop: 0
-  _priority: 128
-  _volume: 0.45
-  _pitch: 1
-  _reverbZoneMix: 1
-  _dopplerLevel: 1
-  _spread: 0
-  _volumeRolloff: 0
-  _minDistance: 1
-  _maxDistance: 500
-  OnlyPlayForClosestCamera: 0
 --- !u!1 &3783534224321692341
 GameObject:
   m_ObjectHideFlags: 0

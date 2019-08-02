@@ -184,7 +184,6 @@ GameObject:
   - component: {fileID: 2607124934051973270}
   - component: {fileID: 3262953133007772231}
   - component: {fileID: 1079611210394075096}
-  - component: {fileID: 1798592876730084842}
   m_Layer: 15
   m_Name: PFB_Maan
   m_TagString: PlayerOne
@@ -286,19 +285,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.55, z: 0}
---- !u!135 &1798592876730084842
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2607124934051973264}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2639070368847424931
 GameObject:
   m_ObjectHideFlags: 0
