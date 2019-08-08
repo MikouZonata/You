@@ -28,7 +28,8 @@ public class Kevin : MonoBehaviour
 	public LineRenderer linkRenderer;
 
 	public Transform modelAnchor;
-	const float modelMaxForwardsAngle = 12, modelMaxSidewaysAngle = 9;
+	const float modelFatigueForwardsFactor = 18;
+	const float modelMaxForwardsAngle = 9, modelMaxSidewaysAngle = 9;
 	Vector3 _velocity = Vector3.zero;
 	float _triggerValue;
 	const float throttleMaxForwardSpeed = 28;
@@ -37,6 +38,7 @@ public class Kevin : MonoBehaviour
 
 	float _fatigue = .5f;
 	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
+	const float fatigueFirstPlacePenalty = .007f;
 	const float fatigueRechargePerPickup = 0.04f;
 	const float fatigueSlowFactorMin = .4f;
 	public GameObject fatigueSmokeGO;
@@ -164,7 +166,7 @@ public class Kevin : MonoBehaviour
 
 	void ModelRotation ()
 	{
-		float xRot = modelMaxForwardsAngle * gamePadState.Triggers.Right;
+		float xRot = _fatigue * modelFatigueForwardsFactor + modelMaxForwardsAngle * gamePadState.Triggers.Right;
 		float yRot = modelMaxSidewaysAngle * gamePadState.ThumbSticks.Left.X;
 		modelAnchor.rotation = transform.rotation * Quaternion.Euler(xRot, yRot, 0);
 	}
@@ -206,7 +208,7 @@ public class Kevin : MonoBehaviour
 		if (StaticData.playersAreLinked) {
 			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueRecoverRate * Time.deltaTime);
 		} else {
-			_fatigue = Mathf.MoveTowards(_fatigue, 1, fatigueIncreaseRate * Time.deltaTime);
+			_fatigue = Mathf.MoveTowards(_fatigue, 1, (fatigueIncreaseRate + (manager.GetKevinRank() == 0 ? fatigueFirstPlacePenalty : 0)) * Time.deltaTime );
 		}
 
 		if (!fatigueSmokePlaying && _fatigue > fatigueSmokeThreshold) {
@@ -282,5 +284,9 @@ public class Kevin : MonoBehaviour
 	public Transform GetTransform ()
 	{
 		return transform;
+	}
+	public float GetFatigue ()
+	{
+		return _fatigue;
 	}
 }

@@ -33,6 +33,7 @@ public class KevinManager : MonoBehaviour
 	int[] _ranks;
 	Text[][] _scoreDisplays;
 	Image[] _scoreHighlights;
+	Color scoreHightlightColor;
 
 	float[] scoreDownTimers = new float[numberOfDrivers];
 	float scoreDownBaseTime = 12, scoreDownTimePerPoint = .075f;
@@ -127,6 +128,7 @@ public class KevinManager : MonoBehaviour
 				_scores[driver] = 0;
 			}
 		}
+		scoreHightlightColor = _scoreHighlights[0].color;
 
 		//Add 1 punt zodat het scoreboard zichzelf formateert.
 		AddPointToScore(0);
@@ -167,7 +169,6 @@ public class KevinManager : MonoBehaviour
 
 	public void PickUpPickup (int driverIndex, int pickupIndex)
 	{
-
 		//Verwijder oude pickup.
 		_pickupPool[pickupIndex].gameObject.SetActive(false);
 
@@ -274,7 +275,7 @@ public class KevinManager : MonoBehaviour
 		}
 
 		//Update leaderboardCards naar hun juiste posities en vul strings in
-		float distanceBetweenCards = -52, rankTwoBasePosition = -8;
+		float distanceBetweenCards = -56, rankTwoBasePosition = -24;
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
 			if (_ranks[driver] == 0) {
 				leaderboardCards[driver].anchoredPosition = new Vector2(0, 0);
@@ -311,18 +312,23 @@ public class KevinManager : MonoBehaviour
 	//Als iemand een puntje haalt licht hun score counter even op
 	IEnumerator HighlightScore (int driverIndex)
 	{
-		float highlightAlpha = 1, highlightTime = .7f;
+		float highlightAlpha = .8f, highlightTime = .9f;
 
 		for (float t = 0; t < highlightTime * .5f; t += Time.deltaTime) {
-			_scoreHighlights[driverIndex].color = new Color(1, 1, 1, t * 2 / highlightTime * highlightAlpha);
+			_scoreHighlights[driverIndex].color = new Color(scoreHightlightColor.r, scoreHightlightColor.g, scoreHightlightColor.b, t * 2 / highlightTime * highlightAlpha);
 			yield return null;
 		}
 		for (float t = highlightTime * .5f; t > 0; t -= Time.deltaTime) {
-			_scoreHighlights[driverIndex].color = new Color(1, 1, 1, t * 2 / highlightTime * highlightAlpha);
+			_scoreHighlights[driverIndex].color = new Color(scoreHightlightColor.r, scoreHightlightColor.g, scoreHightlightColor.b, t * 2 / highlightTime * highlightAlpha);
 			yield return null;
 		}
 
-		_scoreHighlights[driverIndex].color = new Color(1, 1, 1, 0);
+		_scoreHighlights[driverIndex].color = new Color(scoreHightlightColor.r, scoreHightlightColor.g, scoreHightlightColor.b, 0);
+	}
+
+	public int GetKevinRank ()
+	{
+		return _ranks[5];
 	}
 }
 

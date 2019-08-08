@@ -13,7 +13,7 @@ public class MenuManager : MonoBehaviour
 	public Text[] titleDisplays, creditsDisplays, linesDisplays;
 	public Image[] faceDisplays;
 
-	const float menuActivationTime = 3;
+	const float menuActivationTime = 60;
 	float _menuActivationTimer = 0;
 
 	bool _cutscenePlaying = false;
