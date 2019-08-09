@@ -144,7 +144,6 @@ public class MenuManager : MonoBehaviour
 
 	public void ActivateMenu ()
 	{
-		Debug.Log("Menu Activated");
 		menuParent.SetActive(true);
 
 		for (int i = 0; i < 2; i++) {
@@ -164,7 +163,6 @@ public class MenuManager : MonoBehaviour
 
 	void DeactivateMenu ()
 	{
-		Debug.Log("Menu Deactivated");
 		_menuOpen = false;
 		menuParent.SetActive(false);
 

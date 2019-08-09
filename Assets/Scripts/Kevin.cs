@@ -13,7 +13,7 @@ public class Kevin : MonoBehaviour, ICharacter
 	public PlayerIndex playerIndex = PlayerIndex.Two;
 	GamePadState gamePadState;
 	KevinManager manager;
-	Transform otherPlayer;
+	Transform maan;
 	Rigidbody rig;
 
 	Camera mainCam;
@@ -70,7 +70,7 @@ public class Kevin : MonoBehaviour, ICharacter
 	float fmodHoverPitchThreshold = .65f;
 	bool fmodHoverPlaying = false;
 
-	public void Init (KevinManager manager, Transform otherPlayer)
+	public void Init (KevinManager manager, Transform maan)
 	{
 		gamePadState = GamePad.GetState(playerIndex);
 
@@ -100,7 +100,7 @@ public class Kevin : MonoBehaviour, ICharacter
 		fatigueSmokeGO.SetActive(false);
 
 		this.manager = manager;
-		this.otherPlayer = otherPlayer;
+		this.maan = maan;
 	}
 
 	public void Destroy ()
@@ -182,7 +182,7 @@ public class Kevin : MonoBehaviour, ICharacter
 	{
 		Vector3[] positions;
 		if (StaticData.playersAreLinked) {
-			positions = new Vector3[] { transform.position + Vector3.up, otherPlayer.position + Vector3.up };
+			positions = new Vector3[] { transform.position + Vector3.up, maan.position + Vector3.up };
 		} else {
 			positions = new Vector3[] { transform.position, transform.position };
 		}
@@ -282,6 +282,12 @@ public class Kevin : MonoBehaviour, ICharacter
 		//}
 
 		return result;
+	}
+
+	void ShowLove ()
+	{
+		Love love = Instantiate(lovePrefab, transform.position + Vector3.up, transform.rotation).GetComponent<Love>();
+		love.Init(maan);
 	}
 
 	IEnumerator Struggle ()

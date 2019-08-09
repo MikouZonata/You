@@ -432,9 +432,11 @@ MonoBehaviour:
   - {fileID: 7747989653987455845}
   - {fileID: 5382221553757228901}
   - {fileID: 8655384939510423349}
-  defaultPPProfile: {fileID: 11400000, guid: a82465324f4726b49871496130a89ff3, type: 2}
-  nearCloudPPProfile: {fileID: 11400000, guid: 0d273e0f6c137524da7baabbac34ebec, type: 2}
+  happyPPProfile: {fileID: 0}
+  sadPPProfile: {fileID: 0}
   fadeToBlackDisplay: {fileID: 1307387079112111319}
+  lovePrefab: {fileID: 6248528153568438144, guid: cabd3ed290bf61a45bf87e2befc2ab37,
+    type: 3}
 --- !u!114 &8470219772833119722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -702,7 +704,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3667308814959261173}
   - component: {fileID: 3915416928724239222}
-  - component: {fileID: 2699489069275806663}
   m_Layer: 8
   m_Name: MaanPostProcessing
   m_TagString: Untagged
@@ -718,7 +719,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4452590158633576232}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.41861, y: 0.5, z: -11.56406}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2607124934051973274}
@@ -737,23 +738,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sharedProfile: {fileID: 11400000, guid: a82465324f4726b49871496130a89ff3, type: 2}
-  isGlobal: 1
-  blendDistance: 0
-  weight: 1
-  priority: 0
---- !u!114 &2699489069275806663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4452590158633576232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 0d273e0f6c137524da7baabbac34ebec, type: 2}
   isGlobal: 1
   blendDistance: 0
   weight: 1

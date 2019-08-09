@@ -1485,6 +1485,8 @@ MonoBehaviour:
   modelAnchor: {fileID: 4431606092988745753}
   fatigueSmokeGO: {fileID: 4999632072804539486}
   leaderboardFrame: {fileID: 4739564086490765760}
+  lovePrefab: {fileID: 6248528153568438144, guid: cabd3ed290bf61a45bf87e2befc2ab37,
+    type: 3}
 --- !u!114 &3335190556768068890
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ public class Maan : MonoBehaviour, ICharacter
 	GamePadState gamePadState;
 	Vector2 _leftStickInput;
 	MaanManager manager;
-	Transform otherPlayer;
+	Transform kevin;
 	Rigidbody rig;
 	Transform cameraAnchorTrans, cameraTrans;
 	Vector3 _velocity, _cameraRotation;
@@ -32,9 +32,6 @@ public class Maan : MonoBehaviour, ICharacter
 	public LineRenderer linkRenderer;
 
 	Vector3 cameraDefaultPosition;
-	float screenShakeMaxIntensity = .14f, visualMaxDistanceToCloud = 55, visualReactionMinDistanceToCloud = 12;
-	float _screenShakeIntensity = 0, screenShakeIntensityGrowth = .18f;
-	float _postProcessingWeight, postProcessingWeightGrowth = .3f;
 
 	Transform modelTrans;
 	float _modelYAngle = 0;
@@ -56,10 +53,9 @@ public class Maan : MonoBehaviour, ICharacter
 		}
 	}
 
-	public PostProcessProfile defaultPPProfile, nearCloudPPProfile;
-	PostProcessVolume[] postProcessVolumes;
-
 	public Image fadeToBlackDisplay;
+
+	public GameObject lovePrefab;
 
 	//FMOD
 	string fmodWhistlePath = "event:/Maan/Calling_Cats_Maan";
@@ -67,7 +63,7 @@ public class Maan : MonoBehaviour, ICharacter
 	int _fmodWhistlePoolIndex = 0;
 	FMOD.Studio.EventInstance[] fmodWhistleInstances = new FMOD.Studio.EventInstance[fmodWhistlePoolSize];
 
-	public void Init (MaanManager manager, Transform otherPlayer)
+	public void Init (MaanManager manager, Transform kevin)
 	{
 		gamePadState = GamePad.GetState(playerIndex);
 
@@ -82,12 +78,6 @@ public class Maan : MonoBehaviour, ICharacter
 
 		modelTrans = transform.GetChild(0);
 
-		postProcessVolumes = GetComponentsInChildren<PostProcessVolume>();
-		postProcessVolumes[0].profile = defaultPPProfile;
-		postProcessVolumes[0].weight = 1;
-		postProcessVolumes[1].profile = nearCloudPPProfile;
-		postProcessVolumes[1].weight = 0;
-
 		fadeToBlackDisplay.enabled = false;
 
 		pingParent = new GameObject("PingFeedbackParent").transform;
@@ -99,7 +89,7 @@ public class Maan : MonoBehaviour, ICharacter
 		}
 
 		this.manager = manager;
-		this.otherPlayer = otherPlayer;
+		this.kevin = kevin;
 	}
 
 	public void Destroy ()
@@ -137,6 +127,10 @@ public class Maan : MonoBehaviour, ICharacter
 			gamePadState = new GamePadState();
 		_leftStickInput = new Vector2(gamePadState.ThumbSticks.Left.X, gamePadState.ThumbSticks.Left.Y);
 
+		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.B, playerIndex)) {
+			ShowLove();
+		}
+
 		CameraMovement();
 		ModelRotation();
 		ShowLink();
@@ -145,6 +139,8 @@ public class Maan : MonoBehaviour, ICharacter
 			Ping();
 		}
 	}
+
+	
 
 	void FixedUpdate ()
 	{
@@ -197,38 +193,17 @@ public class Maan : MonoBehaviour, ICharacter
 	{
 		Vector3[] positions;
 		if (StaticData.playersAreLinked) {
-			positions = new Vector3[] { transform.position + Vector3.up, otherPlayer.position + Vector3.up };
+			positions = new Vector3[] { transform.position + Vector3.up, kevin.position + Vector3.up };
 		} else {
 			positions = new Vector3[] { transform.position, transform.position };
 		}
 		linkRenderer.SetPositions(positions);
 	}
 
-	public void VisualReactionToCloud (float distanceMaanToCloud)
+	public void ScreenShake (float intensity)
 	{
-		float _targetIntensity;
-		float _targetPPWeight;
-		if (distanceMaanToCloud >= visualMaxDistanceToCloud) {
-			_targetIntensity = _targetPPWeight = 0;
-		} else if (distanceMaanToCloud <= visualReactionMinDistanceToCloud) {
-			_targetIntensity = screenShakeMaxIntensity;
-			_targetPPWeight = 1;
-		} else {
-			_targetIntensity = screenShakeMaxIntensity * (visualMaxDistanceToCloud - distanceMaanToCloud) / visualMaxDistanceToCloud;
-			_targetPPWeight = (visualMaxDistanceToCloud - distanceMaanToCloud) / visualMaxDistanceToCloud;
-		}
-
-		if (StaticData.playersAreLinked) {
-			_targetIntensity *= 0.08f;
-			_targetPPWeight *= .11f;
-		}
-
-		_screenShakeIntensity = Mathf.MoveTowards(_screenShakeIntensity, _targetIntensity, screenShakeIntensityGrowth * Time.deltaTime);
-		_postProcessingWeight = Mathf.MoveTowards(_postProcessingWeight, _targetPPWeight, postProcessingWeightGrowth * Time.deltaTime);
-
 		Vector3 screenShakeResult = new Vector3(Mathf.Sin(Time.time * 100), Mathf.Sin(Time.time * 120 + 1), 0);
-		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * _screenShakeIntensity;
-		postProcessVolumes[1].weight = _postProcessingWeight;
+		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * intensity;
 	}
 
 	public void EngagedByKattoe (Kattoe kattoe, bool engageOrDisengage)
@@ -287,6 +262,12 @@ public class Maan : MonoBehaviour, ICharacter
 
 		yield return new WaitForSeconds(2);
 		go.SetActive(false);
+	}
+
+	void ShowLove ()
+	{
+		Love love = Instantiate(lovePrefab, transform.position + Vector3.up, transform.rotation).GetComponent<Love>();
+		love.Init(kevin);
 	}
 
 	public Transform KattoeRequestFlockAnchor ()

@@ -59,7 +59,6 @@ public class PauseScreen : MonoBehaviour
 
 	public void Activate ()
 	{
-		Debug.Log("Pause Activated");
 		selectedOption = Options.Resume;
 		canvasParent.SetActive(true);
 		resumeIndicator.enabled = true;
@@ -69,7 +68,6 @@ public class PauseScreen : MonoBehaviour
 
 	void Deactivate ()
 	{
-		Debug.Log("Pause Deactivated");
 		canvasParent.SetActive(false);
 		character.DeactivatePause();
 		enabled = false;
