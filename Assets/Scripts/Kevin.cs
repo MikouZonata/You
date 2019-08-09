@@ -62,6 +62,8 @@ public class Kevin : MonoBehaviour, ICharacter
 	public Transform leaderboardFrame;
 
 	public GameObject lovePrefab;
+	bool _goingToLove = false;
+	bool _lovedOnPass = false;
 
 	//FMOD
 	string fmodHoverPath = "event:/Kevin/Hover_Engine";
@@ -124,6 +126,7 @@ public class Kevin : MonoBehaviour, ICharacter
 		CameraFoV();
 		ShowLink();
 		ModelRotation();
+		Loving();
 
 		if (!StaticData.playersAreLinked && rig.velocity.sqrMagnitude < 1) {
 			_struggleTimer += Time.deltaTime;
@@ -284,9 +287,28 @@ public class Kevin : MonoBehaviour, ICharacter
 		return result;
 	}
 
+	void Loving ()
+	{
+		if (!_lovedOnPass && _fatigue > .3f && StaticData.playersAreLinked) {
+			_lovedOnPass = true;
+			ShowLove();
+		}
+		if (_lovedOnPass && !StaticData.playersAreLinked)
+			_lovedOnPass = false;
+
+		if (!_goingToLove && _fatigue > .7f && StaticData.playersAreLinked)
+			_goingToLove = true;
+		if (_goingToLove && _fatigue < .2f && !StaticData.playersAreLinked) {
+			_goingToLove = false;
+			ShowLove();
+			ShowLove();
+			ShowLove();
+		}
+	}
+
 	void ShowLove ()
 	{
-		Love love = Instantiate(lovePrefab, transform.position + Vector3.up, transform.rotation).GetComponent<Love>();
+		Love love = Instantiate(lovePrefab, transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 1.5f, Random.Range(-1.0f, 1.0f)), transform.rotation).GetComponent<Love>();
 		love.Init(maan);
 	}
 

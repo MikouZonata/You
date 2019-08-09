@@ -32,6 +32,7 @@ public class Maan : MonoBehaviour, ICharacter
 	public LineRenderer linkRenderer;
 
 	Vector3 cameraDefaultPosition;
+	const float screenShakeIntensityFactor = .17f;
 
 	Transform modelTrans;
 	float _modelYAngle = 0;
@@ -56,6 +57,10 @@ public class Maan : MonoBehaviour, ICharacter
 	public Image fadeToBlackDisplay;
 
 	public GameObject lovePrefab;
+	const float loveMinTimebetweenLoveLinked = 2, loveMaxTimeBetweenLoveLinked = 4;
+	const float loveMinTimebetweenLoveUnlinked = 8, loveMaxTimeBetweenLoveUnlinked = 11;
+	float _loveTimer = 0, _loveTime = 0;
+	bool _wasLinked = false;
 
 	//FMOD
 	string fmodWhistlePath = "event:/Maan/Calling_Cats_Maan";
@@ -127,20 +132,15 @@ public class Maan : MonoBehaviour, ICharacter
 			gamePadState = new GamePadState();
 		_leftStickInput = new Vector2(gamePadState.ThumbSticks.Left.X, gamePadState.ThumbSticks.Left.Y);
 
-		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.B, playerIndex)) {
-			ShowLove();
-		}
-
 		CameraMovement();
 		ModelRotation();
 		ShowLink();
+		LoveClock();
 
 		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.A, playerIndex)) {
 			Ping();
 		}
 	}
-
-	
 
 	void FixedUpdate ()
 	{
@@ -200,10 +200,31 @@ public class Maan : MonoBehaviour, ICharacter
 		linkRenderer.SetPositions(positions);
 	}
 
+	void LoveClock ()
+	{
+		if (_wasLinked && !StaticData.playersAreLinked) {
+			_loveTime = Random.Range(loveMinTimebetweenLoveUnlinked, loveMaxTimeBetweenLoveUnlinked);
+		} else if (!_wasLinked && StaticData.playersAreLinked) {
+			_loveTime = Random.Range(loveMinTimebetweenLoveLinked, loveMaxTimeBetweenLoveLinked);
+			ShowLove();
+		}
+		_wasLinked = StaticData.playersAreLinked;
+
+		_loveTimer += Time.deltaTime;
+		if (_loveTimer > _loveTime) {
+			ShowLove();
+			if (StaticData.playersAreLinked)
+				_loveTime = Random.Range(loveMinTimebetweenLoveLinked, loveMaxTimeBetweenLoveLinked);
+			else
+				_loveTime = Random.Range(loveMinTimebetweenLoveUnlinked, loveMaxTimeBetweenLoveUnlinked);
+			_loveTimer = 0;
+		}
+	}
+
 	public void ScreenShake (float intensity)
 	{
 		Vector3 screenShakeResult = new Vector3(Mathf.Sin(Time.time * 100), Mathf.Sin(Time.time * 120 + 1), 0);
-		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * intensity;
+		cameraTrans.localPosition = cameraDefaultPosition + screenShakeResult * intensity * screenShakeIntensityFactor;
 	}
 
 	public void EngagedByKattoe (Kattoe kattoe, bool engageOrDisengage)
@@ -266,7 +287,7 @@ public class Maan : MonoBehaviour, ICharacter
 
 	void ShowLove ()
 	{
-		Love love = Instantiate(lovePrefab, transform.position + Vector3.up, transform.rotation).GetComponent<Love>();
+		Love love = Instantiate(lovePrefab, transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 2.5f, Random.Range(-1.0f, 1.0f)), cameraTrans.rotation).GetComponent<Love>();
 		love.Init(kevin);
 	}
 

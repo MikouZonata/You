@@ -8,8 +8,9 @@ public class Love : MonoBehaviour
 	public GameObject feedbackPrefab;
 	Transform targetTrans;
 	
-	const float loveFadeInTime = .2f;
-	const float loveMovementSpeed = 24;
+	const float fadeInTime = .2f;
+	const float acceleration = 5;
+	float _speed = 5;
 
 	public void Init (Transform targetTrans)
 	{
@@ -17,13 +18,18 @@ public class Love : MonoBehaviour
 		StartCoroutine(LoveRoutine());
 	}
 
+	private void Update ()
+	{
+		_speed += acceleration * Time.deltaTime;
+	}
+
 	IEnumerator LoveRoutine ()
 	{
 		StartCoroutine(LoveFadeIn(GetComponent<SpriteRenderer>()));
 
 		while (true) {
-			transform.position = Vector3.MoveTowards(transform.position, targetTrans.position + Vector3.up, loveMovementSpeed * Time.deltaTime);
-			transform.rotation = Quaternion.Lerp(transform.rotation, targetTrans.rotation, 3 * Time.deltaTime);
+			transform.position = Vector3.MoveTowards(transform.position, targetTrans.position + Vector3.up, _speed * Time.deltaTime);
+			transform.rotation = Quaternion.Lerp(transform.rotation, targetTrans.rotation, Time.deltaTime);
 
 			if (Util.SqrDistanceTo(transform.position, targetTrans.position + Vector3.up) < .5f) {
 				break;
@@ -39,7 +45,7 @@ public class Love : MonoBehaviour
 
 	IEnumerator LoveFadeIn (SpriteRenderer renderer)
 	{
-		float fadeTimeInverse = 1 / loveFadeInTime;
+		float fadeTimeInverse = 1 / fadeInTime;
 		renderer.color = new Color(1, 1, 1, 0);
 
 		for (float a = 0; a < 1; a += Time.deltaTime * fadeTimeInverse) {
@@ -57,6 +63,7 @@ public class Love : MonoBehaviour
 			yield return null;
 		}
 
+		yield return null;
 		Destroy(feedbackTrans.gameObject);
 		Destroy(gameObject);
 	}

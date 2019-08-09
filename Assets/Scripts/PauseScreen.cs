@@ -42,7 +42,9 @@ public class PauseScreen : MonoBehaviour
 		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.DPadUp, playerIndex) ||
 			XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.DPadDown, playerIndex) ||
 			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.Left, XInputDotNetExtender.Directions.Up, playerIndex) ||
-			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.Left, XInputDotNetExtender.Directions.Down, playerIndex)
+			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.Left, XInputDotNetExtender.Directions.Down, playerIndex) ||
+			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.Left, XInputDotNetExtender.Directions.Left, playerIndex) ||
+			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.Left, XInputDotNetExtender.Directions.Right, playerIndex)
 			) {
 			if (selectedOption == Options.Resume) {
 				selectedOption = Options.Quit;

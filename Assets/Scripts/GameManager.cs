@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
 				StaticData.playersAreLinked = false;
 			}
 
-			if (XInputDotNetExtender.instance.GetAnyButton(PlayerIndex.One) || XInputDotNetExtender.instance.GetAnyButton(PlayerIndex.Two)) {
+			if (XInputDotNetExtender.instance.GetAnyInput(PlayerIndex.One) || XInputDotNetExtender.instance.GetAnyInput(PlayerIndex.Two)) {
 				_deactivationTimer = 0;
 			}
 			_deactivationTimer += Time.deltaTime;

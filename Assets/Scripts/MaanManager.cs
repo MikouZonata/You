@@ -16,12 +16,15 @@ public class MaanManager : MonoBehaviour
 	float _happiness = 0;
 	const float happinessGrowthRate = .5f;
 	const float happinessWhenLinked = .5f;
-	const float happinessBadCloudFar = -.2f, happinessBadCloudNear = -1.4f;
+	const float happinessBadCloudFar = -.3f, happinessBadCloudNear = -1.1f;
 	const float happinessGoodCloudFar = -.1f, happinessGoodCloudNear = -.36f;
 	const float happinessCloudNearDistance = 12, happinessCloudFarDistance = 55;
 	const float happinessPerKattoe = 0.18f;
 	const float happinessScreenShakeThreshold = .3f;
 	const float happinessMusicThreshold = .3f;
+	const float happinessMusicMaxThreshold = .6f;
+	float _happinessMusicVolume = 0;
+	const float happinessMusicVolumeGrowthRate = .4f;
 
 	PostProcessVolume postProcessingVolume;
 	public PostProcessProfile ppHappyProfile;
@@ -31,7 +34,6 @@ public class MaanManager : MonoBehaviour
 	Transform kattoeParent;
 	List<Kattoe> kattoes;
 	List<Transform> occupiedPieces;
-	int kattoeMusicThreshold = 1;
 
 	public GameObject cloudPrefab;
 	Transform _cloudTrans;
@@ -43,7 +45,7 @@ public class MaanManager : MonoBehaviour
 
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
-	const float cloudMinTimeBeforeSpawn = 40, cloudMaxTimeBeforeSpawn = 84;
+	const float cloudMinTimeBeforeSpawn = 40, cloudMaxTimeBeforeSpawn = 8;
 	const float cloudSpawningHeight = 4;
 
 	bool cloudWaitingSetup = false;
@@ -56,7 +58,7 @@ public class MaanManager : MonoBehaviour
 	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .33f;
 	float cloudChasingHeight = 0;
 	float cloudChasingDistanceToImpact = 4;
-	float cloudImpactFadeTimeGood = 2, cloudImpactFadeTimeBad = 4f;
+	float cloudImpactFadeTimeGood = 0, cloudImpactFadeTimeBad = 4f;
 
 	//FMOD
 	string fmodCloudPath = "event:/Maan/Stress_Monster";
@@ -67,7 +69,6 @@ public class MaanManager : MonoBehaviour
 	string fmodKattoeMusicPath = "event:/Maan/Cat_Song";
 	FMOD.Studio.EventInstance fmodKattoeMusicInstance;
 	bool fmodKattoeMusicPlaying = false;
-
 
 	public void Init (Transform[] trackPieces, Maan maan)
 	{
@@ -96,6 +97,7 @@ public class MaanManager : MonoBehaviour
 		fmodCloudInstance = RuntimeManager.CreateInstance(fmodCloudPath);
 		fmodCloudInstance.getParameter("Stress", out fmodCloudStateParameter);
 		fmodKattoeMusicInstance = RuntimeManager.CreateInstance(fmodKattoeMusicPath);
+		fmodKattoeMusicInstance.start();
 	}
 
 	public void Deactivate ()
@@ -113,7 +115,6 @@ public class MaanManager : MonoBehaviour
 		if (!StaticData.menuActive) {
 			Cloud();
 			CloudFeedback();
-			KattoeMusic();
 			Happiness();
 		}
 	}
@@ -125,7 +126,7 @@ public class MaanManager : MonoBehaviour
 		//Kevin
 		if (StaticData.playersAreLinked)
 			targetHappiness += happinessWhenLinked;
-
+		
 		//Cloud
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(maan.transform.position, _cloudTrans.position);
@@ -142,11 +143,12 @@ public class MaanManager : MonoBehaviour
 					targetHappiness += happinessBadCloudNear;
 				}
 			} else {
-				float factor = distanceMaanToCloud / (happinessCloudFarDistance - happinessCloudNearDistance);
+				float factor = 1 - (distanceMaanToCloud - happinessCloudNearDistance) / (happinessCloudFarDistance - happinessCloudNearDistance);
+				Debug.Log("factor " + factor.ToString());
 				if (StaticData.playersAreLinked) {
-					targetHappiness += factor * (happinessGoodCloudNear - happinessGoodCloudFar);
+					targetHappiness += (factor * (happinessGoodCloudNear - happinessGoodCloudFar)) + happinessGoodCloudFar;
 				} else {
-					targetHappiness += factor * (happinessBadCloudNear - happinessBadCloudFar);
+					targetHappiness += (factor * (happinessBadCloudNear - happinessBadCloudFar)) + happinessBadCloudFar;
 				}
 			}
 		}
@@ -174,6 +176,18 @@ public class MaanManager : MonoBehaviour
 		} else {
 			maan.ScreenShake(0);
 		}
+
+		//KattoeMusic
+		float desiredVolume = 0;
+		if (_happiness < happinessMusicThreshold) {
+			desiredVolume = 0;
+		} else if (_happiness > happinessMusicMaxThreshold) {
+			desiredVolume = 1;
+		} else {
+			desiredVolume = .7f;
+		}
+		_happinessMusicVolume = Mathf.MoveTowards(_happinessMusicVolume, desiredVolume, happinessMusicVolumeGrowthRate * Time.deltaTime);
+		fmodKattoeMusicInstance.setVolume(_happinessMusicVolume);
 	}
 
 	Kattoe CreateKattoe (Transform parentPiece)
@@ -298,18 +312,6 @@ public class MaanManager : MonoBehaviour
 		for (float t = 0; t < _riseTime; t += Time.deltaTime) {
 			_cloudTrans.position += Vector3.up * cloudWaitingSpeed * Time.deltaTime;
 			yield return null;
-		}
-	}
-
-	void KattoeMusic ()
-	{
-		if (!fmodKattoeMusicPlaying && maan.KattoesBonded >= kattoeMusicThreshold) {
-			fmodKattoeMusicPlaying = true;
-			fmodKattoeMusicInstance.start();
-		}
-		if (fmodKattoeMusicPlaying && maan.KattoesBonded < kattoeMusicThreshold) {
-			fmodKattoeMusicPlaying = false;
-			fmodKattoeMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 		}
 	}
 }

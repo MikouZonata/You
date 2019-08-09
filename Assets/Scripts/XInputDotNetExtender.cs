@@ -209,5 +209,47 @@ namespace XInputDotNetPure
 
 			return false;
 		}
+
+		public bool GetAnyInput (PlayerIndex playerIndex)
+		{
+			int index = (int) playerIndex;
+
+			if (currentState[index].Buttons.A == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.B == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.X == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.Y == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.Start == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.Back == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.RightShoulder == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.LeftShoulder == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.LeftStick == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.RightStick == ButtonState.Pressed)
+				return true;
+			if (currentState[index].Buttons.Guide == ButtonState.Pressed)
+				return true;
+			if (currentState[index].ThumbSticks.Left.X != 0)
+				return true;
+			if (currentState[index].ThumbSticks.Left.Y != 0)
+				return true;
+			if (currentState[index].ThumbSticks.Right.X != 0)
+				return true;
+			if (currentState[index].ThumbSticks.Right.Y != 0)
+				return true;
+			if (currentState[index].Triggers.Left != 0)
+				return true;
+			if (currentState[index].Triggers.Right != 0)
+				return true;
+
+			return false;
+		}
 	}
 }
