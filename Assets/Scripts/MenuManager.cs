@@ -8,14 +8,12 @@ public class MenuManager : MonoBehaviour
 {
 	GamePadState[] gamePadStates = new GamePadState[2];
 
-	GameManager _gameManager;
+	GameManager gameManager;
 	GameObject menuParent;
 	public Text[] titleDisplays, creditsDisplays, linesDisplays;
 	public Image[] faceDisplays;
 
-	const float menuActivationTime = 60;
-	float _menuActivationTimer = 0;
-
+	bool _menuOpen = false;
 	bool _cutscenePlaying = false;
 	string[][] cutsceneLines = new string[2][];
 	string[] kevinLines = new string[] {
@@ -37,39 +35,25 @@ public class MenuManager : MonoBehaviour
 	float[] timesPerLine = new float[] { 2, 2.5f, 3.5f, 3.5f, 3, 4 };
 	const float lineFadeTime = .32f;
 
-	private void Awake ()
+	public void Init (GameManager gameManager)
 	{
-		_gameManager = GetComponent<GameManager>();
+		this.gameManager = gameManager;
 		menuParent = transform.GetChild(0).gameObject;
 		menuParent.SetActive(false);
 		cutsceneLines[0] = kevinLines;
 		cutsceneLines[1] = maanLines;
+
+		menuParent.SetActive(false);
+		enabled = false;
 	}
 
 	void Update ()
 	{
-		if (!StaticData.menuActive) {
-			bool anyInputDetected = false;
+		if (_menuOpen) {
 			for (int i = 0; i < 2; i++) {
-				gamePadStates[i] = GamePad.GetState((PlayerIndex) i);
-
-				if (AnyInput(gamePadStates[i]))
-					anyInputDetected = true;
-			}
-
-			if (anyInputDetected) {
-				_menuActivationTimer = 0;
-			} else {
-				_menuActivationTimer += Time.deltaTime;
-				if (_menuActivationTimer >= menuActivationTime) {
-					ActivateMenu();
-				}
-			}
-		} else {
-			for (int i = 0; i < 2; i++) {
-				gamePadStates[i] = GamePad.GetState((PlayerIndex) i);
-
-				if (!_cutscenePlaying && AnyInput(gamePadStates[i])) {
+				if (!_cutscenePlaying &&
+					(XInputDotNetExtender.instance.GetAnyButton(PlayerIndex.One) ||
+					XInputDotNetExtender.instance.GetAnyButton(PlayerIndex.Two))) {
 					_cutscenePlaying = true;
 					StartCoroutine(RunCutscene());
 					return;
@@ -78,34 +62,32 @@ public class MenuManager : MonoBehaviour
 		}
 	}
 
-	bool AnyInput (GamePadState state)
+	IEnumerator OpenMenu ()
 	{
-		if (state.Buttons.A == ButtonState.Pressed)
-			return true;
-		//if (state.Buttons.B == ButtonState.Pressed)
-		//	return true;
-		//if (state.Buttons.X == ButtonState.Pressed)
-		//	return true;
-		//if (state.Buttons.Y == ButtonState.Pressed)
-		//	return true;
-		//if (state.Buttons.Start == ButtonState.Pressed)
-		//	return true;
-		//if (state.Buttons.Back == ButtonState.Pressed)
-		//	return true;
-		if (state.ThumbSticks.Left.X != 0)
-			return true;
-		if (state.ThumbSticks.Left.Y != 0)
-			return true;
-		if (state.ThumbSticks.Right.X != 0)
-			return true;
-		if (state.ThumbSticks.Right.Y != 0)
-			return true;
-		if (state.Triggers.Left != 0)
-			return true;
-		if (state.Triggers.Right != 0)
-			return true;
+		for (int i = 0; i < 2; i++) {
+			linesDisplays[i].color = new Color(0, 0, 0, 0);
+			faceDisplays[i].color = new Color(1, 1, 1, 0);
+			titleDisplays[i].color = new Color(0, 0, 0, 0);
+			creditsDisplays[i].color = new Color(0, 0, 0, 0);
+		}
 
-		return false;
+		float fadeTimeInverse = 1 / lineFadeTime;
+		for (float a = 0; a < 1; a += Time.deltaTime * fadeTimeInverse) {
+			for (int i = 0; i < 2; i++) {
+				faceDisplays[i].color = new Color(1, 1, 1, a);
+				titleDisplays[i].color = new Color(0, 0, 0, a);
+				creditsDisplays[i].color = new Color(0, 0, 0, a);
+			}
+			yield return null;
+		}
+
+		for (int i = 0; i < 2; i++) {
+			faceDisplays[i].color = new Color(1, 1, 1, 1);
+			titleDisplays[i].color = new Color(0, 0, 0, 1);
+			creditsDisplays[i].color = new Color(0, 0, 0, 1);
+		}
+
+		_menuOpen = true;
 	}
 
 	IEnumerator RunCutscene ()
@@ -160,9 +142,9 @@ public class MenuManager : MonoBehaviour
 		_cutscenePlaying = false;
 	}
 
-	void ActivateMenu ()
+	public void ActivateMenu ()
 	{
-		_gameManager.ActivateMenu();
+		Debug.Log("Menu Activated");
 		menuParent.SetActive(true);
 
 		for (int i = 0; i < 2; i++) {
@@ -174,14 +156,20 @@ public class MenuManager : MonoBehaviour
 			linesDisplays[i].enabled = false;
 		}
 		_cutscenePlaying = false;
-		StaticData.menuActive = true;
+		_menuOpen = false;
+		StartCoroutine(OpenMenu());
+
+		enabled = true;
 	}
 
 	void DeactivateMenu ()
 	{
-		_gameManager.DeactivateMenu();
+		Debug.Log("Menu Deactivated");
+		_menuOpen = false;
 		menuParent.SetActive(false);
-		_menuActivationTimer = 0;
-		StaticData.menuActive = false;
+
+		gameManager.ActivateGame();
+
+		enabled = false;
 	}
 }

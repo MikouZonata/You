@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 using XInputDotNetPure;
 using Utility;
 using FMODUnity;
 
-public class Maan : MonoBehaviour
+public class Maan : MonoBehaviour, ICharacter
 {
 	[HideInInspector]
 	public PlayerIndex playerIndex = PlayerIndex.One;
@@ -19,7 +18,9 @@ public class Maan : MonoBehaviour
 	Rigidbody rig;
 	Transform cameraAnchorTrans, cameraTrans;
 	Vector3 _velocity, _cameraRotation;
-	bool _firstTimeInit = true;
+
+	PauseScreen pauseScreen;
+	bool pauseActive = true;
 
 	float movementSpeed = 17;
 
@@ -72,6 +73,9 @@ public class Maan : MonoBehaviour
 
 		rig = GetComponent<Rigidbody>();
 
+		pauseScreen = GetComponent<PauseScreen>();
+		ActivatePause();
+
 		cameraAnchorTrans = Instantiate(cameraPrefab, transform.position, transform.rotation).transform;
 		cameraTrans = cameraAnchorTrans.GetChild(0);
 		cameraDefaultPosition = cameraTrans.localPosition;
@@ -112,16 +116,32 @@ public class Maan : MonoBehaviour
 		Destroy(gameObject);
 	}
 
+	void ActivatePause ()
+	{
+		pauseScreen.Activate();
+		pauseActive = true;
+	}
+	public void DeactivatePause ()
+	{
+		pauseActive = false;
+	}
+
 	private void Update ()
 	{
-		gamePadState = GamePad.GetState(playerIndex);
+		if (!pauseActive) {
+			gamePadState = GamePad.GetState(playerIndex);
+			if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.Start, playerIndex)) {
+				ActivatePause();
+			}
+		} else
+			gamePadState = new GamePadState();
 		_leftStickInput = new Vector2(gamePadState.ThumbSticks.Left.X, gamePadState.ThumbSticks.Left.Y);
 
 		CameraMovement();
 		ModelRotation();
 		ShowLink();
 
-		if (GetAButtonDown()) {
+		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.A, playerIndex)) {
 			Ping();
 		}
 	}
@@ -228,7 +248,7 @@ public class Maan : MonoBehaviour
 		_fmodWhistlePoolIndex++;
 		if (_fmodWhistlePoolIndex >= fmodWhistlePoolSize)
 			_fmodWhistlePoolIndex = 0;
-		
+
 		for (int i = 0; i < pingFeedbackPool.Count; i++) {
 			if (!pingFeedbackPool[i].activeSelf) {
 				StartCoroutine(PingRoseRoutine(pingFeedbackPool[i]));
@@ -255,7 +275,7 @@ public class Maan : MonoBehaviour
 			yield return null;
 		}
 
-		pingRenderer.color = new Color(1,1,1,0);
+		pingRenderer.color = new Color(1, 1, 1, 0);
 	}
 	IEnumerator PingRoseRoutine (GameObject go)
 	{
@@ -297,26 +317,5 @@ public class Maan : MonoBehaviour
 			yield return null;
 		}
 		fadeToBlackDisplay.enabled = false;
-	}
-
-	bool AButtonReleased = true;
-	bool GetAButtonDown ()
-	{
-		if (AButtonReleased && gamePadState.Buttons.A == ButtonState.Pressed) {
-			AButtonReleased = false;
-			StartCoroutine(WaitForAButtonRelease());
-			return true;
-		} else
-			return false;
-	}
-	IEnumerator WaitForAButtonRelease ()
-	{
-		while (true) {
-			if (gamePadState.Buttons.A == ButtonState.Released) {
-				AButtonReleased = true;
-				break;
-			} else
-				yield return null;
-		}
 	}
 }

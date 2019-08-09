@@ -13,11 +13,15 @@ public class GameManager : MonoBehaviour
 	public GameObject level;
 	public GameObject kevinPrefab, maanPrefab;
 	bool _firstTimeInit = true;
-	Kevin _kevin;
-	Maan _maan;
-	KevinManager _kevinManager;
-	MaanManager _maanManager;
+	Kevin kevin;
+	Maan maan;
+	KevinManager kevinManager;
+	MaanManager maanManager;
+	MenuManager menuManager;
 	Transform[] trackPieces;
+
+	const int secondsBeforeDeactivation = 90;
+	float _deactivationTimer = 0;
 
 	//FMOD
 	string fmodLinkedPath = "event:/Linked_Up";
@@ -47,41 +51,66 @@ public class GameManager : MonoBehaviour
 				trackPieces[i] = trackPiecesParent.GetChild(i);
 			}
 
-			_maanManager = GetComponent<MaanManager>();
-			_kevinManager = GetComponent<KevinManager>();
+			maanManager = GetComponent<MaanManager>();
+			kevinManager = GetComponent<KevinManager>();
+			menuManager = GetComponent<MenuManager>();
 
 			_firstTimeInit = false;
 		}
 
-		_maan = (Instantiate(maanPrefab, new Vector3(-1, .05f, 0), Quaternion.identity).GetComponent<Maan>());
-		_maan.playerIndex = (PlayerIndex) 0;
-		StaticData.playerTransforms[0] = _maan.transform;
-		_kevin = (Instantiate(kevinPrefab, new Vector3(1, .05f, 0), Quaternion.identity).GetComponent<Kevin>());
-		_kevin.playerIndex = (PlayerIndex) 1;
-		StaticData.playerTransforms[1] = _kevin.transform;
+		maan = (Instantiate(maanPrefab, new Vector3(-1, .05f, 0), Quaternion.identity).GetComponent<Maan>());
+		maan.playerIndex = (PlayerIndex) 0;
+		StaticData.playerTransforms[0] = maan.transform;
+		kevin = (Instantiate(kevinPrefab, new Vector3(1, .05f, 0), Quaternion.identity).GetComponent<Kevin>());
+		kevin.playerIndex = (PlayerIndex) 1;
+		StaticData.playerTransforms[1] = kevin.transform;
 
-		_maan.Init(_maanManager, _kevin.transform);
-		_kevin.Init(_kevinManager, _maan.transform);
+		maan.Init(maanManager, kevin.transform);
+		kevin.Init(kevinManager, maan.transform);
 
-		_maanManager.Init(trackPieces, _maan);
-		_kevinManager.Init(trackPieces, _kevin);
+		maanManager.Init(trackPieces, maan);
+		kevinManager.Init(trackPieces, kevin);
+
+		menuManager.Init(this);
+		_deactivationTimer = 0;
+
+		maan.GetComponent<PauseScreen>().Init(this, maan, PlayerIndex.One);
+		kevin.GetComponent<PauseScreen>().Init(this, kevin, PlayerIndex.Two);
 
 		fmodLinkedInstance = RuntimeManager.CreateInstance(fmodLinkedPath);
 	}
 
-	private void DeactivateGame ()
+	public void DeactivateGame ()
 	{
-		_kevinManager.Deactivate();
-		_maanManager.Deactivate();
+		kevinManager.Deactivate();
+		maanManager.Deactivate();
+
+		menuManager.ActivateMenu();
+		StaticData.menuActive = true;
+	}
+
+	public void ActivateGame ()
+	{
+		Init();
+		StaticData.menuActive = false;
 	}
 
 	void Update ()
 	{
 		if (!StaticData.menuActive) {
-			if (Vector3.Distance(_kevin.transform.position, _maan.transform.position) <= StaticData.distanceToLink) {
+			if (Vector3.Distance(kevin.transform.position, maan.transform.position) <= StaticData.distanceToLink) {
 				StaticData.playersAreLinked = true;
 			} else {
 				StaticData.playersAreLinked = false;
+			}
+
+			if (XInputDotNetExtender.instance.GetAnyButton(PlayerIndex.One) || XInputDotNetExtender.instance.GetAnyButton(PlayerIndex.Two)) {
+				_deactivationTimer = 0;
+			}
+			_deactivationTimer += Time.deltaTime;
+			if (_deactivationTimer > secondsBeforeDeactivation) {
+				_deactivationTimer = 0;
+				DeactivateGame();
 			}
 		}
 
@@ -93,15 +122,5 @@ public class GameManager : MonoBehaviour
 			fmodLinkedPlaying = true;
 			fmodLinkedInstance.start();
 		}
-	}
-
-	public void ActivateMenu ()
-	{
-		DeactivateGame();
-	}
-
-	public void DeactivateMenu ()
-	{
-		Init();
 	}
 }

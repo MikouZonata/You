@@ -7,7 +7,7 @@ using XInputDotNetPure;
 using Utility;
 using FMODUnity;
 
-public class Kevin : MonoBehaviour
+public class Kevin : MonoBehaviour, ICharacter
 {
 	[HideInInspector]
 	public PlayerIndex playerIndex = PlayerIndex.Two;
@@ -24,6 +24,9 @@ public class Kevin : MonoBehaviour
 	ParticleSystem sideDriftParticles;
 	ParticleSystem.EmissionModule sideDriftEmissionModule;
 	float sideDriftDefaultEmission;
+
+	PauseScreen pauseScreen;
+	bool pauseActive = true;
 
 	public LineRenderer linkRenderer;
 
@@ -58,6 +61,8 @@ public class Kevin : MonoBehaviour
 
 	public Transform leaderboardFrame;
 
+	public GameObject lovePrefab;
+
 	//FMOD
 	string fmodHoverPath = "event:/Kevin/Hover_Engine";
 	FMOD.Studio.EventInstance fmodHoverInstance;
@@ -84,6 +89,9 @@ public class Kevin : MonoBehaviour
 		driftingSideAcceleration = (driftingMaxSideFactor - 1) / driftingTimeToMax;
 		driftingTurnAcceleration = (driftingMaxTurnFactor - 1) / driftingTimeToMax;
 
+		pauseScreen = GetComponent<PauseScreen>();
+		ActivatePause();
+
 		struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 
 		fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
@@ -105,7 +113,13 @@ public class Kevin : MonoBehaviour
 
 	private void Update ()
 	{
-		gamePadState = GamePad.GetState(playerIndex);
+		if (!pauseActive) {
+			gamePadState = GamePad.GetState(playerIndex);
+			if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.Start, playerIndex)) {
+				ActivatePause();
+			}
+		} else
+			gamePadState = new GamePadState();
 
 		CameraFoV();
 		ShowLink();
@@ -146,6 +160,17 @@ public class Kevin : MonoBehaviour
 			manager.PickUpPickup(Util.ToInt(transform.name), Util.ToInt(other.name));
 			_fatigue = Mathf.Clamp(_fatigue - fatigueRechargePerPickup, 0, 1);
 		}
+	}
+
+	void ActivatePause ()
+	{
+		pauseActive = true;
+		pauseScreen.Activate();
+	}
+
+	public void DeactivatePause ()
+	{
+		pauseActive = false;
 	}
 
 	void CameraFoV ()
@@ -208,7 +233,7 @@ public class Kevin : MonoBehaviour
 		if (StaticData.playersAreLinked) {
 			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueRecoverRate * Time.deltaTime);
 		} else {
-			_fatigue = Mathf.MoveTowards(_fatigue, 1, (fatigueIncreaseRate + (manager.GetKevinRank() == 0 ? fatigueFirstPlacePenalty : 0)) * Time.deltaTime );
+			_fatigue = Mathf.MoveTowards(_fatigue, 1, (fatigueIncreaseRate + (manager.GetKevinRank() == 0 ? fatigueFirstPlacePenalty : 0)) * Time.deltaTime);
 		}
 
 		if (!fatigueSmokePlaying && _fatigue > fatigueSmokeThreshold) {
