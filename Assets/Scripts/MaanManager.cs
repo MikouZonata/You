@@ -68,7 +68,6 @@ public class MaanManager : MonoBehaviour
 
 	string fmodKattoeMusicPath = "event:/Maan/Cat_Song";
 	FMOD.Studio.EventInstance fmodKattoeMusicInstance;
-	bool fmodKattoeMusicPlaying = false;
 
 	public void Init (Transform[] trackPieces, Maan maan)
 	{
@@ -286,15 +285,12 @@ public class MaanManager : MonoBehaviour
 	{
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
-			maan.ScreenShake(distanceMaanToCloud);
 			if (StaticData.playersAreLinked) {
 				_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 0, Time.deltaTime * 2);
 			} else {
 				_fmodCloudState = Mathf.MoveTowards(_fmodCloudState, 1, Time.deltaTime * 2);
 			}
 			fmodCloudStateParameter.setValue(_fmodCloudState);
-		} else {
-			maan.ScreenShake(1000);
 		}
 	}
 

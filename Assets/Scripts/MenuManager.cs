@@ -10,8 +10,8 @@ public class MenuManager : MonoBehaviour
 
 	GameManager gameManager;
 	GameObject menuParent;
-	public Text[] titleDisplays, creditsDisplays, linesDisplays;
-	public Image[] faceDisplays;
+	public Text[] creditsDisplays, linesDisplays;
+	public Image[] titleDisplays, faceDisplays;
 
 	bool _menuOpen = false;
 	bool _cutscenePlaying = false;
@@ -19,20 +19,16 @@ public class MenuManager : MonoBehaviour
 	string[] kevinLines = new string[] {
 		"Yo, ik ben Kevin.",
 		"Maan en ik zijn ruim 4 jaar samen.",
-		"Soms ben ik ervan overtuigd dat Maan het beste is dat mij ooit is overkomen.",
-		"Soms denk ik dat wij zo veel van elkaar verschillen dat wij gelukkiger zouden zijn met andere partners.",
-		"In deze game kunnen jullie ervaren hoe het is om ons te zijn.",
-		"Denken jullie dat wij bij elkaar passen?"
+		"Ik vergelijk mezelf constant met mijn peers en moet mezelf constant verbeteren.",
+		"Ik vraag mij af wat mijn mindset doet met Maan..."
 	};
 	string[] maanLines = new string[] {
 		"Hoi! Ik ben Maan :D",
 		"Kevin en ik zijn al 4 jaar samen (vet lang!)",
-		"Hij is vet leuk en lief ook al denkt hij zelf van niet.",
-		"Maar soms lijkt hij mij niet nodig te hebben en weet ik niet of hij wel van mij houdt...",
-		"In deze game kunnen jullie ervaren hoe het is om ons te zijn.",
-		"Denken jullie dat wij bij elkaar passen?"
+		"Ik probeer zo veel mogelijk in het moment te leven door te genieten van ALLES.",
+		"Ik zou dat graag willen delen met Kevin maar ik denk dat hij zichzelf dat niet doen :c"
 	};
-	float[] timesPerLine = new float[] { 2, 2.5f, 3.5f, 3.5f, 3, 4 };
+	float[] timesPerLine = new float[] { 2, 2.6f, 3.8f, 4 };
 	const float lineFadeTime = .32f;
 
 	public void Init (GameManager gameManager)
@@ -75,7 +71,7 @@ public class MenuManager : MonoBehaviour
 		for (float a = 0; a < 1; a += Time.deltaTime * fadeTimeInverse) {
 			for (int i = 0; i < 2; i++) {
 				faceDisplays[i].color = new Color(1, 1, 1, a);
-				titleDisplays[i].color = new Color(0, 0, 0, a);
+				titleDisplays[i].color = new Color(1, 1, 1, a);
 				creditsDisplays[i].color = new Color(0, 0, 0, a);
 			}
 			yield return null;
@@ -83,7 +79,7 @@ public class MenuManager : MonoBehaviour
 
 		for (int i = 0; i < 2; i++) {
 			faceDisplays[i].color = new Color(1, 1, 1, 1);
-			titleDisplays[i].color = new Color(0, 0, 0, 1);
+			titleDisplays[i].color = new Color(1, 1, 1, 1);
 			creditsDisplays[i].color = new Color(0, 0, 0, 1);
 		}
 
@@ -97,14 +93,14 @@ public class MenuManager : MonoBehaviour
 		for (float a = 1; a > 0; a -= Time.deltaTime * fadeTimeInverse) {
 			for (int i = 0; i < 2; i++) {
 				faceDisplays[i].color = new Color(1, 1, 1, a);
-				titleDisplays[i].color = new Color(0, 0, 0, a);
+				titleDisplays[i].color = new Color(1, 1, 1, a);
 				creditsDisplays[i].color = new Color(0, 0, 0, a);
 			}
 			yield return null;
 		}
 		for (int i = 0; i < 2; i++) {
 			faceDisplays[i].color = new Color(1, 1, 1, 0);
-			titleDisplays[i].color = new Color(0, 0, 0, 0);
+			titleDisplays[i].color = new Color(1, 1, 1, 0);
 			creditsDisplays[i].color = new Color(0, 0, 0, 0);
 		}
 
@@ -148,7 +144,7 @@ public class MenuManager : MonoBehaviour
 
 		for (int i = 0; i < 2; i++) {
 			titleDisplays[i].enabled = true;
-			titleDisplays[i].color = Color.black;
+			titleDisplays[i].color = Color.white;
 			creditsDisplays[i].enabled = true;
 			creditsDisplays[i].color = Color.black;
 			faceDisplays[i].color = Color.white;

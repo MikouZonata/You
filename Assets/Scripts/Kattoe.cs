@@ -24,7 +24,7 @@ public class Kattoe : MonoBehaviour
 
 	bool spottedSetup = false, spottedAdvancing = false;
 	Vector3 spottedMaanPosition, spottedTargetPosition;
-	float spottedMaxMaanDistanceTraveled = 5.6f;
+	float spottedMaxMaanDistanceTraveled = 6.2f;
 	float _spottedAdvanceTimer = 0, spottedAdvanceTime;
 	float _spottedMovingTimer = 0, spottedMovingTime;
 	const float spottedMinAdvanceTime = .8f, spottedMaxAdvanceTime = 3;
