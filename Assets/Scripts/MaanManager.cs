@@ -14,7 +14,7 @@ public class MaanManager : MonoBehaviour
 	public GameObject[] kattoePrefabs;
 
 	float _happiness = 0;
-	const float happinessGrowthRate = .5f;
+	const float happinessGrowthRate = .3f;
 	const float happinessWhenLinked = .5f;
 	const float happinessBadCloudFar = -.3f, happinessBadCloudNear = -1.1f;
 	const float happinessGoodCloudFar = -.1f, happinessGoodCloudNear = -.36f;
@@ -45,7 +45,7 @@ public class MaanManager : MonoBehaviour
 
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
-	const float cloudMinTimeBeforeSpawn = 40, cloudMaxTimeBeforeSpawn = 8;
+	const float cloudMinTimeBeforeSpawn = 54, cloudMaxTimeBeforeSpawn = 92;
 	const float cloudSpawningHeight = 4;
 
 	bool cloudWaitingSetup = false;
@@ -55,9 +55,9 @@ public class MaanManager : MonoBehaviour
 
 	bool cloudChaseSetup = false;
 	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
-	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .33f;
+	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .44f;
 	float cloudChasingHeight = 0;
-	float cloudChasingDistanceToImpact = 4;
+	float cloudChasingDistanceToImpact = 3;
 	float cloudImpactFadeTimeGood = 0, cloudImpactFadeTimeBad = 4f;
 
 	//FMOD
@@ -125,7 +125,7 @@ public class MaanManager : MonoBehaviour
 		//Kevin
 		if (StaticData.playersAreLinked)
 			targetHappiness += happinessWhenLinked;
-		
+
 		//Cloud
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(maan.transform.position, _cloudTrans.position);
@@ -266,9 +266,9 @@ public class MaanManager : MonoBehaviour
 				_cloudTrans.LookAt(maan.transform);
 
 				if (distanceCloudToMaan < cloudChasingDistanceToImpact) {
-					StartCoroutine(maan.FadeToBlack(
-						StaticData.playersAreLinked ? cloudImpactFadeTimeGood : cloudImpactFadeTimeBad,
-						StaticData.playersAreLinked ? new Color(.55f, .6f, .6f) : Color.black));
+					if (!StaticData.playersAreLinked) {
+						StartCoroutine(maan.FadeToBlack(cloudImpactFadeTimeBad, Color.black));
+					}
 					Destroy(_cloudTrans.gameObject);
 					cloudChaseSetup = false;
 					fmodCloudInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

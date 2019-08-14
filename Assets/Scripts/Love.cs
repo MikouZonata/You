@@ -9,8 +9,8 @@ public class Love : MonoBehaviour
 	Transform targetTrans;
 	
 	const float fadeInTime = .2f;
-	const float acceleration = 5;
-	float _speed = 5;
+	const float acceleration = 4.2f;
+	float _speed = 3;
 
 	public void Init (Transform targetTrans)
 	{

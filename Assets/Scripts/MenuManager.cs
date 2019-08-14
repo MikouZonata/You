@@ -24,9 +24,9 @@ public class MenuManager : MonoBehaviour
 	};
 	string[] maanLines = new string[] {
 		"Hoi! Ik ben Maan :D",
-		"Kevin en ik zijn al 4 jaar samen (vet lang!)",
+		"Kevin en ik zijn al vier jaar samen (vet lang!)",
 		"Ik probeer zo veel mogelijk in het moment te leven door te genieten van ALLES.",
-		"Ik zou dat graag willen delen met Kevin maar ik denk dat hij zichzelf dat niet doen :c"
+		"Ik zou dat graag willen delen met Kevin maar ik denk dat hij zichzelf dat niet laat doen :c"
 	};
 	float[] timesPerLine = new float[] { 2, 2.6f, 3.8f, 4 };
 	const float lineFadeTime = .32f;

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7508562203373725129}
   - component: {fileID: 8449532354957338360}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: PFB_KattoeBondedFeedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
