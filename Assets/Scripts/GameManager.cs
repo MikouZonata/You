@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
 	const int secondsBeforeDeactivation = 90;
 	float _deactivationTimer = 0;
 
+	const int secondsBeforeFirstCloud = 180;
+	const int secondsBeforeFatigue = 180;
+	float _pacingTimer = 0;
+
 	//FMOD
 	string fmodLinkedPath = "event:/Linked_Up";
 	FMOD.Studio.EventInstance fmodLinkedInstance;
@@ -92,6 +96,8 @@ public class GameManager : MonoBehaviour
 	public void ActivateGame ()
 	{
 		Init();
+		_pacingTimer = 0;
+		_deactivationTimer = 0;
 		StaticData.menuActive = false;
 	}
 
@@ -111,6 +117,14 @@ public class GameManager : MonoBehaviour
 			if (_deactivationTimer > secondsBeforeDeactivation) {
 				_deactivationTimer = 0;
 				DeactivateGame();
+			}
+
+			_pacingTimer += Time.deltaTime;
+			if (_pacingTimer >= secondsBeforeFirstCloud) {
+				maanManager.ActivateCloud();
+			}
+			if (_pacingTimer >= secondsBeforeFatigue) {
+				kevin.ActivateFatigue();
 			}
 		}
 

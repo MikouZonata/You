@@ -59,6 +59,9 @@ public class Love : MonoBehaviour
 	IEnumerator FeedbackFollowPlayer (Transform feedbackTrans)
 	{
 		for (float t = 0; t < 2.5f; t += Time.deltaTime) {
+			if (feedbackTrans == null)
+				break;
+
 			feedbackTrans.position = targetTrans.position + Vector3.up;
 			yield return null;
 		}

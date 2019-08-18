@@ -18,7 +18,7 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	Camera mainCam;
 	Transform mainCamTrans;
-	const float FoVBaseDegrees = 60, FoVDegreesPerVelocity = .3f;
+	const float FoVBaseDegrees = 60, FoVDegreesPerVelocity = .4f;
 	Quaternion mainCamDefaultRot;
 
 	ParticleSystem sideDriftParticles;
@@ -39,11 +39,13 @@ public class Kevin : MonoBehaviour, ICharacter
 	const float throttleAcceleration = 2, throttleNaturalDecceleration = 18;
 	float _speedPoint = 0, _throttleSpeed = 0;
 
-	float _fatigue = .5f;
+	bool overrideFatigue = false;
+	bool fatigueActive = false;
+	float _fatigue = 0f;
 	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
-	const float fatigueFirstPlacePenalty = .007f;
+	const float fatigueFirstPlacePenalty = .006f;
 	const float fatigueRechargePerPickup = 0.04f;
-	const float fatigueSlowFactorMin = .4f;
+	const float fatigueSlowFactorMin = .5f;
 	public GameObject fatigueSmokeGO;
 	bool fatigueSmokePlaying = false;
 	const float fatigueSmokeThreshold = .68f;
@@ -126,7 +128,8 @@ public class Kevin : MonoBehaviour, ICharacter
 		CameraFoV();
 		ShowLink();
 		ModelRotation();
-		Loving();
+		Fatigue();
+		//Loving();
 
 		if (!StaticData.playersAreLinked && rig.velocity.sqrMagnitude < 1) {
 			_struggleTimer += Time.deltaTime;
@@ -146,7 +149,6 @@ public class Kevin : MonoBehaviour, ICharacter
 		_triggerValue = gamePadState.Triggers.Right;
 
 		Throttle();
-		Fatigue();
 
 		_velocity.z = _throttleSpeed * FatigueSlowFactor();  //_boostSpeed;
 		_velocity.x = _steeringSideDrift;
@@ -233,10 +235,26 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	void Fatigue ()
 	{
-		if (StaticData.playersAreLinked) {
-			_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueRecoverRate * Time.deltaTime);
+		if (Input.GetKeyDown(KeyCode.F)) {
+			overrideFatigue = !overrideFatigue;
+		}
+
+		if (!overrideFatigue && fatigueActive) {
+			if (StaticData.playersAreLinked) {
+				_fatigue = Mathf.MoveTowards(_fatigue, 0, fatigueRecoverRate * Time.deltaTime);
+			} else {
+				_fatigue = Mathf.MoveTowards(_fatigue, 1, (fatigueIncreaseRate + (manager.GetKevinRank() == 0 ? fatigueFirstPlacePenalty : 0)) * Time.deltaTime);
+			}
 		} else {
-			_fatigue = Mathf.MoveTowards(_fatigue, 1, (fatigueIncreaseRate + (manager.GetKevinRank() == 0 ? fatigueFirstPlacePenalty : 0)) * Time.deltaTime);
+			if (Input.GetKey(KeyCode.LeftArrow)) {
+				_fatigue -= Time.deltaTime * .5f;
+			} else if (Input.GetKey(KeyCode.RightArrow)) {
+				_fatigue += Time.deltaTime * .5f;
+			}
+			if (gamePadState.Buttons.X == ButtonState.Pressed) {
+				_fatigue -= Time.deltaTime * .5f;
+			}
+			_fatigue = Mathf.Clamp(_fatigue, 0, 1);
 		}
 
 		if (!fatigueSmokePlaying && _fatigue > fatigueSmokeThreshold) {
@@ -334,6 +352,10 @@ public class Kevin : MonoBehaviour, ICharacter
 		_struggleVelocity = Vector3.zero;
 	}
 
+	public void ActivateFatigue ()
+	{
+		fatigueActive = true;
+	}
 	public Transform GetTransform ()
 	{
 		return transform;

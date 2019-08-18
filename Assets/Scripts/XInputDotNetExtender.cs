@@ -9,9 +9,9 @@ namespace XInputDotNetPure
 	{
 		public static XInputDotNetExtender instance;
 
-		GamePadState[] prevStates = new GamePadState[4], currentState = new GamePadState[4];
+		GamePadState[] prevStates = new GamePadState[4], currentStates = new GamePadState[4];
 		public enum Buttons { A, B, X, Y, Start, Back, RB, LB, LS, RS, Guide, DPadUp, DPadRight, DPadDown, DPadLeft };
-		public enum DirectionalInputs { Left, Right };
+		public enum DirectionalInputs { LeftStick, RightStick, DPad };
 		public enum Directions { Up, Right, Down, Left };
 
 		private void Awake ()
@@ -22,8 +22,8 @@ namespace XInputDotNetPure
 		private void Update ()
 		{
 			for (int i = 0; i < 4; i++) {
-				prevStates[i] = currentState[i];
-				currentState[i] = GamePad.GetState((PlayerIndex) i);
+				prevStates[i] = currentStates[i];
+				currentStates[i] = GamePad.GetState((PlayerIndex) i);
 			}
 		}
 
@@ -35,77 +35,77 @@ namespace XInputDotNetPure
 					Debug.Log("XInputDotNetExtender GetButtonDown() has been sent invalid arguments?");
 					return false;
 				case Buttons.A:
-					if (prevStates[index].Buttons.A == ButtonState.Released && currentState[index].Buttons.A == ButtonState.Pressed)
+					if (prevStates[index].Buttons.A == ButtonState.Released && currentStates[index].Buttons.A == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.B:
-					if (prevStates[index].Buttons.B == ButtonState.Released && currentState[index].Buttons.B == ButtonState.Pressed)
+					if (prevStates[index].Buttons.B == ButtonState.Released && currentStates[index].Buttons.B == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.X:
-					if (prevStates[index].Buttons.X == ButtonState.Released && currentState[index].Buttons.X == ButtonState.Pressed)
+					if (prevStates[index].Buttons.X == ButtonState.Released && currentStates[index].Buttons.X == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.Y:
-					if (prevStates[index].Buttons.Y == ButtonState.Released && currentState[index].Buttons.Y == ButtonState.Pressed)
+					if (prevStates[index].Buttons.Y == ButtonState.Released && currentStates[index].Buttons.Y == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.Start:
-					if (prevStates[index].Buttons.Start == ButtonState.Released && currentState[index].Buttons.Start == ButtonState.Pressed)
+					if (prevStates[index].Buttons.Start == ButtonState.Released && currentStates[index].Buttons.Start == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.Back:
-					if (prevStates[index].Buttons.Back == ButtonState.Released && currentState[index].Buttons.Back == ButtonState.Pressed)
+					if (prevStates[index].Buttons.Back == ButtonState.Released && currentStates[index].Buttons.Back == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.LB:
-					if (prevStates[index].Buttons.LeftShoulder == ButtonState.Released && currentState[index].Buttons.LeftShoulder == ButtonState.Pressed)
+					if (prevStates[index].Buttons.LeftShoulder == ButtonState.Released && currentStates[index].Buttons.LeftShoulder == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.RB:
-					if (prevStates[index].Buttons.RightShoulder == ButtonState.Released && currentState[index].Buttons.RightShoulder == ButtonState.Pressed)
+					if (prevStates[index].Buttons.RightShoulder == ButtonState.Released && currentStates[index].Buttons.RightShoulder == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.LS:
-					if (prevStates[index].Buttons.LeftStick == ButtonState.Released && currentState[index].Buttons.LeftStick == ButtonState.Pressed)
+					if (prevStates[index].Buttons.LeftStick == ButtonState.Released && currentStates[index].Buttons.LeftStick == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.RS:
-					if (prevStates[index].Buttons.RightStick == ButtonState.Released && currentState[index].Buttons.RightStick == ButtonState.Pressed)
+					if (prevStates[index].Buttons.RightStick == ButtonState.Released && currentStates[index].Buttons.RightStick == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.Guide:
-					if (prevStates[index].Buttons.Guide == ButtonState.Released && currentState[index].Buttons.Guide == ButtonState.Pressed)
+					if (prevStates[index].Buttons.Guide == ButtonState.Released && currentStates[index].Buttons.Guide == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.DPadUp:
-					if (prevStates[index].DPad.Up == ButtonState.Released && currentState[index].DPad.Up == ButtonState.Pressed)
+					if (prevStates[index].DPad.Up == ButtonState.Released && currentStates[index].DPad.Up == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.DPadRight:
-					if (prevStates[index].DPad.Right == ButtonState.Released && currentState[index].DPad.Right == ButtonState.Pressed)
+					if (prevStates[index].DPad.Right == ButtonState.Released && currentStates[index].DPad.Right == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.DPadDown:
-					if (prevStates[index].DPad.Down == ButtonState.Released && currentState[index].DPad.Down == ButtonState.Pressed)
+					if (prevStates[index].DPad.Down == ButtonState.Released && currentStates[index].DPad.Down == ButtonState.Pressed)
 						return true;
 					else
 						return false;
 				case Buttons.DPadLeft:
-					if (prevStates[index].DPad.Left == ButtonState.Released && currentState[index].DPad.Left == ButtonState.Pressed)
+					if (prevStates[index].DPad.Left == ButtonState.Released && currentStates[index].DPad.Left == ButtonState.Pressed)
 						return true;
 					else
 						return false;
@@ -113,61 +113,87 @@ namespace XInputDotNetPure
 			}
 		}
 
-		public bool GetDirectionDown (DirectionalInputs input, Directions direction, PlayerIndex playerIndex)
+		public bool GetDirectionDown (DirectionalInputs input, Directions direction, PlayerIndex playerIndex, float stickDeadzone = .12f)
 		{
 			int index = (int) playerIndex;
 			switch (input) {
 				default:
 					Debug.Log("XInputDotNetExtender GetDirectionDown() has been sent invalid arguments?");
 					return false;
-				case DirectionalInputs.Left:
+				case DirectionalInputs.LeftStick:
 					switch (direction) {
 						default:
 							Debug.Log("XInputDotNetExtender GetDirectionDown() has been sent invalid arguments?");
 							return false;
 						case Directions.Up:
-							if (prevStates[index].ThumbSticks.Left.Y <= 0 && currentState[index].ThumbSticks.Left.Y > 0)
+							if (prevStates[index].ThumbSticks.Left.Y < stickDeadzone && currentStates[index].ThumbSticks.Left.Y >= stickDeadzone)
 								return true;
 							else
 								return false;
 						case Directions.Right:
-							if (prevStates[index].ThumbSticks.Left.X <= 0 && currentState[index].ThumbSticks.Left.X > 0)
+							if (prevStates[index].ThumbSticks.Left.X < stickDeadzone && currentStates[index].ThumbSticks.Left.X >= stickDeadzone)
 								return true;
 							else
 								return false;
 						case Directions.Down:
-							if (prevStates[index].ThumbSticks.Left.Y >= 0 && currentState[index].ThumbSticks.Left.Y < 0)
+							if (prevStates[index].ThumbSticks.Left.Y > -stickDeadzone && currentStates[index].ThumbSticks.Left.Y <= -stickDeadzone)
 								return true;
 							else
 								return false;
 						case Directions.Left:
-							if (prevStates[index].ThumbSticks.Left.X >= 0 && currentState[index].ThumbSticks.Left.X < 0)
+							if (prevStates[index].ThumbSticks.Left.X > -stickDeadzone && currentStates[index].ThumbSticks.Left.X <= -stickDeadzone)
 								return true;
 							else
 								return false;
 					}
-				case DirectionalInputs.Right:
+				case DirectionalInputs.RightStick:
 					switch (direction) {
 						default:
 							Debug.Log("XInputDotNetExtender GetDirectionDown() has been sent invalid arguments?");
 							return false;
 						case Directions.Up:
-							if (prevStates[index].ThumbSticks.Right.Y <= 0 && currentState[index].ThumbSticks.Right.Y > 0)
+							if (prevStates[index].ThumbSticks.Right.Y < stickDeadzone && currentStates[index].ThumbSticks.Right.Y >= stickDeadzone)
 								return true;
 							else
 								return false;
 						case Directions.Right:
-							if (prevStates[index].ThumbSticks.Right.X <= 0 && currentState[index].ThumbSticks.Right.X > 0)
+							if (prevStates[index].ThumbSticks.Right.X < stickDeadzone && currentStates[index].ThumbSticks.Right.X >= stickDeadzone)
 								return true;
 							else
 								return false;
 						case Directions.Down:
-							if (prevStates[index].ThumbSticks.Right.Y >= 0 && currentState[index].ThumbSticks.Right.Y < 0)
+							if (prevStates[index].ThumbSticks.Right.Y > -stickDeadzone && currentStates[index].ThumbSticks.Right.Y <= -stickDeadzone)
 								return true;
 							else
 								return false;
 						case Directions.Left:
-							if (prevStates[index].ThumbSticks.Right.X >= 0 && currentState[index].ThumbSticks.Right.X < 0)
+							if (prevStates[index].ThumbSticks.Right.X > -stickDeadzone && currentStates[index].ThumbSticks.Right.X <= -stickDeadzone)
+								return true;
+							else
+								return false;
+					}
+				case DirectionalInputs.DPad:
+					switch (direction) {
+						default:
+							Debug.Log("XInputDotNetExtender GetDirectionDown() has been sent invalid arguments?");
+							return false;
+						case Directions.Up:
+							if (prevStates[index].DPad.Up == ButtonState.Released && currentStates[index].DPad.Up == ButtonState.Pressed)
+								return true;
+							else
+								return false;
+						case Directions.Right:
+							if (prevStates[index].DPad.Right == ButtonState.Released && currentStates[index].DPad.Right == ButtonState.Pressed)
+								return true;
+							else
+								return false;
+						case Directions.Down:
+							if (prevStates[index].DPad.Down == ButtonState.Released && currentStates[index].DPad.Down == ButtonState.Pressed)
+								return true;
+							else
+								return false;
+						case Directions.Left:
+							if (prevStates[index].DPad.Left == ButtonState.Released && currentStates[index].DPad.Left == ButtonState.Pressed)
 								return true;
 							else
 								return false;
@@ -184,69 +210,69 @@ namespace XInputDotNetPure
 		{
 			int index = (int) playerIndex;
 
-			if (currentState[index].Buttons.A == ButtonState.Pressed)
+			if (currentStates[index].Buttons.A == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.B == ButtonState.Pressed)
+			if (currentStates[index].Buttons.B == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.X == ButtonState.Pressed)
+			if (currentStates[index].Buttons.X == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Y == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Y == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Start == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Start == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Back == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Back == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.RightShoulder == ButtonState.Pressed)
+			if (currentStates[index].Buttons.RightShoulder == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.LeftShoulder == ButtonState.Pressed)
+			if (currentStates[index].Buttons.LeftShoulder == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.LeftStick == ButtonState.Pressed)
+			if (currentStates[index].Buttons.LeftStick == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.RightStick == ButtonState.Pressed)
+			if (currentStates[index].Buttons.RightStick == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Guide == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Guide == ButtonState.Pressed)
 				return true;
 
 			return false;
 		}
 
-		public bool GetAnyInput (PlayerIndex playerIndex)
+		public bool GetAnyInput (PlayerIndex playerIndex, float stickDeadzone = .12f)
 		{
 			int index = (int) playerIndex;
 
-			if (currentState[index].Buttons.A == ButtonState.Pressed)
+			if (currentStates[index].Buttons.A == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.B == ButtonState.Pressed)
+			if (currentStates[index].Buttons.B == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.X == ButtonState.Pressed)
+			if (currentStates[index].Buttons.X == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Y == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Y == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Start == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Start == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Back == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Back == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.RightShoulder == ButtonState.Pressed)
+			if (currentStates[index].Buttons.RightShoulder == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.LeftShoulder == ButtonState.Pressed)
+			if (currentStates[index].Buttons.LeftShoulder == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.LeftStick == ButtonState.Pressed)
+			if (currentStates[index].Buttons.LeftStick == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.RightStick == ButtonState.Pressed)
+			if (currentStates[index].Buttons.RightStick == ButtonState.Pressed)
 				return true;
-			if (currentState[index].Buttons.Guide == ButtonState.Pressed)
+			if (currentStates[index].Buttons.Guide == ButtonState.Pressed)
 				return true;
-			if (currentState[index].ThumbSticks.Left.X != 0)
+			if (Mathf.Abs(currentStates[index].ThumbSticks.Left.X) >= stickDeadzone)
 				return true;
-			if (currentState[index].ThumbSticks.Left.Y != 0)
+			if (Mathf.Abs(currentStates[index].ThumbSticks.Left.Y) >= stickDeadzone)
 				return true;
-			if (currentState[index].ThumbSticks.Right.X != 0)
+			if (Mathf.Abs(currentStates[index].ThumbSticks.Right.X) >= stickDeadzone)
 				return true;
-			if (currentState[index].ThumbSticks.Right.Y != 0)
+			if (Mathf.Abs(currentStates[index].ThumbSticks.Right.Y) >= stickDeadzone)
 				return true;
-			if (currentState[index].Triggers.Left != 0)
+			if (currentStates[index].Triggers.Left != 0)
 				return true;
-			if (currentState[index].Triggers.Right != 0)
+			if (currentStates[index].Triggers.Right != 0)
 				return true;
 
 			return false;

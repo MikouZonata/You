@@ -19,8 +19,8 @@ public class MenuManager : MonoBehaviour
 	string[] kevinLines = new string[] {
 		"Yo, ik ben Kevin.",
 		"Maan en ik zijn ruim 4 jaar samen.",
-		"Ik vergelijk mezelf constant met mijn peers en moet mezelf constant verbeteren.",
-		"Ik vraag mij af wat mijn mindset doet met Maan..."
+		"Ik wil mijzelf constant verbeteren en vergelijk me continu met mijn peers.",
+		"Het zou super zijn als Maan die drive ook zou hebben maar die gaat liever op avontuur..."
 	};
 	string[] maanLines = new string[] {
 		"Hoi! Ik ben Maan :D",
@@ -28,7 +28,7 @@ public class MenuManager : MonoBehaviour
 		"Ik probeer zo veel mogelijk in het moment te leven door te genieten van ALLES.",
 		"Ik zou dat graag willen delen met Kevin maar ik denk dat hij zichzelf dat niet laat doen :c"
 	};
-	float[] timesPerLine = new float[] { 2, 2.6f, 3.8f, 4 };
+	float[] timesPerLine = new float[] { 2, 2.6f, 3.5f, 4 };
 	const float lineFadeTime = .32f;
 
 	public void Init (GameManager gameManager)

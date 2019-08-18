@@ -1402,10 +1402,10 @@ RectTransform:
   m_Father: {fileID: 8988981355911819272}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 2000, y: 1150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &753308032831442022
 CanvasRenderer:
@@ -1773,6 +1773,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2607124934051973274}
     m_Modifications:
+    - target: {fileID: 1112064612500784, guid: b3924aaae7d6f174ca74da462a9dda78, type: 3}
+      propertyPath: m_Name
+      value: PFB_LinkMaan
+      objectReference: {fileID: 0}
     - target: {fileID: 4470157513425488, guid: b3924aaae7d6f174ca74da462a9dda78, type: 3}
       propertyPath: m_LocalPosition.x
       value: -21.140429
@@ -1816,10 +1820,6 @@ PrefabInstance:
     - target: {fileID: 4470157513425488, guid: b3924aaae7d6f174ca74da462a9dda78, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1112064612500784, guid: b3924aaae7d6f174ca74da462a9dda78, type: 3}
-      propertyPath: m_Name
-      value: PFB_LinkMaan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3924aaae7d6f174ca74da462a9dda78, type: 3}

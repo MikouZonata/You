@@ -13,6 +13,7 @@ public class MaanManager : MonoBehaviour
 
 	public GameObject[] kattoePrefabs;
 
+	bool happinessOverride = false;
 	float _happiness = 0;
 	const float happinessGrowthRate = .3f;
 	const float happinessWhenLinked = .5f;
@@ -35,13 +36,14 @@ public class MaanManager : MonoBehaviour
 	List<Kattoe> kattoes;
 	List<Transform> occupiedPieces;
 
+	bool cloudActive = false;
 	public GameObject cloudPrefab;
 	Transform _cloudTrans;
 	Cloud cloud;
 	enum CloudStates { Dormant, Waiting, Chasing };
 	CloudStates cloudState;
 
-	float cloudSpawnDistance = 60;
+	float cloudSpawnDistance = 72;
 
 	bool cloudDormantSetup = false;
 	float _cloudDormantTimer = 0, cloudDormantTime;
@@ -55,7 +57,7 @@ public class MaanManager : MonoBehaviour
 
 	bool cloudChaseSetup = false;
 	float cloudDescendSpeed = 3, _cloudChaseSpeed = 0;
-	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .44f;
+	float cloudChaseBaseSpeed = 3, cloudChaseAcceleration = .54f;
 	float cloudChasingHeight = 0;
 	float cloudChasingDistanceToImpact = 3;
 	float cloudImpactFadeTimeGood = 0, cloudImpactFadeTimeBad = 4f;
@@ -104,6 +106,7 @@ public class MaanManager : MonoBehaviour
 		StopAllCoroutines();
 
 		Destroy(kattoeParent.gameObject);
+		cloudActive = false;
 		if (_cloudTrans != null)
 			Destroy(_cloudTrans.gameObject);
 		maan.Destroy();
@@ -112,52 +115,68 @@ public class MaanManager : MonoBehaviour
 	private void Update ()
 	{
 		if (!StaticData.menuActive) {
-			Cloud();
-			CloudFeedback();
+			if (cloudActive) {
+				Cloud();
+				CloudAudio();
+			}
 			Happiness();
 		}
 	}
 
 	void Happiness ()
 	{
-		float targetHappiness = 0;
+		if (Input.GetKeyDown(KeyCode.Space))
+			happinessOverride = !happinessOverride;
 
-		//Kevin
-		if (StaticData.playersAreLinked)
-			targetHappiness += happinessWhenLinked;
+		if (!happinessOverride) {
+			float targetHappiness = 0;
 
-		//Cloud
-		if (cloudState != CloudStates.Dormant) {
-			float distanceMaanToCloud = Vector3.Distance(maan.transform.position, _cloudTrans.position);
-			if (distanceMaanToCloud >= happinessCloudFarDistance) {
-				if (StaticData.playersAreLinked) {
-					targetHappiness += happinessGoodCloudFar;
+			//Kevin
+			if (StaticData.playersAreLinked)
+				targetHappiness += happinessWhenLinked;
+
+			//Cloud
+			if (cloudState != CloudStates.Dormant) {
+				float distanceMaanToCloud = Vector3.Distance(maan.transform.position, _cloudTrans.position);
+				if (distanceMaanToCloud >= happinessCloudFarDistance) {
+					if (StaticData.playersAreLinked) {
+						targetHappiness += happinessGoodCloudFar;
+					} else {
+						targetHappiness += happinessBadCloudFar;
+					}
+				} else if (distanceMaanToCloud <= happinessCloudNearDistance) {
+					if (StaticData.playersAreLinked) {
+						targetHappiness += happinessGoodCloudNear;
+					} else {
+						targetHappiness += happinessBadCloudNear;
+					}
 				} else {
-					targetHappiness += happinessBadCloudFar;
-				}
-			} else if (distanceMaanToCloud <= happinessCloudNearDistance) {
-				if (StaticData.playersAreLinked) {
-					targetHappiness += happinessGoodCloudNear;
-				} else {
-					targetHappiness += happinessBadCloudNear;
-				}
-			} else {
-				float factor = 1 - (distanceMaanToCloud - happinessCloudNearDistance) / (happinessCloudFarDistance - happinessCloudNearDistance);
-				Debug.Log("factor " + factor.ToString());
-				if (StaticData.playersAreLinked) {
-					targetHappiness += (factor * (happinessGoodCloudNear - happinessGoodCloudFar)) + happinessGoodCloudFar;
-				} else {
-					targetHappiness += (factor * (happinessBadCloudNear - happinessBadCloudFar)) + happinessBadCloudFar;
+					float factor = 1 - (distanceMaanToCloud - happinessCloudNearDistance) / (happinessCloudFarDistance - happinessCloudNearDistance);
+					if (StaticData.playersAreLinked) {
+						targetHappiness += (factor * (happinessGoodCloudNear - happinessGoodCloudFar)) + happinessGoodCloudFar;
+					} else {
+						targetHappiness += (factor * (happinessBadCloudNear - happinessBadCloudFar)) + happinessBadCloudFar;
+					}
 				}
 			}
+
+			//Kattoes
+			targetHappiness += happinessPerKattoe * maan.KattoesBonded;
+
+			//Calculate actual happiness
+			_happiness = Mathf.MoveTowards(_happiness, targetHappiness, happinessGrowthRate * Time.deltaTime);
+			_happiness = Mathf.Clamp(_happiness, -1, 1);
 		}
-
-		//Kattoes
-		targetHappiness += happinessPerKattoe * maan.KattoesBonded;
-
-		//Calculate actual happiness
-		_happiness = Mathf.MoveTowards(_happiness, targetHappiness, happinessGrowthRate * Time.deltaTime);
-		_happiness = Mathf.Clamp(_happiness, -1, 1);
+		//Happiness manual override
+		else {
+			Debug.Log("Happiness override active. Value: " + _happiness.ToString());
+			if (Input.GetKey(KeyCode.LeftArrow)) {
+				_happiness -= Time.deltaTime * .5f;
+			} else if (Input.GetKey(KeyCode.RightArrow)) {
+				_happiness += Time.deltaTime * .5f;
+			}
+			_happiness = Mathf.Clamp(_happiness, -1, 1);
+		}
 
 		//Apply happiness
 		//PostProcessing
@@ -281,7 +300,7 @@ public class MaanManager : MonoBehaviour
 	}
 
 	float _fmodCloudState = 1;
-	void CloudFeedback ()
+	void CloudAudio ()
 	{
 		if (cloudState != CloudStates.Dormant) {
 			float distanceMaanToCloud = Vector3.Distance(cloud.transform.position, maan.transform.position);
@@ -309,5 +328,10 @@ public class MaanManager : MonoBehaviour
 			_cloudTrans.position += Vector3.up * cloudWaitingSpeed * Time.deltaTime;
 			yield return null;
 		}
+	}
+
+	public void ActivateCloud ()
+	{
+		cloudActive = true;
 	}
 }

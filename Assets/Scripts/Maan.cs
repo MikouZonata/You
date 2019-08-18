@@ -22,10 +22,10 @@ public class Maan : MonoBehaviour, ICharacter
 	PauseScreen pauseScreen;
 	bool pauseActive = true;
 
-	float movementSpeed = 17;
+	float movementSpeed = 11;
 
 	public GameObject cameraPrefab;
-	float cameraMaxZAngle = 42, cameraMinZAngle = -40;
+	float cameraMaxZAngle = 42, cameraMinZAngle = -36;
 	float _cameraZAngle = 0;
 	float cameraXSensitivity = 260, cameraZSensitivity = 150;
 
@@ -135,7 +135,7 @@ public class Maan : MonoBehaviour, ICharacter
 		CameraMovement();
 		ModelRotation();
 		ShowLink();
-		LoveClock();
+		//Loving();
 
 		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.A, playerIndex)) {
 			Ping();
@@ -200,7 +200,7 @@ public class Maan : MonoBehaviour, ICharacter
 		linkRenderer.SetPositions(positions);
 	}
 
-	void LoveClock ()
+	void Loving ()
 	{
 		if (_wasLinked && !StaticData.playersAreLinked) {
 			_loveTime = Random.Range(loveMinTimebetweenLoveUnlinked, loveMaxTimeBetweenLoveUnlinked);
