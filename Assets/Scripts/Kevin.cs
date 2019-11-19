@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using XInputDotNetPure;
+//using XInputDotNetPure;
 using Utility;
 using FMODUnity;
+using XInputDotNetExtended;
 
 public class Kevin : MonoBehaviour, ICharacter
 {
-	[HideInInspector]
-	public PlayerIndex playerIndex = PlayerIndex.Two;
-	GamePadState gamePadState;
+	public XInputDotNetPure.PlayerIndex playerIndex = XInputDotNetPure.PlayerIndex.One;
 	KevinManager manager;
 	Transform maan;
 	Rigidbody rig;
@@ -23,7 +22,7 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	ParticleSystem sideDriftParticles;
 	ParticleSystem.EmissionModule sideDriftEmissionModule;
-	float sideDriftDefaultEmission;
+	float _sideDriftDefaultEmission;
 
 	PauseScreen pauseScreen;
 	bool pauseActive = true;
@@ -34,27 +33,28 @@ public class Kevin : MonoBehaviour, ICharacter
 	const float modelFatigueForwardsFactor = 18;
 	const float modelMaxForwardsAngle = 9, modelMaxSidewaysAngle = 9;
 	Vector3 _velocity = Vector3.zero;
-	float _triggerValue;
+	float _triggerValue = 0;
 	const float throttleMaxForwardSpeed = 28;
 	const float throttleAcceleration = 2, throttleNaturalDecceleration = 18;
 	float _speedPoint = 0, _throttleSpeed = 0;
 
-	bool overrideFatigue = false;
-	bool fatigueActive = false;
-	float _fatigue = 0f;
+	public GameObject fatigueSmokeGO;
 	const float fatigueRecoverRate = .167f, fatigueIncreaseRate = .011f;
 	const float fatigueFirstPlacePenalty = .006f;
 	const float fatigueRechargePerPickup = 0.04f;
 	const float fatigueSlowFactorMin = .5f;
-	public GameObject fatigueSmokeGO;
-	bool fatigueSmokePlaying = false;
 	const float fatigueSmokeThreshold = .68f;
+	bool overrideFatigue = false;
+	bool fatigueActive = false;
+	float _fatigue = 0f;
+	bool _fatigueSmokePlaying = false;
 
 	const float maxTurnRate = 192, minTurnRate = 76;
 	const float turnRateLossPerVelocity = 4.22f;
-	float _steeringSideDrift = 0, sideDriftPerVelocity = .42f, sideDriftMaxVelocity = 22, sideDriftMinVelocity = 12;
-	float driftingMaxSideFactor = 5.2f, _driftingSideFactor = 1, driftingMaxTurnFactor = 1.24f, driftingTimeToMax = .12f;
-	float _driftingTurnFactor = 1;
+	const float sideDriftPerVelocity = .42f, sideDriftMaxVelocity = 22, sideDriftMinVelocity = 12;
+	float _steeringSideDrift = 0;
+	const float driftingMaxSideFactor = 5.2f, driftingMaxTurnFactor = 1.24f, driftingTimeToMax = .12f;
+	float _driftingTurnFactor = 1, _driftingSideFactor = 1;
 	float driftingSideAcceleration, driftingTurnAcceleration;
 
 	float _struggleTimer = 0, struggleTime = 10;
@@ -76,8 +76,6 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	public void Init (KevinManager manager, Transform maan)
 	{
-		gamePadState = GamePad.GetState(playerIndex);
-
 		rig = GetComponent<Rigidbody>();
 		mainCam = transform.GetChild(0).GetComponent<Camera>();
 		mainCamTrans = mainCam.transform;
@@ -85,7 +83,7 @@ public class Kevin : MonoBehaviour, ICharacter
 
 		sideDriftParticles = GetComponentInChildren<ParticleSystem>();
 		sideDriftEmissionModule = sideDriftParticles.emission;
-		sideDriftDefaultEmission = sideDriftEmissionModule.rateOverTime.constant;
+		_sideDriftDefaultEmission = sideDriftEmissionModule.rateOverTime.constant;
 		sideDriftEmissionModule.rateOverTime = 0;
 		var emission = sideDriftParticles.emission;
 		emission.rateOverTime = 0;
@@ -118,12 +116,10 @@ public class Kevin : MonoBehaviour, ICharacter
 	private void Update ()
 	{
 		if (!pauseActive) {
-			gamePadState = GamePad.GetState(playerIndex);
-			if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.Start, playerIndex)) {
+			if (XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.Start)) {
 				ActivatePause();
 			}
-		} else
-			gamePadState = new GamePadState();
+		}
 
 		CameraFoV();
 		ShowLink();
@@ -146,7 +142,7 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	void FixedUpdate ()
 	{
-		_triggerValue = gamePadState.Triggers.Right;
+		_triggerValue = XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right);
 
 		Throttle();
 
@@ -196,8 +192,8 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	void ModelRotation ()
 	{
-		float xRot = _fatigue * modelFatigueForwardsFactor + modelMaxForwardsAngle * gamePadState.Triggers.Right;
-		float yRot = modelMaxSidewaysAngle * gamePadState.ThumbSticks.Left.X;
+		float xRot = _fatigue * modelFatigueForwardsFactor + modelMaxForwardsAngle * XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right);
+		float yRot = modelMaxSidewaysAngle * XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickHorizontal);
 		modelAnchor.rotation = transform.rotation * Quaternion.Euler(xRot, yRot, 0);
 	}
 
@@ -217,11 +213,10 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	void ThrottleAudio ()
 	{
-		if (gamePadState.Triggers.Right == 0 && fmodHoverPlaying) {
+		if (XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right) == 0 && fmodHoverPlaying) {
 			fmodHoverPlaying = false;
 			fmodHoverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-		}
-		if (gamePadState.Triggers.Right > 0 && !fmodHoverPlaying) {
+		} else if (XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right) > 0 && !fmodHoverPlaying) {
 			fmodHoverPlaying = true;
 			fmodHoverInstance.start();
 		}
@@ -246,24 +241,25 @@ public class Kevin : MonoBehaviour, ICharacter
 				_fatigue = Mathf.MoveTowards(_fatigue, 1, (fatigueIncreaseRate + (manager.GetKevinRank() == 0 ? fatigueFirstPlacePenalty : 0)) * Time.deltaTime);
 			}
 		} else {
+			//Debug Fatigue options
 			if (Input.GetKey(KeyCode.LeftArrow)) {
 				_fatigue -= Time.deltaTime * .5f;
 			} else if (Input.GetKey(KeyCode.RightArrow)) {
 				_fatigue += Time.deltaTime * .5f;
 			}
-			if (gamePadState.Buttons.X == ButtonState.Pressed) {
+			if (XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.X)) {
 				_fatigue -= Time.deltaTime * .5f;
 			}
 			_fatigue = Mathf.Clamp(_fatigue, 0, 1);
 		}
 
-		if (!fatigueSmokePlaying && _fatigue > fatigueSmokeThreshold) {
+		if (!_fatigueSmokePlaying && _fatigue > fatigueSmokeThreshold) {
 			fatigueSmokeGO.SetActive(true);
-			fatigueSmokePlaying = true;
+			_fatigueSmokePlaying = true;
 		}
-		if (fatigueSmokePlaying && _fatigue < fatigueSmokeThreshold) {
+		if (_fatigueSmokePlaying && _fatigue < fatigueSmokeThreshold) {
 			fatigueSmokeGO.SetActive(false);
-			fatigueSmokePlaying = false;
+			_fatigueSmokePlaying = false;
 		}
 	}
 	float FatigueSlowFactor ()
@@ -278,13 +274,13 @@ public class Kevin : MonoBehaviour, ICharacter
 		float result = 0;
 
 		float turnRate = Mathf.Clamp(maxTurnRate - Mathf.Abs(turnRateLossPerVelocity * _velocity.z), minTurnRate, maxTurnRate);
-		result = gamePadState.ThumbSticks.Left.X * turnRate * Time.deltaTime;
+		result = XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickHorizontal) * turnRate * Time.deltaTime;
 
 		float trimmedVelocity = Mathf.MoveTowards(_velocity.z, 0, sideDriftMinVelocity);
 		trimmedVelocity = Mathf.Clamp(trimmedVelocity, -sideDriftMaxVelocity + sideDriftMinVelocity, sideDriftMaxVelocity - sideDriftMinVelocity);
-		_steeringSideDrift = -gamePadState.ThumbSticks.Left.X * trimmedVelocity * sideDriftPerVelocity;
+		_steeringSideDrift = -XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickHorizontal) * trimmedVelocity * sideDriftPerVelocity;
 
-		if (gamePadState.Triggers.Left > 0.1f) {
+		if (XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Left) != 0) {
 			_driftingTurnFactor = Mathf.MoveTowards(_driftingTurnFactor, driftingMaxTurnFactor, driftingTurnAcceleration * Time.deltaTime);
 			_driftingSideFactor = Mathf.MoveTowards(_driftingSideFactor, driftingMaxSideFactor, driftingSideAcceleration * Time.deltaTime);
 		} else {
@@ -342,7 +338,10 @@ public class Kevin : MonoBehaviour, ICharacter
 		for (float t = 0; t < struggleTime; t += Time.deltaTime) {
 			transform.Rotate(0, rotation * Time.deltaTime, 0);
 
-			if (gamePadState.ThumbSticks.Left.X != 0 || gamePadState.ThumbSticks.Left.Y != 0 || gamePadState.Triggers.Right != 0 || gamePadState.Triggers.Left != 0) {
+			if (XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickHorizontal) != 0
+				|| XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickVertical) != 0
+				|| XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Left) != 0
+				|| XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right) != 0) {
 				break;
 			}
 
