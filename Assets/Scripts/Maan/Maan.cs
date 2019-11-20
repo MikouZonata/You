@@ -130,7 +130,7 @@ public class Maan : MonoBehaviour, ICharacter
 		CameraMovement();
 		ModelRotation();
 		ShowLink();
-		//Loving();
+		//Loving(); Loving is being redesigned
 
 		if (XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.A)) {
 			Ping();
