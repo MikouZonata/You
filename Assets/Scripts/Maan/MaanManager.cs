@@ -99,6 +99,8 @@ public class MaanManager : MonoBehaviour
 		fmodCloudInstance.getParameter("Stress", out fmodCloudStateParameter);
 		fmodKattoeMusicInstance = RuntimeManager.CreateInstance(fmodKattoeMusicPath);
 		fmodKattoeMusicInstance.start();
+
+		Debug.Log(maan.GetInstanceID());
 	}
 
 	public void Deactivate ()

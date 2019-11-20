@@ -63,16 +63,17 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	public Transform leaderboardFrame;
 
+	//Loving is currently disabled
 	public GameObject lovePrefab;
 	bool _goingToLove = false;
 	bool _lovedOnPass = false;
 
 	//FMOD
-	string fmodHoverPath = "event:/Kevin/Hover_Engine";
+	const string fmodHoverPath = "event:/Kevin/Hover_Engine";
+	const float fmodHoverPitchThreshold = .65f;
 	FMOD.Studio.EventInstance fmodHoverInstance;
 	FMOD.Studio.ParameterInstance fmodHoverPitch;
-	float fmodHoverPitchThreshold = .65f;
-	bool fmodHoverPlaying = false;
+	bool _fmodHoverPlaying = false;
 
 	public void Init (KevinManager manager, Transform maan)
 	{
@@ -213,11 +214,11 @@ public class Kevin : MonoBehaviour, ICharacter
 
 	void ThrottleAudio ()
 	{
-		if (XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right) == 0 && fmodHoverPlaying) {
-			fmodHoverPlaying = false;
+		if (XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right) == 0 && _fmodHoverPlaying) {
+			_fmodHoverPlaying = false;
 			fmodHoverInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-		} else if (XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right) > 0 && !fmodHoverPlaying) {
-			fmodHoverPlaying = true;
+		} else if (XInputEX.GetTrigger(playerIndex, XInputEX.Triggers.Right) > 0 && !_fmodHoverPlaying) {
+			_fmodHoverPlaying = true;
 			fmodHoverInstance.start();
 		}
 

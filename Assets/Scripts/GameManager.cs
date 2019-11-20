@@ -82,8 +82,8 @@ public class GameManager : MonoBehaviour
 		menuManager.Init(this);
 		_deactivationTimer = 0;
 
-		maan.GetComponent<PauseScreen>().Init(this, maan, PlayerIndex.One);
-		kevin.GetComponent<PauseScreen>().Init(this, kevin, PlayerIndex.Two);
+		maan.GetComponent<PauseScreen>().Init(this, maan, XInputDotNetPure.PlayerIndex.One);
+		kevin.GetComponent<PauseScreen>().Init(this, kevin, XInputDotNetPure.PlayerIndex.Two);
 
 		fmodLinkedInstance = RuntimeManager.CreateInstance(fmodLinkedPath);
 	}

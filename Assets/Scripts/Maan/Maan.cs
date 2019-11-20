@@ -240,6 +240,7 @@ public class Maan : MonoBehaviour, ICharacter
 		if (_fmodWhistlePoolIndex >= fmodWhistlePoolSize)
 			_fmodWhistlePoolIndex = 0;
 
+		//Look for an inactive Pign object. If none are available create a new one
 		for (int i = 0; i < pingFeedbackPool.Count; i++) {
 			if (!pingFeedbackPool[i].activeSelf) {
 				StartCoroutine(PingRoseRoutine(pingFeedbackPool[i]));

@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using XInputDotNetPure;
+using XInputDotNetExtended;
 
 public class PauseScreen : MonoBehaviour
 {
 	GameManager gameManager;
 	ICharacter character;
-	PlayerIndex playerIndex;
-	GamePadState _gamePadState;
+	XInputDotNetPure.PlayerIndex playerIndex;
 
 	public enum Options { Resume, Quit };
 	Options selectedOption = Options.Resume;
@@ -17,7 +16,7 @@ public class PauseScreen : MonoBehaviour
 	public GameObject canvasParent;
 	public Image resumeIndicator, quitIndicator;
 
-	public void Init (GameManager gameManager, ICharacter character, PlayerIndex playerIndex)
+	public void Init (GameManager gameManager, ICharacter character, XInputDotNetPure.PlayerIndex playerIndex)
 	{
 		this.gameManager = gameManager;
 		this.character = character;
@@ -26,11 +25,9 @@ public class PauseScreen : MonoBehaviour
 
 	void Update ()
 	{
-		_gamePadState = GamePad.GetState(playerIndex);
-
 		//Select an option
-		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.A, playerIndex) ||
-			XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.Start, playerIndex)){
+		if (XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.A) ||
+			XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.Start)){
 			if (selectedOption == Options.Resume) {
 				Deactivate();
 			} else {
@@ -39,12 +36,12 @@ public class PauseScreen : MonoBehaviour
 		}
 
 		//Change option
-		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.DPadUp, playerIndex) ||
-			XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.DPadDown, playerIndex) ||
-			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.LeftStick, XInputDotNetExtender.Directions.Up, playerIndex) ||
-			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.LeftStick, XInputDotNetExtender.Directions.Down, playerIndex) ||
-			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.LeftStick, XInputDotNetExtender.Directions.Left, playerIndex) ||
-			XInputDotNetExtender.instance.GetDirectionDown(XInputDotNetExtender.DirectionalInputs.LeftStick, XInputDotNetExtender.Directions.Right, playerIndex)
+		if (XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.DPadUp) ||
+			XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.DPadDown) ||
+			XInputEX.GetDirectionDown(playerIndex, XInputEX.DirectionalInputs.LeftStick, XInputEX.Directions.Up) ||
+			XInputEX.GetDirectionDown(playerIndex, XInputEX.DirectionalInputs.LeftStick, XInputEX.Directions.Down) ||
+			XInputEX.GetDirectionDown(playerIndex, XInputEX.DirectionalInputs.LeftStick, XInputEX.Directions.Left) ||
+			XInputEX.GetDirectionDown(playerIndex, XInputEX.DirectionalInputs.LeftStick, XInputEX.Directions.Right)
 			) {
 			if (selectedOption == Options.Resume) {
 				selectedOption = Options.Quit;
@@ -56,7 +53,6 @@ public class PauseScreen : MonoBehaviour
 				resumeIndicator.enabled = true;
 			}
 		}
-
 	}
 
 	public void Activate ()
