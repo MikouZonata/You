@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering.PostProcessing;
-using XInputDotNetPure;
+using XInputDotNetExtended;
 using Utility;
 using FMODUnity;
 
 public class Maan : MonoBehaviour, ICharacter
 {
 	[HideInInspector]
-	public PlayerIndex playerIndex = PlayerIndex.One;
-	GamePadState gamePadState;
+	public XInputDotNetPure.PlayerIndex playerIndex = PlayerIndex.One;
 	Vector2 _leftStickInput;
 	MaanManager manager;
 	Transform kevin;
@@ -70,8 +69,6 @@ public class Maan : MonoBehaviour, ICharacter
 
 	public void Init (MaanManager manager, Transform kevin)
 	{
-		gamePadState = GamePad.GetState(playerIndex);
-
 		rig = GetComponent<Rigidbody>();
 
 		pauseScreen = GetComponent<PauseScreen>();
@@ -124,20 +121,18 @@ public class Maan : MonoBehaviour, ICharacter
 	private void Update ()
 	{
 		if (!pauseActive) {
-			gamePadState = GamePad.GetState(playerIndex);
-			if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.Start, playerIndex)) {
+			if (XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.Start)) {
 				ActivatePause();
 			}
-		} else
-			gamePadState = new GamePadState();
-		_leftStickInput = new Vector2(gamePadState.ThumbSticks.Left.X, gamePadState.ThumbSticks.Left.Y);
+		}
+		_leftStickInput = new Vector2(XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickHorizontal), XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickVertical));
 
 		CameraMovement();
 		ModelRotation();
 		ShowLink();
 		//Loving();
 
-		if (XInputDotNetExtender.instance.GetButtonDown(XInputDotNetExtender.Buttons.A, playerIndex)) {
+		if (XInputEX.GetButtonDown(playerIndex, XInputEX.Buttons.A)) {
 			Ping();
 		}
 	}
@@ -151,8 +146,8 @@ public class Maan : MonoBehaviour, ICharacter
 	Vector3 CharacterMovement ()
 	{
 		Vector3 result = Vector3.zero;
-		result.x = gamePadState.ThumbSticks.Left.X * movementSpeed;
-		result.z = gamePadState.ThumbSticks.Left.Y * movementSpeed;
+		result.x = XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickHorizontal) * movementSpeed;
+		result.z = XInputEX.GetAxis(playerIndex, XInputEX.Axis.LeftStickVertical) * movementSpeed;
 		if (result.sqrMagnitude > movementSpeed * movementSpeed) {
 			result = result.normalized * movementSpeed;
 		}
@@ -165,14 +160,14 @@ public class Maan : MonoBehaviour, ICharacter
 	{
 		cameraAnchorTrans.position = transform.position;
 
-		_cameraYAngle += gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime;
-		_modelYAngle -= gamePadState.ThumbSticks.Right.X * cameraXSensitivity * Time.deltaTime;
+		_cameraYAngle += XInputEX.GetAxis(playerIndex, XInputEX.Axis.RightStickHorizontal) * cameraXSensitivity * Time.deltaTime;
+		_modelYAngle -= XInputEX.GetAxis(playerIndex, XInputEX.Axis.RightStickHorizontal) * cameraXSensitivity * Time.deltaTime;
 		if (_cameraYAngle < -180) {
 			_cameraYAngle += 360;
 		} else if (_cameraYAngle > 180) {
 			_cameraYAngle -= 360;
 		}
-		_cameraZAngle = Mathf.Clamp(_cameraZAngle - gamePadState.ThumbSticks.Right.Y * cameraZSensitivity * Time.deltaTime,
+		_cameraZAngle = Mathf.Clamp(_cameraZAngle - XInputEX.GetAxis(playerIndex, XInputEX.Axis.RightStickVertical) * cameraZSensitivity * Time.deltaTime,
 			cameraMinZAngle, cameraMaxZAngle);
 		cameraAnchorTrans.rotation = Quaternion.Euler(new Vector3(_cameraZAngle, _cameraYAngle, 0));
 		cameraTrans.LookAt(transform.position + Quaternion.Euler(_cameraZAngle, _cameraYAngle, 0) * Vector3.forward * 2.5f);
