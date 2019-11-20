@@ -21,17 +21,17 @@ public class Maan : MonoBehaviour, ICharacter
 	PauseScreen pauseScreen;
 	bool pauseActive = true;
 
-	float movementSpeed = 11;
+	const float movementSpeed = 11;
 
 	public GameObject cameraPrefab;
-	float cameraMaxZAngle = 42, cameraMinZAngle = -36;
+	const float cameraMaxZAngle = 42, cameraMinZAngle = -36;
+	const float cameraXSensitivity = 260, cameraZSensitivity = 150;
 	float _cameraZAngle = 0;
-	float cameraXSensitivity = 260, cameraZSensitivity = 150;
 
 	public LineRenderer linkRenderer;
 
-	Vector3 cameraDefaultPosition;
 	const float screenShakeIntensityFactor = .17f;
+	Vector3 cameraDefaultPosition;
 
 	Transform modelTrans;
 	float _modelYAngle = 0;
@@ -42,7 +42,7 @@ public class Maan : MonoBehaviour, ICharacter
 	Transform pingParent;
 	List<GameObject> pingFeedbackPool = new List<GameObject>();
 	SpriteRenderer pingRenderer;
-	float pingActiveTime = .3f;
+	const float pingActiveTime = .3f;
 
 	public Transform[] kattoeAnchors;
 	List<Transform> occupiedKattoeAnchors = new List<Transform>();
@@ -62,10 +62,10 @@ public class Maan : MonoBehaviour, ICharacter
 	bool _wasLinked = false;
 
 	//FMOD
-	string fmodWhistlePath = "event:/Maan/Calling_Cats_Maan";
+	const string fmodWhistlePath = "event:/Maan/Calling_Cats_Maan";
 	const int fmodWhistlePoolSize = 8;
-	int _fmodWhistlePoolIndex = 0;
 	FMOD.Studio.EventInstance[] fmodWhistleInstances = new FMOD.Studio.EventInstance[fmodWhistlePoolSize];
+	int _fmodWhistlePoolIndex = 0;
 
 	public void Init (MaanManager manager, Transform kevin)
 	{
