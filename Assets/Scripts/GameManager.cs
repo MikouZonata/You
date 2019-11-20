@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using XInputDotNetPure;
+//using XInputDotNetPure;
+using XInputDotNetExtended;
 using Utility;
 using FMODUnity;
 
@@ -63,10 +64,10 @@ public class GameManager : MonoBehaviour
 		}
 
 		maan = (Instantiate(maanPrefab, new Vector3(-1, .05f, 0), Quaternion.identity).GetComponent<Maan>());
-		maan.playerIndex = (PlayerIndex) 0;
+		maan.playerIndex = (XInputDotNetPure.PlayerIndex) 0;
 		StaticData.playerTransforms[0] = maan.transform;
 		kevin = (Instantiate(kevinPrefab, new Vector3(1, .05f, 0), Quaternion.identity).GetComponent<Kevin>());
-		kevin.playerIndex = (PlayerIndex) 1;
+		kevin.playerIndex = (XInputDotNetPure.PlayerIndex) 1;
 		StaticData.playerTransforms[1] = kevin.transform;
 
 		maan.Init(maanManager, kevin.transform);
@@ -110,7 +111,7 @@ public class GameManager : MonoBehaviour
 				StaticData.playersAreLinked = false;
 			}
 
-			if (XInputDotNetExtender.instance.GetAnyInput(PlayerIndex.One) || XInputDotNetExtender.instance.GetAnyInput(PlayerIndex.Two)) {
+			if (XInputEX.GetAnyInput(PlayerIndex.One) || XInputEX.GetAnyInput(PlayerIndex.Two)) {
 				_deactivationTimer = 0;
 			}
 			_deactivationTimer += Time.deltaTime;
