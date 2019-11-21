@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 206739502226933589}
   m_Layer: 15
-  m_Name: GameObject (9)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3830610321070577582}
   m_Layer: 15
-  m_Name: GameObject (10)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,7 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 59163791603026329}
   m_Layer: 15
-  m_Name: GameObject (11)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -505,7 +505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8655384939510423349}
   m_Layer: 15
-  m_Name: GameObject (14)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -535,7 +535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1477924559757945001}
   m_Layer: 15
-  m_Name: GameObject (2)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -565,7 +565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7598296668203328860}
   m_Layer: 15
-  m_Name: GameObject (3)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -595,7 +595,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3985377989771313340}
   m_Layer: 15
-  m_Name: GameObject (6)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -750,7 +750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4128603702666016264}
   m_Layer: 15
-  m_Name: GameObject (7)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -780,7 +780,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8762752770579171093}
   m_Layer: 15
-  m_Name: GameObject (8)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -810,7 +810,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2863657581455241218}
   m_Layer: 15
-  m_Name: GameObject (1)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -840,7 +840,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5382221553757228901}
   m_Layer: 15
-  m_Name: GameObject (13)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1029,7 +1029,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2499557017714399925}
   m_Layer: 15
-  m_Name: GameObject
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1139,7 +1139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7747989653987455845}
   m_Layer: 15
-  m_Name: GameObject (12)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1169,7 +1169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4511609252948167979}
   m_Layer: 15
-  m_Name: GameObject (4)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1276,7 +1276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2969497797458259385}
   m_Layer: 15
-  m_Name: GameObject (5)
+  m_Name: KattoeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1594,6 +1594,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6073674957109660561, guid: bb9022a81d2989140addb448cc18333a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 94539eddf73ed1d4b81ed94a2625147b, type: 2}
     - target: {fileID: 2746580967588730913, guid: bb9022a81d2989140addb448cc18333a,
         type: 3}
       propertyPath: m_LocalPosition.y

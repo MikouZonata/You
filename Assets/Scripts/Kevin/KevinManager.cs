@@ -9,59 +9,60 @@ using FMODUnity;
 
 public class KevinManager : MonoBehaviour
 {
-	bool _firstTimeSetup = true;
+	bool firstTimeSetup = true;
+
 	public GameObject[] enemyDriverPrefabs;
 	public GameObject pickupPrefab, pickupFeedbackPrefab;
-	Transform pickupFeedbackParent;
 	const int numberOfDrivers = 6;
 	const int numberOfAiDrivers = 5;
+	Transform pickupFeedbackParent;
+	int[] driverTargets = new int[numberOfDrivers];
 	Kevin _kevin;
 	Transform driverParent;
 	NavMeshAgent[] _driverAgents;
-	int[] driverTargets = new int[numberOfDrivers];
 
-	Transform[] _pickupPool;
+	Transform[] pickupPool;
 
-	Transform[] _trackPieces;
+	Transform[] trackPieces;
 
 	Transform _leaderboard;
 	RectTransform[] leaderboardCards;
 	string[] driverNames = new string[] { "Daniel", "Lenny", "Tim", "Valentijn", "Richard" };
 	int[] driverStartingScores = new int[] { 52, 44, 36, 17, 8 };
 	float[] driverBaseSpeeds = new float[] { 16.3f, 14.9f, 10.6f, 9.6f, 8.3f };
+	Color scoreHightlightColor;
 	int[] _scores;
 	int[] _ranks;
 	Text[][] _scoreDisplays;
 	Image[] _scoreHighlights;
-	Color scoreHightlightColor;
 
-	float[] scoreDownTimers = new float[numberOfDrivers];
-	float scoreDownBaseTime = 12, scoreDownTimePerPoint = .075f;
+	const float scoreDownBaseTime = 12, scoreDownTimePerPoint = .075f;
+	float[] _scoreDownTimers = new float[numberOfDrivers];
 
-	float driverSpeedFluxMax = 1.1f;
-	float[] driverSpeedFluxTimers;
-	float driverSpeedFluxWavelength = 50;
+	const float driverSpeedFluxMax = 1.1f;
+	const float driverSpeedFluxWavelength = 50;
+	float[] _driverSpeedFluxTimers;
 
 	GameObject[] pickupFeedbackPool = new GameObject[numberOfDrivers];
 
 	//FMOD
-	string fmodKevinPickupEvent = "event:/Kevin/Pick-up";
-	string fmodDriverPickupEvent = "event:/Kevin/Pick-up_Opponent";
+	const string fmodKevinPickupEvent = "event:/Kevin/Pick-up";
+	const string fmodDriverPickupEvent = "event:/Kevin/Pick-up_Opponent";
 	FMOD.Studio.EventInstance fmodPickupInstance;
 
 	public void Init (Transform[] trackPieces, Kevin _kevin)
 	{
-		_trackPieces = trackPieces;
+		this.trackPieces = trackPieces;
 		this._kevin = _kevin;
 
-		if (_firstTimeSetup) {
+		if (firstTimeSetup) {
 			//Maak alle pickups
-			_pickupPool = new Transform[trackPieces.Length];
+			pickupPool = new Transform[trackPieces.Length];
 			GameObject pickupParent = new GameObject("PickupParent");
-			for (int i = 0; i < _pickupPool.Length; i++) {
-				_pickupPool[i] = Instantiate(pickupPrefab, trackPieces[i].position + Vector3.up * .5f, Quaternion.identity, pickupParent.transform).transform;
-				_pickupPool[i].name = i.ToString();
-				_pickupPool[i].gameObject.SetActive(false);
+			for (int i = 0; i < pickupPool.Length; i++) {
+				pickupPool[i] = Instantiate(pickupPrefab, trackPieces[i].position + Vector3.up * .5f, Quaternion.identity, pickupParent.transform).transform;
+				pickupPool[i].name = i.ToString();
+				pickupPool[i].gameObject.SetActive(false);
 			}
 
 			//Pickup feedback pool maken
@@ -80,12 +81,12 @@ public class KevinManager : MonoBehaviour
 
 			//Setup een parent voor de drivers en ai driver speed flux
 			driverParent = new GameObject("DriverParent").transform;
-			driverSpeedFluxTimers = new float[numberOfAiDrivers];
+			_driverSpeedFluxTimers = new float[numberOfAiDrivers];
 			for (int i = 0; i < numberOfAiDrivers; i++) {
-				driverSpeedFluxTimers[i] = Random.Range(0, driverSpeedFluxWavelength);
+				_driverSpeedFluxTimers[i] = Random.Range(0, driverSpeedFluxWavelength);
 			}
 
-			_firstTimeSetup = false;
+			firstTimeSetup = false;
 		}
 
 		//Instantiate alle drivers
@@ -107,8 +108,8 @@ public class KevinManager : MonoBehaviour
 		//Vul het leaderboard met naampjes en stuff
 		_leaderboard = _kevin.leaderboardFrame;
 		_scores = new int[numberOfDrivers];
-		for (int i = 0; i < scoreDownTimers.Length; i++) {
-			scoreDownTimers[i] = 0;
+		for (int i = 0; i < _scoreDownTimers.Length; i++) {
+			_scoreDownTimers[i] = 0;
 		}
 
 		for (int driver = 0; driver < numberOfDrivers; driver++) {
@@ -141,7 +142,7 @@ public class KevinManager : MonoBehaviour
 		foreach (NavMeshAgent agent in _driverAgents) {
 			Destroy(agent.gameObject);
 		}
-		foreach (Transform t in _pickupPool) {
+		foreach (Transform t in pickupPool) {
 			t.gameObject.SetActive(false);
 		}
 
@@ -170,11 +171,11 @@ public class KevinManager : MonoBehaviour
 	public void PickUpPickup (int driverIndex, int pickupIndex)
 	{
 		//Verwijder oude pickup.
-		_pickupPool[pickupIndex].gameObject.SetActive(false);
+		pickupPool[pickupIndex].gameObject.SetActive(false);
 
 		foreach (GameObject feedbackGO in pickupFeedbackPool) {
 			if (!feedbackGO.activeSelf) {
-				feedbackGO.transform.position = _pickupPool[pickupIndex].position;
+				feedbackGO.transform.position = pickupPool[pickupIndex].position;
 				feedbackGO.SetActive(true);
 				if (driverIndex != 5) {
 					StartCoroutine(PickupFeedbackRoutine(feedbackGO, _driverAgents[driverIndex].transform));
@@ -227,24 +228,24 @@ public class KevinManager : MonoBehaviour
 	{
 		//Zet oude pickup op inactive en maak feedback
 		if (!firstTimeInitialization) {
-			_pickupPool[driverTargets[driverIndex]].gameObject.SetActive(false);
+			pickupPool[driverTargets[driverIndex]].gameObject.SetActive(false);
 		}
 
 		//Vind nieuwe target in de pool
-		int targetPickupIndex = Random.Range(0, _pickupPool.Length);
+		int targetPickupIndex = Random.Range(0, pickupPool.Length);
 		while (true) {
-			if (!_pickupPool[targetPickupIndex].gameObject.activeSelf) {
+			if (!pickupPool[targetPickupIndex].gameObject.activeSelf) {
 				break;
 			} else {
-				targetPickupIndex = Random.Range(0, _pickupPool.Length);
+				targetPickupIndex = Random.Range(0, pickupPool.Length);
 			}
 		}
 
 		//Set nieuwe target en, if ai, maak dat ook de nav agent's destination
 		driverTargets[driverIndex] = targetPickupIndex;
-		_pickupPool[driverTargets[driverIndex]].gameObject.SetActive(true);
+		pickupPool[driverTargets[driverIndex]].gameObject.SetActive(true);
 		if (driverIndex < numberOfAiDrivers)
-			_driverAgents[driverIndex].destination = _pickupPool[targetPickupIndex].position;
+			_driverAgents[driverIndex].destination = pickupPool[targetPickupIndex].position;
 	}
 
 	void AddPointToScore (int driverIndex, int score = 1)
@@ -252,7 +253,7 @@ public class KevinManager : MonoBehaviour
 		_scores[driverIndex] += score;
 		if (_scores[driverIndex] < 0)
 			_scores[driverIndex] = 0;
-		scoreDownTimers[driverIndex] = 0;
+		_scoreDownTimers[driverIndex] = 0;
 		if (score > 0) {
 			StartCoroutine(HighlightScore(driverIndex));
 		}
@@ -292,11 +293,11 @@ public class KevinManager : MonoBehaviour
 	void ScoreDownTimers ()
 	{
 		for (int i = 0; i < numberOfDrivers; i++) {
-			scoreDownTimers[i] += Time.deltaTime;
+			_scoreDownTimers[i] += Time.deltaTime;
 
-			if (scoreDownTimers[i] >= scoreDownBaseTime - _scores[i] * scoreDownTimePerPoint) {
+			if (_scoreDownTimers[i] >= scoreDownBaseTime - _scores[i] * scoreDownTimePerPoint) {
 				AddPointToScore(i, -1);
-				scoreDownTimers[i] = 0;
+				_scoreDownTimers[i] = 0;
 			}
 		}
 	}
@@ -304,8 +305,8 @@ public class KevinManager : MonoBehaviour
 	void DriverSpeedFlux ()
 	{
 		for (int i = 0; i < numberOfAiDrivers; i++) {
-			driverSpeedFluxTimers[i] += Time.deltaTime;
-			_driverAgents[i].speed = driverBaseSpeeds[i] + Mathf.Sin(driverSpeedFluxTimers[i] * (Mathf.PI * 2) / driverSpeedFluxWavelength) * driverSpeedFluxMax;
+			_driverSpeedFluxTimers[i] += Time.deltaTime;
+			_driverAgents[i].speed = driverBaseSpeeds[i] + Mathf.Sin(_driverSpeedFluxTimers[i] * (Mathf.PI * 2) / driverSpeedFluxWavelength) * driverSpeedFluxMax;
 		}
 	}
 

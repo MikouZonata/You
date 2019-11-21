@@ -66,7 +66,8 @@ public class MaanManager : MonoBehaviour
 	string fmodCloudPath = "event:/Maan/Stress_Monster";
 	FMOD.Studio.EventInstance fmodCloudInstance;
 	FMOD.Studio.ParameterInstance fmodCloudStateParameter; //0 == evil, 1 == good
-	bool fmodCloudPlaying = false;
+	bool _fmodCloudPlaying = false;
+	float _fmodCloudState = 1;
 
 	string fmodKattoeMusicPath = "event:/Maan/Cat_Song";
 	FMOD.Studio.EventInstance fmodKattoeMusicInstance;
@@ -85,6 +86,7 @@ public class MaanManager : MonoBehaviour
 
 		kattoeParent = new GameObject("KattoeParent").transform;
 
+		//Populate the level with kattoes
 		kattoes = new List<Kattoe>();
 		occupiedPieces = new List<Transform>();
 		Transform[] spawnPositions = Util.PickRandom(activeKattoes, false, trackPieces);
@@ -99,8 +101,6 @@ public class MaanManager : MonoBehaviour
 		fmodCloudInstance.getParameter("Stress", out fmodCloudStateParameter);
 		fmodKattoeMusicInstance = RuntimeManager.CreateInstance(fmodKattoeMusicPath);
 		fmodKattoeMusicInstance.start();
-
-		Debug.Log(maan.GetInstanceID());
 	}
 
 	public void Deactivate ()
@@ -118,7 +118,7 @@ public class MaanManager : MonoBehaviour
 	{
 		if (!StaticData.menuActive) {
 			if (cloudActive) {
-				Cloud();
+				CloudBehaviour();
 				CloudAudio();
 			}
 			Happiness();
@@ -127,6 +127,7 @@ public class MaanManager : MonoBehaviour
 
 	void Happiness ()
 	{
+		//Override happiness for debugging
 		if (Input.GetKeyDown(KeyCode.Space))
 			happinessOverride = !happinessOverride;
 
@@ -235,7 +236,7 @@ public class MaanManager : MonoBehaviour
 		kattoes.Add(CreateKattoe(pieceAttempt));
 	}
 
-	void Cloud ()
+	void CloudBehaviour ()
 	{
 		switch (cloudState) {
 			case CloudStates.Dormant:
@@ -286,6 +287,7 @@ public class MaanManager : MonoBehaviour
 				_cloudTrans.position = _cloudPosition;
 				_cloudTrans.LookAt(maan.transform);
 
+				//Check proximity to Maan and impact if close enough
 				if (distanceCloudToMaan < cloudChasingDistanceToImpact) {
 					if (!StaticData.playersAreLinked) {
 						StartCoroutine(maan.FadeToBlack(cloudImpactFadeTimeBad, Color.black));
@@ -293,7 +295,7 @@ public class MaanManager : MonoBehaviour
 					Destroy(_cloudTrans.gameObject);
 					cloudChaseSetup = false;
 					fmodCloudInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-					fmodCloudPlaying = false;
+					_fmodCloudPlaying = false;
 					cloudState = CloudStates.Dormant;
 					goto case CloudStates.Dormant;
 				}
@@ -301,7 +303,6 @@ public class MaanManager : MonoBehaviour
 		}
 	}
 
-	float _fmodCloudState = 1;
 	void CloudAudio ()
 	{
 		if (cloudState != CloudStates.Dormant) {
@@ -325,6 +326,7 @@ public class MaanManager : MonoBehaviour
 		RuntimeManager.AttachInstanceToGameObject(fmodCloudInstance, _cloudTrans, _cloudTrans.GetComponent<Rigidbody>());
 		fmodCloudInstance.start();
 
+		//Clouse rises up before starting chase
 		float _riseTime = (cloudWaitingHeight - cloudSpawningHeight) / cloudWaitingSpeed;
 		for (float t = 0; t < _riseTime; t += Time.deltaTime) {
 			_cloudTrans.position += Vector3.up * cloudWaitingSpeed * Time.deltaTime;

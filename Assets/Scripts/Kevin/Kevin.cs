@@ -15,9 +15,9 @@ public class Kevin : MonoBehaviour, ICharacter
 	Transform maan;
 	Rigidbody rig;
 
+	const float FoVBaseDegrees = 60, FoVDegreesPerVelocity = .4f;
 	Camera mainCam;
 	Transform mainCamTrans;
-	const float FoVBaseDegrees = 60, FoVDegreesPerVelocity = .4f;
 	Quaternion mainCamDefaultRot;
 
 	ParticleSystem sideDriftParticles;
@@ -32,10 +32,10 @@ public class Kevin : MonoBehaviour, ICharacter
 	public Transform modelAnchor;
 	const float modelFatigueForwardsFactor = 18;
 	const float modelMaxForwardsAngle = 9, modelMaxSidewaysAngle = 9;
-	Vector3 _velocity = Vector3.zero;
-	float _triggerValue = 0;
 	const float throttleMaxForwardSpeed = 28;
 	const float throttleAcceleration = 2, throttleNaturalDecceleration = 18;
+	Vector3 _velocity = Vector3.zero;
+	float _triggerValue = 0;
 	float _speedPoint = 0, _throttleSpeed = 0;
 
 	public GameObject fatigueSmokeGO;
@@ -52,13 +52,13 @@ public class Kevin : MonoBehaviour, ICharacter
 	const float maxTurnRate = 192, minTurnRate = 76;
 	const float turnRateLossPerVelocity = 4.22f;
 	const float sideDriftPerVelocity = .42f, sideDriftMaxVelocity = 22, sideDriftMinVelocity = 12;
-	float _steeringSideDrift = 0;
 	const float driftingMaxSideFactor = 5.2f, driftingMaxTurnFactor = 1.24f, driftingTimeToMax = .12f;
-	float _driftingTurnFactor = 1, _driftingSideFactor = 1;
 	float driftingSideAcceleration, driftingTurnAcceleration;
+	float _steeringSideDrift = 0;
+	float _driftingTurnFactor = 1, _driftingSideFactor = 1;
 
-	float _struggleTimer = 0, struggleTime = 10;
 	const float struggleMinTime = 1.2f, struggleMaxTime = 3.0f;
+	float _struggleTimer = 0, _struggleTime = 10;
 	Vector3 _struggleVelocity = Vector3.zero;
 
 	public Transform leaderboardFrame;
@@ -95,7 +95,7 @@ public class Kevin : MonoBehaviour, ICharacter
 		pauseScreen = GetComponent<PauseScreen>();
 		ActivatePause();
 
-		struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
+		_struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 
 		fmodHoverInstance = RuntimeManager.CreateInstance(fmodHoverPath);
 		fmodHoverInstance.getParameter("Engine_Pitch", out fmodHoverPitch);
@@ -130,14 +130,14 @@ public class Kevin : MonoBehaviour, ICharacter
 
 		if (!StaticData.playersAreLinked && rig.velocity.sqrMagnitude < 1) {
 			_struggleTimer += Time.deltaTime;
-			if (_struggleTimer > struggleTime) {
+			if (_struggleTimer > _struggleTime) {
 				StartCoroutine(Struggle());
-				struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
+				_struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 				_struggleTimer = 0;
 			}
 		} else {
 			_struggleTimer = 0;
-			struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
+			_struggleTime = Random.Range(struggleMinTime, struggleMaxTime);
 		}
 	}
 
@@ -291,6 +291,7 @@ public class Kevin : MonoBehaviour, ICharacter
 		result *= _driftingTurnFactor;
 		_steeringSideDrift *= _driftingSideFactor;
 
+		//To-Do: SideDriftParticles turn themselves off/on seemingly randomly
 		//if (Mathf.Abs(_steeringSideDrift) >= 2.5f) {
 		//	sideDriftParticles.Play();
 		//	sideDriftEmissionModule.rateOverTime = sideDriftDefaultEmission;
@@ -302,6 +303,7 @@ public class Kevin : MonoBehaviour, ICharacter
 		return result;
 	}
 
+	//Loving is disabled and needs to be redesigned
 	void Loving ()
 	{
 		if (!_lovedOnPass && _fatigue > .3f && StaticData.playersAreLinked) {
@@ -320,7 +322,6 @@ public class Kevin : MonoBehaviour, ICharacter
 			ShowLove();
 		}
 	}
-
 	void ShowLove ()
 	{
 		Love love = Instantiate(lovePrefab, transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 1.5f, Random.Range(-1.0f, 1.0f)), transform.rotation).GetComponent<Love>();

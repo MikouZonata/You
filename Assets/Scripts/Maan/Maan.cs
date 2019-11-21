@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Rendering.PostProcessing;
 using XInputDotNetExtended;
 using Utility;
 using FMODUnity;
@@ -36,22 +35,22 @@ public class Maan : MonoBehaviour, ICharacter
 	Transform modelTrans;
 	float _modelYAngle = 0;
 
-	List<Kattoe> kattoesInRange = new List<Kattoe>();
+	List<Kattoe> _kattoesInRange = new List<Kattoe>();
 
 	public GameObject pingExclamation, pingRoseFeedback;
+	const float pingActiveTime = .3f;
 	Transform pingParent;
 	List<GameObject> pingFeedbackPool = new List<GameObject>();
 	SpriteRenderer pingRenderer;
-	const float pingActiveTime = .3f;
 
-	public Transform[] kattoeAnchors;
-	List<Transform> occupiedKattoeAnchors = new List<Transform>();
 	public int KattoesBonded
 	{
 		get {
 			return occupiedKattoeAnchors.Count;
 		}
 	}
+	public Transform[] kattoeAnchors;
+	List<Transform> occupiedKattoeAnchors = new List<Transform>();
 
 	public Image fadeToBlackDisplay;
 
@@ -225,9 +224,9 @@ public class Maan : MonoBehaviour, ICharacter
 	public void EngagedByKattoe (Kattoe kattoe, bool engageOrDisengage)
 	{
 		if (engageOrDisengage) {
-			kattoesInRange.Add(kattoe);
+			_kattoesInRange.Add(kattoe);
 		} else {
-			kattoesInRange.Remove(kattoe);
+			_kattoesInRange.Remove(kattoe);
 		}
 	}
 	void Ping ()
@@ -253,8 +252,8 @@ public class Maan : MonoBehaviour, ICharacter
 		StartCoroutine(PingRoseRoutine(temp));
 
 		Finish:
-		for (int i = 0; i < kattoesInRange.Count; i++) {
-			kattoesInRange[i].ReceiveLure();
+		for (int i = 0; i < _kattoesInRange.Count; i++) {
+			_kattoesInRange[i].ReceiveLure();
 		}
 	}
 	IEnumerator PingExclamationRoutine ()
