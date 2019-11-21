@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 	bool _fmodLinkedPlaying = false;
 
 	public GameObject singleMonitorErrorDisplay;
-	const float singleMonitorErrorUptime = 5;
+	const float singleMonitorErrorUptime = 7;
 
 	void Awake ()
 	{
