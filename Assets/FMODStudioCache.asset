@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114145827229940472}
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   EditorEvents:
   - {fileID: 114621223674658828}
   - {fileID: 114718543108084550}
@@ -32,10 +32,10 @@ MonoBehaviour:
   - {fileID: 114310413044668618}
   - {fileID: 114477637410151216}
   MasterBanks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   StringsBanks:
   - {fileID: 114145827229940472}
-  stringsBankWriteTime: 637099312525489815
+  stringsBankWriteTime: 637098830847656703
   cacheVersion: 3
 --- !u!114 &114000970519305236
 MonoBehaviour:
@@ -52,12 +52,12 @@ MonoBehaviour:
   Path: event:/Kevin/Hover_Engine
   guid: 3d2892ef1f3f4142b572f62787db8f7e
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114741081342015846}
+  - {fileID: 114577517506388710}
   MinDistance: 0
   MaxDistance: 0
   Length: 31300
@@ -249,7 +249,7 @@ MonoBehaviour:
   Path: event:/Ambience/Ambience
   guid: 7b5d78dfebeeaa41aee8b300b6aa2adb
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -496,7 +496,7 @@ MonoBehaviour:
   m_Name: bank:/Master Bank.strings.bank
   m_EditorClassIdentifier: 
   Path: Fmod\Build\Desktop\Master Bank.strings.bank
-  lastModified: 637099312525489815
+  lastModified: 637098830847656703
   LoadResult: 0
   FileSizes:
   - Name: Desktop
@@ -540,12 +540,12 @@ MonoBehaviour:
   Path: event:/Maan/Cats
   guid: 45489bc3d0efa144ac5e8edcbe646d44
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 114767305113605484}
+  - {fileID: 114980290731225842}
   MinDistance: 0
   MaxDistance: 0
   Length: 22000
@@ -680,12 +680,12 @@ MonoBehaviour:
   Path: event:/Maan/Stress_Monster
   guid: 6ca6ce6b90da8b4f9a2fdc935a8f94c8
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 1
   IsOneShot: 1
   Parameters:
-  - {fileID: 114869415888521382}
+  - {fileID: 114914654376988242}
   MinDistance: 5
   MaxDistance: 55
   Length: 118230
@@ -746,6 +746,25 @@ MonoBehaviour:
   Max: 1
   Default: 0
   Exists: 0
+--- !u!114 &114253024913913312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master Bank.bank
+  m_EditorClassIdentifier: 
+  Path: C:\Users\Mikou\Desktop\Work\You\Fmod\Build\Desktop\Master Bank.bank
+  lastModified: 637098830847336685
+  LoadResult: 0
+  FileSizes:
+  - Name: Desktop
+    Value: 13003680
+  Exists: 1
 --- !u!114 &114255849590232860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,7 +820,7 @@ MonoBehaviour:
   Path: event:/Maan/Calling_Cats_Maan
   guid: 7fd7b244acbf5249878b041496255aa7
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -847,7 +866,7 @@ MonoBehaviour:
   Path: event:/Kevin/Engine_Failure
   guid: 79b2874b491f0442b3c4d5c3443418df
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -963,7 +982,7 @@ MonoBehaviour:
   Path: event:/Linked_Up
   guid: de8222962f844142a8b6468e24ae1bf2
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -1328,7 +1347,7 @@ MonoBehaviour:
   Path: event:/Kevin/Pick-up_Opponent
   guid: faac4dd884ebef4488a84cc4515d82c0
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -1399,7 +1418,7 @@ MonoBehaviour:
   Path: event:/Maan/Cat_Song
   guid: 163b752c15eb064ab1680fedaeb295d1
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -1563,6 +1582,23 @@ MonoBehaviour:
   Max: 1
   Default: 0
   Exists: 1
+--- !u!114 &114577517506388710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Hover_Engine/Engine_Pitch
+  m_EditorClassIdentifier: 
+  Name: Engine_Pitch
+  Min: 0
+  Max: 1
+  Default: 0
+  Exists: 1
 --- !u!114 &114580071061956706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1624,7 +1660,7 @@ MonoBehaviour:
   Path: event:/Ambience/Ambience_Kevin
   guid: 119a1db5434abd4cb05f3dd3d4427d57
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -1795,7 +1831,7 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 13003680
-  Exists: 1
+  Exists: 0
 --- !u!114 &114660568787706986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1925,7 +1961,7 @@ MonoBehaviour:
   Path: event:/Ambience/Ambience_Maan
   guid: 14c334d728a7e04ab2955f36161ce99a
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -1965,7 +2001,7 @@ MonoBehaviour:
   Path: event:/Kevin/Pick-up
   guid: 38e062dba7ed554d9a3b9f04dd16bd03
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -1989,7 +2025,7 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &114743349058671806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2110,7 +2146,7 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &114769794585669466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2169,7 +2205,7 @@ MonoBehaviour:
   Path: event:/Kevin/Lamp_Footsteps
   guid: 49ded5d347d7fe47882f327fa770e696
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -2215,7 +2251,7 @@ MonoBehaviour:
   Path: event:/Kevin/Calling_Cats_Kevin
   guid: 7cbe8a4f080fda4595fc0d4669e1fca5
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -2523,7 +2559,7 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &114878692601751346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2678,7 +2714,7 @@ MonoBehaviour:
   Path: event:/Maan/Snail_Moving
   guid: 6ac3f6e6cafd5649a54b9aaf53b2d2d5
   Banks:
-  - {fileID: 114655704400642846}
+  - {fileID: 114253024913913312}
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -2704,6 +2740,23 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 12994048
+  Exists: 1
+--- !u!114 &114914654376988242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Stress_Monster/Stress
+  m_EditorClassIdentifier: 
+  Name: Stress
+  Min: 0
+  Max: 1
+  Default: 0
   Exists: 1
 --- !u!114 &114924241398452278
 MonoBehaviour:
@@ -2815,6 +2868,23 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 13798144
+  Exists: 1
+--- !u!114 &114980290731225842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Cats/Pitch
+  m_EditorClassIdentifier: 
+  Name: Pitch
+  Min: 0
+  Max: 1
+  Default: 0
   Exists: 1
 --- !u!114 &114992608106129212
 MonoBehaviour:

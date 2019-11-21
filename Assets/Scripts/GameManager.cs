@@ -32,6 +32,9 @@ public class GameManager : MonoBehaviour
 	FMOD.Studio.EventInstance fmodLinkedInstance;
 	bool _fmodLinkedPlaying = false;
 
+	public GameObject singleMonitorErrorDisplay;
+	const float singleMonitorErrorUptime = 5;
+
 	void Awake ()
 	{
 		Init();
@@ -44,8 +47,10 @@ public class GameManager : MonoBehaviour
 			Display.displays[0].Activate();
 #if UNITY_EDITOR
 #else
-			if (Display.displays.Length > 0) {
+			if (Display.displays.Length > 1) {
 				Display.displays[1].Activate();
+			} else {
+				StartCoroutine(SingleMonitorErrorMessage());
 			}
 #endif
 			Cursor.visible = false;
@@ -146,5 +151,12 @@ public class GameManager : MonoBehaviour
 			_fmodLinkedPlaying = true;
 			fmodLinkedInstance.start();
 		}
+	}
+
+	IEnumerator SingleMonitorErrorMessage ()
+	{
+		singleMonitorErrorDisplay.SetActive(true);
+		yield return new WaitForSeconds(singleMonitorErrorUptime);
+		singleMonitorErrorDisplay.SetActive(false);
 	}
 }

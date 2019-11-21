@@ -4,10 +4,10 @@
 [LOG] SystemI::setOutputInternal               : Setting output to 'FMOD WASAPI Output'
 [LOG] OutputWASAPI::init                       : Mix Format (WAVEFORMATEX): wFormatTag=0xFFFE, nChannels=2, nSamplesPerSec=48000, nAvgBytesPerSec=384000, nBlockAlign=8, wBitsPerSample=32, cbSize=22.
 [LOG] OutputWASAPI::init                       : Mix Format (WAVEFORMATEXTENSIBLE): wValidBitsPerSample=32, dwChannelMask=0x00000003, SubFormat=00000003-0000-0010-8000-00AA00389B71.
-[LOG] OutputWASAPI::init                       : Output buffer size: 4096 samples, latency: 0.00ms, period: 10.00ms, DSP buffer: 1024 * 4
+[LOG] OutputWASAPI::init                       : Output buffer size: 4096 samples, latency: 10.67ms, period: 10.00ms, DSP buffer: 1024 * 4
 [LOG] Thread::initThread                       : Init FMOD stream thread. Priority: 2, Stack Size: 65536, Semaphore: No, Sleep Time: 10, Looping: Yes.
 [LOG] Thread::initThread                       : Init FMOD mixer thread. Priority: 3, Stack Size: 49152, Semaphore: No, Sleep Time: 0, Looping: Yes.
-[LOG] AsyncManager::init                       : manager 000000004126DBF8 isAsync 0 updatePeriod 0.02
+[LOG] AsyncManager::init                       : manager 0000000038ED1DA8 isAsync 0 updatePeriod 0.02
 [LOG] AsyncManager::init                       : done
 [LOG] PlaybackSystem::init                     : 
 [LOG] Thread::initThread                       : Init FMOD Studio sample load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
@@ -15,89 +15,12 @@
 [LOG] Thread::initThread                       : Init FMOD Studio bank load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
 [LOG] Manager::init                            : done.
 [LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
-[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 00000000401ACFB8
-[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 00000000401ACFB8
-[LOG] SoundI::release                          :  (000000001FAEDAC8)
-[LOG] SoundI::release                          :     Leaves II (000000003D3F4278)
-[LOG] SoundI::release                          :  (000000004AEB9548)
-[LOG] SoundI::release                          :     Leaves IV (000000003D3F5798)
-[LOG] SoundI::release                          :  (000000004AB718D8)
-[LOG] SoundI::release                          :     Leaves V (00000000637611C8)
-[LOG] SoundI::release                          :  (0000000040F66328)
-[LOG] SoundI::release                          :     Leaves VII (000000003D3F5C78)
-[LOG] SoundI::release                          :  (000000004AB71768)
-[LOG] SoundI::release                          :     Leaves VIII (0000000063762068)
-[LOG] SoundI::release                          :  (000000004AB71D28)
-[LOG] SoundI::release                          :     Leaves I (000000003D3F45B8)
-[LOG] SoundI::release                          : Linked_Up_Shimmer (00000000401ACAA8)
-[LOG] SoundI::release                          :     Linked_Up_Shimmer (0000000063761848)
-[LOG] SoundI::release                          :     Linked_Up_Shimmer (00000000401AD9D8)
-[LOG] SoundI::release                          : Kitten Song II (00000000401AC8F8)
-[LOG] SoundI::release                          :     Kitten Song II (000000003D3F3A58)
-[LOG] SoundI::release                          :     Kitten Song II (00000000401ACFB8)
-[LOG] SoundI::release                          : Kevin Ambience Short (0000000015BDC288)
-[LOG] SoundI::release                          :     Kevin Ambience Short (0000000063761508)
-[LOG] SoundI::release                          :     Kevin Ambience Short (0000000015BDB508)
-[LOG] SoundI::release                          : Birdies (00000000401ADB88)
-[LOG] SoundI::release                          :     Birdies (0000000063762A28)
-[LOG] SoundI::release                          :     Birdies (0000000015BDBF28)
-[LOG] SoundI::release                          :  (000000001F86D5E8)
-[LOG] SoundI::release                          :     Leaves VI (000000003D3F6CB8)
-[LOG] SoundI::release                          :  (000000004AEB93D8)
-[LOG] SoundI::release                          :     Leaves III (000000003D3F3578)
-[LOG] SoundI::release                          :  (000000004AB715F8)
-[LOG] SoundI::release                          :     Mts_1 (0000000063763728)
-[LOG] SoundI::release                          :  (0000000015D58868)
-[LOG] SoundI::release                          :     Mts_2 (000000003D3F33D8)
-[LOG] SoundI::release                          :  (000000004AB71E98)
-[LOG] SoundI::release                          :     Mts_3 (000000003D3F3098)
-[LOG] SoundI::release                          :  (000000004AB72178)
-[LOG] SoundI::release                          :     Mts_4 (000000003D3F3238)
-[LOG] SoundI::release                          :  (000000003716BE38)
-[LOG] SoundI::release                          :     Mts_5 (000000003D3F6158)
-[LOG] SoundI::release                          :  (000000003716C568)
-[LOG] SoundI::release                          :     Mts_6 (000000003D3F40D8)
-[LOG] SoundI::release                          :  (000000001FAEE088)
-[LOG] SoundI::release                          :     Mts_7 (000000003D3F62F8)
-[LOG] SoundI::release                          :  (000000001F86C4A8)
-[LOG] SoundI::release                          :     Mts_8 (000000003D3F5E18)
-[LOG] SoundI::release                          :  (000000004AEB9998)
-[LOG] SoundI::release                          :     Mts_9 (000000003D3F5AD8)
-[LOG] SoundI::release                          :  (00000000413BB538)
-[LOG] SoundI::release                          :     Cat_1 (0000000063761B88)
-[LOG] SoundI::release                          :  (00000000413BBF48)
-[LOG] SoundI::release                          :     Cat_2 (0000000063761D28)
-[LOG] SoundI::release                          :  (00000000413BBDD8)
-[LOG] SoundI::release                          :     Cat_3 (00000000637604C8)
-[LOG] SoundI::release                          :  (00000000413BBAF8)
-[LOG] SoundI::release                          :     Cat_4 (0000000063761EC8)
-[LOG] SoundI::release                          :  (000000001FAEE4D8)
-[LOG] SoundI::release                          :     Cat_5 (000000003D3F5938)
-[LOG] SoundI::release                          :  (0000000015D59108)
-[LOG] SoundI::release                          :     Cat_6 (000000003D3F6978)
-[LOG] SoundI::release                          :  (000000001F86D758)
-[LOG] SoundI::release                          :     Cat_7 (000000003D3F48F8)
-[LOG] SoundI::release                          :  (000000004AB71488)
-[LOG] SoundI::release                          :     Cat_8 (000000003D3F4418)
-[LOG] SoundI::release                          :  (00000000413BC0B8)
-[LOG] SoundI::release                          :     Cat_9 (00000000637616A8)
-[LOG] SoundI::release                          :  (000000004AB72008)
-[LOG] SoundI::release                          :     Cat_10 (000000003D3F6E58)
-[LOG] SoundI::release                          :  (000000004AB71BB8)
-[LOG] SoundI::release                          :     Cat_11 (000000003D3F6B18)
-[LOG] SoundI::release                          :  (0000000040F65BF8)
-[LOG] SoundI::release                          :     Cat_12 (000000003D3F3718)
-[LOG] SoundI::release                          :  (0000000015D593E8)
-[LOG] SoundI::release                          :     Cat_13 (000000003D3F4DD8)
-[LOG] SoundI::release                          :  (0000000015D586F8)
-[LOG] SoundI::release                          :     Cat_14 (000000003D3F55F8)
-[LOG] SoundI::release                          :  (000000004AB71A48)
-[LOG] SoundI::release                          :     Cat_15 (000000003D3F6638)
-[LOG] SoundI::release                          :  (000000003716C3F8)
-[LOG] SoundI::release                          :     Cat_16 (000000003D3F67D8)
-[LOG] SoundI::release                          :  (000000003716BCC8)
-[LOG] SoundI::release                          :     Cat_17 (000000003D3F3BF8)
-[LOG] Thread::callback                         : FMOD Studio update thread finished.
+[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
+[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
+[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
+[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
+[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
+[LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
 [LOG] Thread::callback                         : FMOD Studio bank load thread finished.
 [LOG] Thread::callback                         : FMOD Studio sample load thread finished.
 [LOG] LiveUpdate::release                      : 
@@ -105,10 +28,3 @@
 [LOG] Thread::callback                         : FMOD stream thread finished.
 [LOG] Thread::callback                         : FMOD mixer thread finished.
 [LOG] SystemI::close                           : Closed.
-[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
-[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
-[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
-[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
-[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
-[LOG] Manager::readBank                        : fileversion = 100, compatVersion = 99 (oldest = 44, newest = 103)
-[LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
