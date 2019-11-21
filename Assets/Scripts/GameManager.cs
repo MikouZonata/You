@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour
 	const int secondsBeforeDeactivation = 90;
 	float _deactivationTimer = 0;
 
-	const int secondsBeforeFirstCloud = 180;
-	const int secondsBeforeFatigue = 180;
+	const int secondsBeforeFirstCloud = 90;
+	const int secondsBeforeFatigue = 40;
 	float _pacingTimer = 0;
 
 	//FMOD
