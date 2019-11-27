@@ -333,7 +333,6 @@ public class KevinManager : MonoBehaviour
 	}
 }
 
-//Gestolen van interwebs hihihihihihi
 class GFG : IComparer<int>
 {
 	public int Compare (int x, int y)

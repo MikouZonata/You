@@ -1,11 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using XInputDotNetExtended;
-using Utility;
 using FMODUnity;
 
 public class GameManager : MonoBehaviour
